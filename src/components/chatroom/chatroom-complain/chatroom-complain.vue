@@ -7,10 +7,11 @@
           </router-link>
       </yd-navbar> 
       <yd-cell-group title="请选择您遇到的问题">
-        <yd-cell-item arrow type="link" href="#" v-for="item in complainList" :key="item.id" >
+        <yd-cell-item arrow type="link" href="/chatroom/suit" v-for="item in complainList" :key="item.id" >
             <span slot="left">{{item.title}}</span>
         </yd-cell-item>
     </yd-cell-group>
+    <router-link to="/chatroom/notice" class="notice-font">投诉须知</router-link>
     </div>
   </transition>
 </template>
@@ -67,5 +68,13 @@
     right: 0;
     z-index: 200;
     background-color: #ebebeb;
+  }
+  .notice-font{
+    position: fixed;
+    width: 100%;
+    bottom: 0.2rem;
+    color: #8D66FA !important;
+    text-align: center;
+    font-size: 0.28rem;
   }
 </style>

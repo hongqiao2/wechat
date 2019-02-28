@@ -14,6 +14,8 @@ import {Icons} from 'vue-ydui/dist/lib.rem/icons'
 import {Layout} from 'vue-ydui/dist/lib.rem/layout'
 import {Search} from 'vue-ydui/dist/lib.rem/search'
 import {KeyBoard} from 'vue-ydui/dist/lib.rem/keyboard'
+import {Dialog, Upload} from 'element-ui'
+// import {Upload} from 'element-ui'
 import './common/style.css' // 这里需要引入基本的样式
 import './common/fonts/iconfont.css'
 import 'vue-ydui/dist/ydui.base.css'
@@ -42,6 +44,8 @@ Vue.component(CellGroup.name, CellGroup)
 Vue.component(CellItem.name, CellItem)
 Vue.component(KeyBoard.name, KeyBoard)
 Vue.use(YDUI)
+Vue.use(Dialog, Upload)
+// Vue.use(Upload)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

@@ -12,7 +12,7 @@
         <yd-input slot="right" v-model="input1" ref="input1" placeholder="0.0"></yd-input>
         <span>元</span>
       </div>
-      <div>
+      <div class="packet-text">
         <yd-cell-item>
             <yd-textarea slot="right" placeholder="恭喜发财，大吉大利！" ></yd-textarea>
         </yd-cell-item>
@@ -40,6 +40,7 @@
 </script>
 
 <style>
+
 .chatroom-packet{
     position: fixed;
     top: 0px;
@@ -49,13 +50,12 @@
     z-index: 200;
     background-color: #ebebeb;
   }
-  /* .yd-navbar{
-    background-color: #D34E48 !important;
-    
-  } */
-  /* .yd-navbar-item a span, .yd-navbar-center-title{
-    color: #fff !important;
-  } */
+  .packet-text{
+    width: 100%;
+    margin: auto;
+    border-radius: 5px;
+  }
+      
   .packet-money{
     background: #fff;
     width: 6.9rem;

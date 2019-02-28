@@ -3,22 +3,22 @@
     <div class="plus-wrap">
       <div class="plus-cover" v-if="isShow" @click=closeMyself></div>
         <transition name="drop">
-          <div class="plus-content" v-if="isShow" @click="warn">
+          <div class="plus-content" v-if="isShow">
             <ul>
-              <li>
-                <img src="./group.png" />
+              <li @click="goGroup">
+                <img src="../../assets/plus/group.png" />
                 <span>发起群聊</span>
               </li>
-              <li>
-                <img src="./addfri.png" />
+              <li @click="goAdd">
+                <img src="../../assets/plus/addfri.png" />
                 <span>添加朋友</span>
               </li>
               <li>
-                <img src="./sweep1.png" />
+                <img src="../../assets/plus/sweep1.png" />
                 <span>扫一扫</span>
               </li>
               <li>
-                <img src="./help1.png" />
+                <img src="../../assets/plus/help1.png" />
                 <span>帮助与反馈</span>
               </li>
             </ul>
@@ -51,6 +51,18 @@ export default {
         position: 'bottom',
         duration: 1500
       })
+    },
+    goGroup () {
+      this.$router.push({
+        path: `/group`
+      })
+      this.$emit('on-close')
+    },
+    goAdd () {
+      this.$router.push({
+        path: `/add`
+      })
+      this.$emit('on-close')
     }
   }
 }

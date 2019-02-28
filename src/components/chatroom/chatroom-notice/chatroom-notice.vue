@@ -2,16 +2,15 @@
   <transition name="slide">
     <div class="chatroom-complain" ref="content">
       <yd-navbar title="投诉建议">
-          <router-link to="/chatroom/user" slot="left">
+          <router-link to="/chatroom/complain" slot="left">
               <yd-navbar-back-icon></yd-navbar-back-icon>
           </router-link>
       </yd-navbar> 
-      <yd-cell-group title="请选择您遇到的问题">
-        <yd-cell-item arrow type="link" href="#" v-for="item in complainList">
-            <span slot="left">{{item.title}}</span>
-        </yd-cell-item>
-    </yd-cell-group>
-    <router-link to="#">投诉须知</router-link>
+      <div class="notice-cont">
+        <h2>投诉须知</h2>
+        <p>{{cont}}</p>
+      </div>
+      
     </div>
   </transition>
 </template>
@@ -21,7 +20,8 @@
     components: { },
     data () {
       return {
-        input1: ''
+        input1: '',
+        cont: '你应保证你的投诉行为基于善意，并代表你本人真实意思。微聊吧团队作为中立的平台服务者，收到你的投诉会尽快按照相关法律 的规定独立判断并进行处理。微聊吧团队将会采取合理的措施保护你的个人信息；除法律法规规定的情形外，未经用户许可，微聊吧团队 不会向第三方公开、透露你的个人信息。'
       }
     },
     computed: {},
@@ -37,6 +37,16 @@
     left: 0;
     right: 0;
     z-index: 200;
-    background-color: #ebebeb;
+    background-color: #ffffff;
+  }
+  .notice-cont{
+    padding: 0.2rem 0.3rem;
+    font-size: 0.28rem;
+    color: #797979;
+  }
+  .notice-cont h2{
+      font-size: 0.36rem;
+      color: #101010;
+      margin-bottom: 0.2rem;
   }
 </style>

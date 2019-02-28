@@ -8,10 +8,8 @@
       </yd-navbar> 
 
       <div class="user">
-        <img class="smallImg" :src="info.imgurl" />
-        
-        <!-- <img class="bigImg" ref="bagImge" :src="info.imgurl" /> -->
-        
+        <img class="smallImg" :src="info.imgurl" @click="goInfo(info)" />
+        <img class="addIcon" src="../../../assets/chatroom/addPerson.png"/>
         <p v-html="info.dissname"></p>
         
         <!-- <div>
@@ -78,6 +76,11 @@
           message: '确定清空全部聊天信息?',
           showCancelButton: true
         })
+      },
+      goInfo (info) {
+        this.$router.push({
+          path: `/address/${info.dissid}`
+        })
       }
     }
   }
@@ -114,9 +117,14 @@
     height: 1rem;
     width: 1rem;
     border-radius: 5px;
+    margin-right: 0.2rem;
   }
   .user p{
     text-align: center;
     width: 1rem;
+  }
+  .addIcon{
+    width:1rem;
+    height:1rem;
   }
 </style>

@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Chat from '../components/chat/chat'
+import PlusGroup from '../components/plus/plus-group/plus-group'
+import PlusAdd from '../components/plus/plus-add/plus-add'
 import Address from '../components/address/address'
 import Find from '../components/find/find'
 import Me from '../components/me/me'
@@ -15,7 +17,9 @@ import ChatroomPacket from '../components/chatroom/chatroom-packet/chatroom-pack
 import ChatroomCard from '../components/chatroom/chatroom-card/chatroom-card'
 import ChatroomComplain from '../components/chatroom/chatroom-complain/chatroom-complain'
 import ChatroomNotice from '../components/chatroom/chatroom-notice/chatroom-notice'
+import ChatroomSuit from '../components/chatroom/chatroom-suit/chatroom-suit'
 import AddressMore from '../components/address/address-detail/address-more/address-more'
+import AddressSet from '../components/address/address-detail/address-set/address-set'
 import Money from '../components/me/money/money'
 import Collection from '../components/me/collection/collection'
 import Album from '../components/me/album/album'
@@ -33,6 +37,14 @@ export default new Router({
     {
       path: '/search',
       component: Search
+    },
+    {
+      path: '/group',
+      component: PlusGroup
+    },
+    {
+      path: '/add',
+      component: PlusAdd
     },
     {
       path: '/chatroom',  // 聊天打字界面
@@ -57,6 +69,10 @@ export default new Router({
         {
           path: 'notice',
           component: ChatroomNotice
+        },
+        {
+          path: 'suit',
+          component: ChatroomSuit
         }
       ]
     },
@@ -75,6 +91,10 @@ export default new Router({
             {
               path: 'more',
               component: AddressMore
+            },
+            {
+              path: 'dset',
+              component: AddressSet
             }
           ]
         }

@@ -1,14 +1,13 @@
 <template>
   <!-- <transition name="slide"> -->
     <yd-layout  class="address-detail">
-        <yd-navbar  @click="back" slot="navbar" title="详细信息">
+        <yd-navbar  @click="back" slot="navbar" title="资料设置1">
             <router-link to="#" slot="left">
-                <yd-navbar-back-icon  @click.native="$router.back(-1)"></yd-navbar-back-icon>
+                <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
             <router-link to="#" slot="right">
-                <yd-icon name="more" @click.native="goDset(this.info.dissid)" size="0.4rem"></yd-icon>
+                <yd-icon name="more" size="0.4rem"></yd-icon>
             </router-link>
-            
         </yd-navbar>
 
         <div class="content" ref="content">
@@ -139,11 +138,6 @@
       },
       doAddList (info) {
         this.setaddList(info)
-      },
-      goDset (dissid) {
-        this.$router.push({
-          path: `/address/${dissid}/dset`
-        })
       },
       // gotoMore (info) {
       //   this.$router.push({
