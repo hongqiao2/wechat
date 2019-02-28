@@ -1,6 +1,50 @@
 <template>
   <!-- <transition name="slide"> -->
-    <div class="address-detail">
+    <yd-layout  class="address-detail">
+        <yd-navbar  @click="back" slot="navbar" title="详细信息">
+            <router-link to="#" slot="left">
+                <yd-navbar-back-icon></yd-navbar-back-icon>
+            </router-link>
+        </yd-navbar>
+
+        <div class="content" ref="content">
+        <div class="content-name">
+          <img class="smallImg" :src="this.info.imgurl" />
+          <!-- <img class="bagImg" @click="changBig" ref="bagImge" :src="this.info.imgurl" /> -->
+          <div>
+            <h2 class="" v-html="this.info.dissname"></h2>
+            <p class="">微信号：{{this.info.dissid}}</p>
+          </div>
+        </div>
+        <div class="content-note">设置备注和描述 </div>
+        <div class="content-intro">
+          <span class="content-label">地区</span>{{this.info.location}}
+        </div>
+        <div class="content-intro">
+          <span class="content-label">个性签名</span>{{this.info.sign}}
+        </div>
+        <div class="content-intro">
+          <span class="content-label">兴趣爱好</span>{{this.info.hobby}}
+        </div>
+        <div class="content-intro">
+          <span class="content-label">来源</span>{{this.info.source}}
+        </div>
+        <!-- <div class="content-album">
+          <span style="font-weight:bold;">个人相册 </span>
+          <img :src="this.info.album" height="50" width="50" />
+          <img :src="this.info.album" height="50" width="50" />
+          <img :src="this.info.album" height="50" width="50" />
+        </div> -->
+        <div class="content-message">
+          <yd-button size="large" type="primary"  shape="circle" @click="doAddList(info)">
+              <router-link to='/chatroom'> 发消息 </router-link>
+            </yd-button>
+        </div>
+      </div>
+    </yd-layout>
+
+
+    <!-- <div class="address-detail">
       <div class="back">
         <div @click="back">
           <img src="../../../assets/返回.png" height="16" width="19" />
@@ -28,9 +72,7 @@
           <img :src="this.info.album" height="50" width="50" />
           <img :src="this.info.album" height="50" width="50" />
         </div>
-        <div class="content-more" @click="gotoMore(info)">
-          <span style="font-weight:bold;">更多</span>
-        </div>
+        
         <div class="content-message" @click="doAddList(info)">
           <router-link to='/chatroom' class="message">
             <span>发消息</span>
@@ -38,7 +80,7 @@
         </div>
       </div>
       <router-view></router-view>
-    </div>
+    </div> -->
   <!-- </transition> -->
 </template>
 
@@ -93,15 +135,13 @@
       },
       doAddList (info) {
         this.setaddList(info)
-        // console.log('测试')
-        // console.log(this.info)
       },
-      gotoMore (info) {
-        this.$router.push({
-          path: `/address/${info.dissid}/more`
-        })
-        console.log('测试')
-      },
+      // gotoMore (info) {
+      //   this.$router.push({
+      //     path: `/address/${info.dissid}/more`
+      //   })
+      //   console.log('测试')
+      // },
       changBig () {
         if (this.$refs.bagImge.offsetWidth < 100) {
           let pageWidth = this.$refs.content.offsetWidth
@@ -122,6 +162,13 @@
 <style scoped>
   a{
     text-decoration: none;
+    color: #fff !important;
+  }
+  
+  .smallImg{
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 5px;
   }
   .address-detail{
     position: fixed;
@@ -131,80 +178,48 @@
     right: 0;
     z-index: 100;
     background-color: #ebebeb;
-    /*border: 1px solid red;*/
   }
-  .back{
-    background: #1e2b39;
-    height: 50px;
-    color: #fff;
-    position: fixed;
-    width: 100%;
-  }
-  .back div{
-    height: 50px;
-    width: 50px;
-  }
-  .back img{
-    position: absolute;
-    top: 25px;
-    margin-top: -8px;
-    left: 14px;
-  }
-  .back span{
-    position: absolute;
-    font-size: 20px;
-    top: 25px;
-    margin-top: -10px;
-    left: 50px;
-    padding-left: 10px;
-    border-left: 1px solid #000;
-  }
-  .content{
-    position: fixed;
-    top: 50px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
+
   .content div{
     width: 100%;
     background-color: #fff;
   }
   .content-name{
-    /*border: 1px solid #000;*/
-    margin-top: 5px;
-    padding: 5px 10px;
+    padding: 0.2rem 0.3rem;
     display: flex;
     align-items: center;
   }
-  .content-name .bagImg{
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    height: 60px;
-    width: 60px;
-    transition: all 0.5s;
-  }
+
   .content-name h2{
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 6px;
-    padding-left: 20px;
+    font-size: 0.36rem;
+    margin-bottom: 0.2rem;
+    padding-left: 0.25rem;
   }
   .content-name p{
-    font-size: 14px;
-    padding-left: 20px;
+    font-size: 0.28rem;
+    padding-left: 0.25rem;
+    color: #AAAAAA;
   }
-  .content-phone{
-    margin: 5px 0;
-    padding: 10px 10px;
-    font-size: 14px;
+  .content-note{
+    margin: 0.2rem 0 0;
+    padding: 0.2rem;
+    font-size: 0.32rem;
+    border-bottom: 1px solid #eee;
   }
-  .content-location, .content-album{
-    border-bottom: 1px solid rgba(153,153,153,0.4);
-    padding: 10px 10px;
-    font-size: 14px;
+  .content-intro{
+    border-bottom: 1px solid #eee;
+    padding: 0.2rem;
+    font-size: 0.28rem;
+    color: #888888;
   }
+  .content-label{
+    color: #464646;
+    font-size: 0.3rem;
+    width: 1.6rem;
+    display: inline-block;
+  }
+ 
+
   .content-album{
     display: flex;
     align-items: center;
@@ -216,9 +231,10 @@
     padding: 10px 10px;
     font-size: 14px;
   }
-  .content-message {
-    margin-top: 20px;
+  .content .content-message {
+    margin: 0.5rem auto;
     background-color: #ebebeb !important;
+    width: 90%;
   }
   .message{
     display: flex;

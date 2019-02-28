@@ -2,35 +2,30 @@
   <div class="find">
     <div class="find-wrapper" ref="wrapper">
       <div class="find-content">
-        <router-link tag="div" class="friend-circle" to="/find/friendcircle">
-          <img class="find-img" src="../../assets/find/朋友圈.png" />
+        <router-link tag="div" class="find-list find-spacing" to="/find/friendcircle">
+          <img class="find-img" src="../../assets/find/circle.png" />
           <span class="find-item">朋友圈</span>
         </router-link>
-        <router-link tag="div" class="friend-circle" @click="warn" to="/find/scan">
-          <img class="find-img" src="../../assets/find/扫一扫.png" />
+        <router-link tag="div" class="find-list find-spacing" @click="warn" to="/find/scan">
+          <img class="find-img" src="../../assets/find/sweep.png" />
           <span class="find-item">扫一扫</span>
         </router-link>
-        <router-link tag="div" class="friend-circle" @click="warn" to="/find/shake">
-          <img class="find-img" src="../../assets/find/摇一摇.png" />
-          <span class="find-item">摇一摇</span>
+        <router-link tag="div" class="find-list" @click="warn" to="/find/scan">
+          <img class="find-img" src="../../assets/find/number.png" />
+          <span class="find-item">按号码查找</span>
         </router-link>
-        <a href="https://caochangkui.github.io/game_PinTu/index.html" title="京东商城" style="text-decoration: none;color:#000;">
-          <div class="friend-circle">
-            <img class="find-img" src="../../assets/find/附近的人.png" />
-            <span class="find-item">游戏</span>
-          </div>
-        </a>
-        <a href="https://m.jd.com" title="京东商城" style="text-decoration: none;color:#000;">
-          <div class="friend-circle">
-            <img class="find-img" src="../../assets/find/购物.png" />
-            <span class="find-item" style="">购物</span>
-          </div>
-        </a>
-        
-        <div class="friend-circle" @click="littleApp">
-          <img class="find-img" src="../../assets/find/小程序.png" />
-          <span class="find-item">小程序</span>
-        </div>         
+        <router-link tag="div" class="find-list" @click="warn" to="/find/scan">
+          <img class="find-img" src="../../assets/find/add.png" />
+          <span class="find-item">添加手机联系人</span>
+        </router-link>
+        <router-link tag="div" class="find-list find-spacing" @click="warn" to="/find/scan">
+          <img class="find-img" src="../../assets/find/invite.png" />
+          <span class="find-item">邀请手机联系人</span>
+        </router-link>
+         <router-link tag="div" class="find-list" @click="warn" to="/find/scan">
+          <img class="find-img" src="../../assets/find/invite1.png" />
+          <span class="find-item">邀请微信好友</span>
+        </router-link>
       </div>
       <router-view></router-view>
     </div>
@@ -90,19 +85,23 @@
   .find-content{
     overflow: hidden;
   }
-  .friend-circle{
+  .find-list{
     display: flex;
     align-items: center;
     left: 0;
-    height: 30px;
-    padding: 8px 10px;
-    margin-top: 10px;
+    height: 1rem;
+    padding: 0 0.2rem;
+    border-bottom: 1px solid #eee;
     background-color: #fff;
+    font-size: 0.32rem;
+    color: #464646;
   }
   .find-img{
-    height: 20px;
-    width: 20px;
-    padding-right: 20px;
+    height: 0.64rem;
+    width: 0.64rem;
+  }
+  .find-spacing{
+    margin-bottom: 0.2rem;
   }
      
 </style>

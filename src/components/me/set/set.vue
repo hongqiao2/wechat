@@ -1,76 +1,30 @@
 <template>
   <transition name="slide">
     <div class="circle">
-      <div class="circle-wrap">
-        <div class="back">
-          <div @click="back">
-            <img src="../../../assets/返回.png" height="16" width="19" />
-          </div>
-          <span>设置</span>
-        </div>
-        <div class="content">
-          <div class="content-wrapper" ref="wrapper">
-            <div class="content-text">
-              <div class="content-body">
-                <h2></h2>
-                <div class="server">
-                  <div>
-                    <p>接收新消息通知</p>
-                    <span class="switch">
-                      <mt-switch v-model="value1"></mt-switch>
-                    </span>
-                  </div>
-                  <div>
-                    <p>接收语音和视频聊天邀请通知</p>
-                    <span class="switch">
-                      <mt-switch v-model="value2"></mt-switch>
-                    </span>
-                  </div>
-                  <div>
-                    <p>通知栏显示消息详情</p>
-                    <span class="switch">
-                      <mt-switch v-model="value3"></mt-switch>
-                    </span>
-                  </div>
-                  <div>
-                    <p>声音</p>
-                    <span class="switch">
-                      <mt-switch v-model="value4"></mt-switch>
-                    </span>
-                  </div>
-                  <div>
-                    <p>新消息提示音</p>
-                    <span class="switch">
-                      <p style="opacity: 0.6;font-size:14px;">默认</p>
-                    </span>
-                  </div>
-                  <div>
-                    <p>振动</p>
-                    <span class="switch">
-                      <mt-switch v-model="value5"></mt-switch>
-                    </span>
-                  </div>
-                  <div>
-                    <p>语言选择</p>
-                    <span class="switch">
-                      <p style="opacity: 0.6;font-size:14px;">跟随系统</p>
-                    </span>
-                  </div>
-                  <div>
-                    <p>自动下载微信安装包</p>
-                    <span class="switch">
-                      <p style="opacity: 0.6;font-size:14px;">从不</p>
-                    </span>
-                  </div>
-                  <div @click="warn">
-                    <p>清理微信存储空间</p>
-                    <span class="switch">
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      <div class="content-wrapper" ref="wrapper">
+        <div class="content-text">
+          <yd-navbar  @click="back" slot="navbar" title="设置">
+              <router-link to="/me" slot="left">
+                  <yd-navbar-back-icon></yd-navbar-back-icon>
+              </router-link>
+          </yd-navbar>
+          <yd-cell-group>
+              <yd-cell-item arrow>
+                  <span slot="left">绑定微信</span>
+              </yd-cell-item>
+              <yd-cell-item arrow>
+                  <span slot="left">新消息提醒</span>
+              </yd-cell-item>
+              <yd-cell-item arrow>
+                  <span slot="left">账号与安全</span>
+              </yd-cell-item>
+              <yd-cell-item arrow>
+                  <span slot="left">设置字体大小</span>
+              </yd-cell-item>
+              <yd-cell-item arrow v-on:click.native="warn">
+                  <span slot="left">清除聊天记录</span>
+              </yd-cell-item>
+          </yd-cell-group>
         </div>
       </div>
     </div>

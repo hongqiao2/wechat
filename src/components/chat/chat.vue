@@ -11,7 +11,7 @@
             class="item"
           >
             <div class="item-cell" @click="">
-              <img class="item-img" :src="addinfo.imgurl" height="40" width="40" />
+              <img class="item-img" :src="addinfo.imgurl" />
               <h2 class="dissname" v-html="addinfo.dissname"></h2>
               <p class="summary">点击发送消息</p>
               <span class="item-time">刚刚</span>
@@ -28,7 +28,7 @@
           >
             <div class="item-cell" @click="gotoChatroom(info)">
               <div class="img-unread">
-                <img class="item-img" :src="info.imgurl" height="40" width="40" /><span v-html="info.unread" v-show="info.unread"></span>
+                <img class="item-img" :src="info.imgurl" /><span v-html="info.unread" v-show="info.unread"></span>
               </div>
               <h2 class="dissname" v-html="info.dissname"></h2>
               <p class="summary" v-html="info.summary"></p>
@@ -132,40 +132,34 @@
 </script>
 
 <style scoped>
-  .chat{
-    position: fixed;
-    /*border: 1px solid red;*/
-    /*width: 100%;*/
-    top: 50px;
-    bottom: 50px;
-    left: 0;
-    right: 0;
-  }
   .item{
+    background: #fff;
     width: 100%;
-    margin-left: 0;
-  }
-  .chat-wrapper{
-    height: 100%;
-    overflow: hidden;
+    height: 1.4rem;
   }
   .item-cell{
     position: relative;
-    border-bottom: 1px solid rgba(153,153,153,0.4); 
-    height: 60px;
+    border-bottom: 1px solid #eee;
+    padding: 0.2rem 0.3rem;
+    width: 100%;
+    height: 1.4rem;
   }
   .img-unread{
     position: relative;
+    width: 1rem;
+    height: 1rem;
+    float: left;
+    margin-right: 0.2rem;
   }
   .img-unread span{
     position: absolute;
-    top: 0;
-    left: 44px;
-    font-size: 10px;
-    line-height: 14px;
+    top: -0.1rem;
+    left: 0.8rem;
+    font-size: 0.12rem;
+    line-height: 0.24rem;
     color: #fff;
-    height: 14px;
-    width: 14px;
+    height: 0.29rem;
+    width: 0.29rem;
     text-align: center;
     vertical-align: middle;
     background-color: red;
@@ -174,21 +168,19 @@
   }
   .item-img{
     float: left;
-    margin:10px 10px 10px 10px;
+    border-radius: 0.1rem;
+    width:1rem;
+    height: 1rem;
+    margin-right: 0.2rem;
   }
   .dissname{
-    /*border: 1px solid red;*/
-    font-size: 14px;
-    font-weight: bold;
-    padding-top: 10px;
-    padding-left: 70px;
+    font-size: 0.34rem;
+    font-weight: 400;
   }
   .summary{
-    font-size: 14px;
-    padding-top: 10px;
-    padding-left: 70px;
+    font-size: 0.28rem;
+    padding-top: 0.08rem;
     color: rgba(153,153,153,0.8);
-    font-style: italic;
   }
   .item-time{
     position: absolute;
@@ -197,5 +189,4 @@
     font-size: 12px;
     color: rgba(153,153,153,0.8); 
   }
-   
 </style>

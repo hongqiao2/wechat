@@ -11,6 +11,10 @@ import FriendCircle from '../components/find/friend-circle/friend-circle'
 import Scan from '../components/find/scan/scan'
 import Shake from '../components/find/shake/shake'
 import ChatroomUser from '../components/chatroom/chatroom-user/chatroom-user'
+import ChatroomPacket from '../components/chatroom/chatroom-packet/chatroom-packet'
+import ChatroomCard from '../components/chatroom/chatroom-card/chatroom-card'
+import ChatroomComplain from '../components/chatroom/chatroom-complain/chatroom-complain'
+import ChatroomNotice from '../components/chatroom/chatroom-notice/chatroom-notice'
 import AddressMore from '../components/address/address-detail/address-more/address-more'
 import Money from '../components/me/money/money'
 import Collection from '../components/me/collection/collection'
@@ -37,6 +41,22 @@ export default new Router({
         {
           path: 'user',
           component: ChatroomUser
+        },
+        {
+          path: 'packet',
+          component: ChatroomPacket
+        },
+        {
+          path: 'percard',
+          component: ChatroomCard
+        },
+        {
+          path: 'complain',
+          component: ChatroomComplain
+        },
+        {
+          path: 'notice',
+          component: ChatroomNotice
         }
       ]
     },

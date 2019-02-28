@@ -1,22 +1,21 @@
 <template>
   <transition name="slide">
     <div class="chatroom">
-      <div class="back">
-        <router-link to='/chat' >
-          <img class="img" src="../../assets/返回.png" @click='clearContent' height="16" width="19" />
-        </router-link>
-        <span class="dissname">{{this.info.dissname}}</span>
-        <span class="logo" @click="gotoUser(info)">
-          <img src="../../assets/我.png" height="28" width="28">
-          <!-- <span class="icon-user"></span> -->
-        </span>
-      </div>
+
+      <yd-navbar :title="this.info.dissname">
+          <router-link to="/chat" slot="left">
+              <yd-navbar-back-icon></yd-navbar-back-icon>
+          </router-link>
+          <img class="person-icon"  @click="gotoUser(info)"  slot="right" src="../../assets/chatroom/person.png" />
+      </yd-navbar>
+
+<!-- <div slot="center" >{{this.info.dissname}}</div> -->
       <div class="content">
         <div class="content-wrapper" ref="wrapper">
           <div class="content-text">
-            <div class="content-top">
+            <!-- <div class="content-top">
               <p>————现在可以和我聊天了————</p>
-            </div>
+            </div> -->
             <div class="content-body" ref="body">
               <ul class="inHtml" v-for="item in content">
                 <li class="ask"  v-show="item.askContent">
@@ -32,17 +31,48 @@
           </div>
         </div>
       </div>
-      <div class="bottom">
-        <div class="send">
-          <input 
-            type="text" 
-            placeholder="请输入聊天内容" 
-            class="sText"
-            ref="sTest"
-          />
-          <input type="button" class="btn" value="发送" @click="sendContent" />
+      <div class="chat-more" v-if="showPop">
+        <div>
+          <img src="../../assets/chatroom/album.png"/>
+          <p>相册</p>
+        </div>
+        <div>
+          <img src="../../assets/chatroom/photograph.png"/>
+          <p>拍照</p>
+        </div>
+        <div @click="goPacket">
+          <img src="../../assets/chatroom/packet2.png"/>
+          <p>云红包</p>
+        </div>
+        <div  @click="goPacket">
+          <img src="../../assets/chatroom/alipay1.png"/>
+          <p>支付宝红包</p>
+        </div>
+        <div @click="goCard">
+          <img src="../../assets/chatroom/card.png"/>
+          <p>个人名片</p>
+        </div>
+        <div>
+          <img src="../../assets/chatroom/collect1.png"/>
+          <p>收藏</p>
         </div>
       </div>
+      <yd-tabbar slot="tabbar" class="chatroom-bottom" v-bind:class="{ popHeight:popHeight}">
+        <button class="voice-btn" v-if="showVoice" @click="changeStatus">语音</button>
+        <button class="text-btn" v-if="showText"  @click="changeStatus">键盘</button>
+        <div class="send" v-if="showVoice">
+          
+          <input type="text" placeholder="请输入聊天内容" class="sText" ref="sTest"/>
+        </div>
+        <div class="speak" v-if="showText">
+          按住 说话
+          <!-- <input type="text" placeholder="请输入聊天内容" class="sText" ref="sTest"/> -->
+        </div>
+        <input type="button" class="btn" value="发送" @click="sendContent" />
+        <button class="express-btn">表情</button>
+        <button class="more-btn" @click="moreBtn">更多</button>
+    </yd-tabbar>
+
       <router-view></router-view>
     </div>
   </transition>
@@ -60,6 +90,10 @@
     data () {
       return {
         text: '', // 输入框的文字
+        showVoice: false, // 语音按钮
+        showText: true, // 键盘按钮
+        popHeight: false, // 更多弹出
+        showPop: false, // 更多显示
         randomReply: [
           '你谁啊？',
           '请你再说一遍！',
@@ -122,6 +156,25 @@
           path: `/chatroom/user`
         })
       },
+      goPacket (info) {
+        this.$router.push({
+          path: `/chatroom/packet`
+        })
+      },
+      goCard () {
+        this.$router.push({
+          path: `/chatroom/percard`
+        })
+      },
+      changeStatus () {
+        if (this.showVoice) {
+          this.showVoice = false
+          this.showText = true
+        } else if (this.showText) {
+          this.showVoice = true
+          this.showText = false
+        }
+      },
       sendContent () {
         this.text = this.$refs.sTest.value
         if (this.text !== '') {
@@ -142,6 +195,15 @@
         }
         this.$refs.sTest.value = '' // 清空输入框的内容
       },
+      moreBtn () {
+        if (this.showPop) {
+          this.showPop = false
+          this.popHeight = false
+        } else {
+          this.showPop = true
+          this.popHeight = true
+        }
+      },
       clearContent () {
         this.content = []
       }
@@ -150,6 +212,82 @@
 </script>
 
 <style scoped>
+.yd-navbar {
+    background-color: #F8F8F8 !important;
+}
+.yd-navbar-item a span{
+    color:rgb(92, 92, 92) !important;
+}
+.popHeight{
+  bottom: 3.8rem !important;
+}
+.chat-more{
+    background: #F8F8F8;
+    position: fixed;
+    height: 3.8rem;
+    z-index: 11;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    flex-flow: wrap;
+    padding: 0 0.2rem;
+    align-items: center;
+}
+.chat-more div{
+  width: 25%;
+  text-align: center;
+}
+.chat-more img{
+    width: 0.9rem;
+    height: 0.9rem;
+}
+    
+.person-icon{
+  width: .55rem;
+  height: .55rem;
+}
+.voice-btn{
+    background: url('../../assets/chatroom/voice.png');
+    background-size: 100%;
+    width: 0.5rem;
+    height: 0.5rem;
+    background-repeat: no-repeat;
+    color: transparent;
+    border: none;
+    margin-left: 0.25rem;
+}
+.text-btn{
+    background: url('../../assets/chatroom/keyboard.png');
+    background-size: 100%;
+    width: 0.5rem;
+    height: 0.5rem;
+    background-repeat: no-repeat;
+    color: transparent;
+    border: none;
+    margin-left: 0.25rem;
+}
+.express-btn{
+    background: url('../../assets/chatroom/face.png');
+    background-size: 100%;
+    width: 0.5rem;
+    height: 0.5rem;
+    background-repeat: no-repeat;
+    color: transparent;
+    border: none;
+    margin-right: 0.25rem;
+}
+.more-btn{
+    background: url('../../assets/chatroom/more.png');
+    background-size: 100%;
+    width: 0.5rem;
+    height: 0.5rem;
+    background-repeat: no-repeat;
+    color: transparent;
+    border: none;
+    margin-right: 0.25rem;
+}
+
   .chatroom{
     position: fixed;
     top: 0;
@@ -157,36 +295,6 @@
     left: 0;
     right: 0;
     z-index: 19;
-    background-color: #ebebeb;
-  }
-  .back{
-    background: #1e2b39;
-    height: 50px;
-    color: #fff;
-    position: fixed;
-    width: 100%;
-  }
-  .back .img{
-    position: absolute;
-    top: 25px;
-    margin-top: -8px;
-    left: 14px;
-  }
-  .back .dissname{
-    position: absolute;
-    font-size: 20px;
-    top: 25px;
-    margin-top: -10px;
-    left: 50px;
-    padding-left: 10px;
-    border-left: 1px solid #000;
-  }
-  .back .logo{
-    position: absolute;
-    font-size: 20px;
-    top: 30px;
-    margin-top: -15px;
-    right: 20px;
   }
   .content{
     position: fixed;
@@ -194,6 +302,7 @@
     bottom: 50px;
     left: 0;
     right: 0;
+    background: #F9F9F9;
     /*border: 1px solid red;*/
   }
   .content-wrapper{
@@ -208,20 +317,18 @@
   }
   .content-body{
     position: relative;
-    padding: 20px 10px;
-    /*overflow: hidden;*/
-    /*border: 1px solid blue;*/
+    padding: 0.4rem 0.2rem;
   }
   .content-body li {
     position: relative;
     overflow: hidden;
-    margin-bottom: 15px;
-    line-height: 28px;
+    margin-bottom: 0.3rem;
   }
   .inHtml img {
     position: relative;
-    width: 30px;
-    height: 30px;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 5px;
   }
   .ask {
     text-align: right;
@@ -231,11 +338,11 @@
   }
   .ask img {
     float: right;
-    margin-left: 15px;
+    margin-left: 0.3rem;
   }
   .reply img {
     float: left;
-    margin-right: 15px;
+    margin-right: 0.3rem;
   }
   .reply p, .ask p {
     border-radius: 4px;
@@ -245,10 +352,10 @@
   }
   .ask p {
     float: right;
-    padding: 3px 10px;
+    padding: 0.1rem 0.25rem;
     max-width: 182px;
-    background: #228b22;
-    color: #fff;
+    background: #C2ACFF;
+    color: #101010;
   }
   .reply p {
     left: 2pc;
@@ -257,7 +364,7 @@
     max-width: 190px;
     background: #fff;
   }
-  .bottom{
+  .chatroom-bottom{
     position: fixed;
     height: 50px;
     bottom: 0;
@@ -267,31 +374,23 @@
   }
   .send{
     display: flex;
+    width: 70%;
   }
   .sText{
+    -webkit-box-flex: 6;
+    -ms-flex: 6;
     flex: 6;
-    height: 30px;
-    margin: 10px;
-    border: 0;
+    height: 0.7rem;
+    margin: 0.2rem;
     padding-left: 8px;
-    border-bottom: 1px solid rgba(153,153,153,0.8);
-    /*border: 1px solid rgba(153,153,153,0.8);*/
-    font-size: 15px;
+    border: 1px solid #eee;
+    font-size: 0.3rem;
+    border-radius: 0.1rem;
   }
   .sText.active{
     background-color: red;
   }
   .btn{
-    flex: 1;
-    width: 65px;
-    height: 30px;
-    margin: 10px 10px;
-    border: 0;
-    border-radius: 5px;
-    /*float: right;*/
-    text-align: center;
-    font-size: 18px;
-    color: white;
     background-color: #09BB07;
   }
 
@@ -301,4 +400,18 @@
   .slide-enter,.slide-leave-to{
     transform: translate3d(100%, 0, 0);
   }
+  .speak{
+    height: 0.7rem;
+    margin: 0.2rem;
+    border: 1px solid #eee;
+    font-size: 0.3rem;
+    border-radius: 0.1rem;
+    line-height: 0.65rem;
+    text-align: center;
+    justify-content: center;
+    color: #565656;
+    font-weight: 500;
+    width: 64%;
+  }
+  
 </style>

@@ -6,23 +6,19 @@
           <div class="plus-content" v-if="isShow" @click="warn">
             <ul>
               <li>
-                <img src="./发起群聊.png" />
+                <img src="./group.png" />
                 <span>发起群聊</span>
               </li>
               <li>
-                <img src="./添加朋友.png" />
+                <img src="./addfri.png" />
                 <span>添加朋友</span>
               </li>
               <li>
-                <img src="./扫一扫.png" />
+                <img src="./sweep1.png" />
                 <span>扫一扫</span>
               </li>
               <li>
-                <img src="./收付款.png" />
-                <span>收付款</span>
-              </li>
-              <li>
-                <img src="./帮助.png" />
+                <img src="./help1.png" />
                 <span>帮助与反馈</span>
               </li>
             </ul>
@@ -68,11 +64,11 @@ export default {
   transition: all .5s ease;
 }
 .drop-enter {
-  transform: translateX(500px); 
+  /* transform: translateY(500px);  */
   opacity: 0;
 }
 .drop-leave-active {
-  transform: translateX(500px);
+  /* transform: translateY(500px); */
   opacity: 0;
 
 }
@@ -85,15 +81,14 @@ export default {
   height: 100%;
 }
 .plus-content {
-  width: 50%;
-  /*height: 200px;*/
-  position: fixed;
-  overflow: auto;
-  background: #1e2b39;
-  top: 40px;
-  right: 10px;
-  z-index: 9999;
-  padding-top: 10px;
+    width: 40%;
+    position: fixed;
+    overflow: auto;
+    background: #343434;
+    top: 1rem;
+    right: 0.2rem;
+    z-index: 9999;
+    border-radius: 0.1rem;
 }
 .plus-content img{
   height: 26px;
@@ -101,11 +96,16 @@ export default {
   margin-right: 10px;
 }
 li{
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  color: #fff;
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 0.24rem;
+    color: #fff;
+    font-size: 0.3rem;
 }
 
 </style>

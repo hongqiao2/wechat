@@ -2,12 +2,11 @@
   <transition name="slide">
     <div class="circle">
       <div class="circle-wrap">
-        <div class="back">
-          <div @click="back">
-            <img src="../../../assets/返回.png" height="16" width="19" />
-          </div>
-          <span>朋友圈</span>
-        </div>
+        <yd-navbar  @click="back" slot="navbar" title="朋友圈">
+            <router-link to="/find" slot="left">
+                <yd-navbar-back-icon></yd-navbar-back-icon>
+            </router-link>
+        </yd-navbar>
         <div class="content">
           <div class="content-wrapper" ref="wrapper">
             <div class="content-text">
@@ -15,14 +14,14 @@
                 <img class="circle-bg" src="../../../assets/find/bg.png" />
                 <div class="user">
                   <span>minion</span>
-                  <img src="../../../assets/me/minion.png" height="80" width="80" />
+                  <img src="../../../assets/me/minion.png" />
                 </div>
               </div>
               <div class="content-body">
                 <ul v-for="(item, index) in info">
                   <li>
                     <div class="everyuser">
-                      <img :src="item.imgurl" height="50" width="50" />
+                      <img class="userphoto" :src="item.imgurl" />
                       <div>
                         <div class="username">
                           <h2 v-html="item.dissname"></h2>
@@ -157,34 +156,12 @@
     right: 0;
     bottom: 0;
     z-index: 203;
-    background-color: rgba(238,233,233,1);
+    background-color:#fff;
   }
-  .back{
-    background: #1e2b39;
-    height: 50px;
-    color: #fff;
-    position: fixed;
-    width: 100%;
-    z-index: 99;
-  }
-  .back div{
-    height: 50px;
-    width: 50px;
-  }
-  .back img{
-    position: absolute;
-    top: 25px;
-    margin-top: -8px;
-    left: 14px;
-  }
-  .back span{
-    position: absolute;
-    font-size: 20px;
-    top: 25px;
-    margin-top: -10px;
-    left: 50px;
-    padding-left: 10px;
-    border-left: 1px solid #000;
+  .userphoto{
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 5px;
   }
   .content{
     position: fixed;
@@ -219,33 +196,36 @@
     margin-right: 10px;
   }
   .user img{
-    border: 2px solid #fff;
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 5px;
   }
   .everyuser{
     position: relative;
-    border-bottom: 1px solid rgba(153,153,153,0.4);
-    margin: 5px 0;
-    padding: 20px 10px;
+    border-bottom: 1px solid #EBEBEB;
+    margin: 0;
+    padding: 0.3rem 0.3rem;
     display: flex;
   }
   .everyuser img{
     margin-right: 10px;
   }
   .username h2{
-    color: blue;
-    font-family: '楷体';
-    font-size: 16px;
+    color: #485273;
+    font-family: '\6977\4F53';
+    font-size: 0.32rem;
     font-weight: bold;
-    line-height: 16px;
-    margin-bottom: 10px;
+    line-height: 0.34rem;
+    margin-bottom: 0.1rem;
   }
   .username p{
-    font-size: 16px;
-    line-height: 30px;
+    font-size: 0.32rem;
+    margin-bottom: 0.1rem;
   }
   .usertime{
-    font-size: 14px;
-    margin-top: 15px;
+    font-size: 0.26rem;
+    margin-top: 0.2rem;
+    color: #B7B7B7;
   }
   .usertime span{
     position: absolute;
