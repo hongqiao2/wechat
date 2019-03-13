@@ -1,12 +1,12 @@
 <template>
   <yd-layout class="circle">
-    <yd-navbar  @click="back" slot="navbar" title="收藏">
-            <router-link to="/me" slot="left">
-                <yd-navbar-back-icon></yd-navbar-back-icon>
-            </router-link>
-        </yd-navbar>
+    <yd-navbar slot="navbar" title="详情">
+        <router-link to="#" slot="left">
+            <yd-navbar-back-icon></yd-navbar-back-icon>
+        </router-link>
+    </yd-navbar>
     <ul v-for="(item, index) in info">
-      <li @click="goDetail">
+      <li>
         <div class="everyuser"  >
           <img class="user-photo" :src="item.imgurl" />
           <div>
@@ -25,6 +25,7 @@
         </div>
       </li>
     </ul>
+    <div style="margin-top: 20px;" @click="goDetail">跳转</div>>
     <div style="text-align: center;opacity: 0.6;margin-top: 20px;" >----没有更多收藏了----</div>
   </yd-layout>
 </template>
@@ -122,8 +123,9 @@
         item.num += 1
       },
       goDetail () {
+        console.log('123')
         this.$router.push({
-          path: `/me/collection/coDetail`
+          path: `/chatroom/packet`
         })
       }
     }

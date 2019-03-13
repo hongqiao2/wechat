@@ -9,12 +9,15 @@
             <yd-icon name="jia" custom size="0.5rem" color="#777"></yd-icon>
         </router-link>
     </yd-navbar> -->
-    <yd-navbar title="消息">
+    <yd-navbar title="消息" v-if="$route.meta.navShow">
        
         <router-link tag="div" to="/search" slot="right">
              <yd-icon name="search" custom size="0.5rem" color="#777" style=" margin-right: 0.3rem;"></yd-icon>
         </router-link>
-        <router-link to="#" slot="right" >
+        <!-- <template v-on:click.native="logClick">  
+           <yd-icon name="jia" custom size="0.5rem" color="#777" ></yd-icon>
+        </template> -->
+        <router-link to="#" slot="right" v-on:click.stop="doThis">
             <yd-icon name="jia" custom size="0.5rem" color="#777" v-on:click.native="logClick"></yd-icon>
         </router-link>
         
@@ -23,7 +26,7 @@
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
-    <yd-tabbar slot="tabbar">
+    <yd-tabbar slot="tabbar" v-if="$route.meta.menuShow">
       <yd-tabbar-item title="消息" link="/chat">
           <yd-icon name="message" custom slot="icon" size="0.5rem"></yd-icon>
       </yd-tabbar-item>
@@ -38,11 +41,22 @@
           <yd-badge slot="badge" type="danger">2</yd-badge>
       </yd-tabbar-item>
     </yd-tabbar>
+    <!-- <yd-tabbar slot="tabbar" v-if="$route.meta.menuShow"> 
+        <yd-tabbar-item title="首页" link="#">
+            <yd-icon name="home" slot="icon" size="0.54rem"></yd-icon>
+        </yd-tabbar-item>
+        <yd-tabbar-item title="购物车" link="#" active>
+            <yd-icon name="shopcart" slot="icon" size="0.54rem"></yd-icon>
+        </yd-tabbar-item>
+        <yd-tabbar-item title="个人中心" link="#">
+            <yd-icon name="ucenter-outline" slot="icon" size="0.54rem"></yd-icon>
+        </yd-tabbar-item>
+    </yd-tabbar> -->
     <Plus :is-show="isShowPlus" @on-close="closeDialog"></Plus>
   </yd-layout>
 </template>
 
-<script src="../static/mui/js/mui.min.js"></script>  
+<!--<script src="../static/mui/js/mui.min.js"></script>-->  
 <script>
 import Plus from './components/plus/plus'
 export default {
@@ -83,7 +97,10 @@ export default {
   background-color: #8D66FA;
 }
 .yd-navbar{
-  background-color: #F8F8F8 !important;
+  background-color: #f7f7f7 !important;
+}
+.yd-navbar:after{
+  background-image: none;
 }
 </style>
 

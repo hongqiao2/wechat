@@ -1,5 +1,4 @@
 <template>
-  <transition name="slide">
     <div class="circle">
       <div class="content-wrapper" ref="wrapper">
         <div class="content-text">
@@ -9,13 +8,13 @@
               </router-link>
           </yd-navbar>
           <yd-cell-group>
-              <yd-cell-item arrow>
+              <yd-cell-item arrow  @click.native="goBind">
                   <span slot="left">绑定微信</span>
               </yd-cell-item>
-              <yd-cell-item arrow>
+              <yd-cell-item arrow @click.native="goRemind">
                   <span slot="left">新消息提醒</span>
               </yd-cell-item>
-              <yd-cell-item arrow>
+              <yd-cell-item arrow @click.native="goAccount">
                   <span slot="left">账号与安全</span>
               </yd-cell-item>
               <yd-cell-item arrow>
@@ -27,8 +26,8 @@
           </yd-cell-group>
         </div>
       </div>
+      <router-view></router-view>
     </div>
-  </transition>
 </template>
 
 <script type="text/ecmascript-6">
@@ -59,11 +58,22 @@
     },
     methods: {
       back (event) {
-        // 为防止PC端时,点击事件会被执行两次,须作如下判断，但是这里暂时不需要，参考http://blog.csdn.net/alsnei/article/details/54375957
-        // if (!event._constructed) {
-        //   return
-        // }
         this.$router.back()   // 返回上一级
+      },
+      goBind () {
+        this.$router.push({
+          path: `/me/set/bind`
+        })
+      },
+      goRemind () {
+        this.$router.push({
+          path: `/me/set/remind`
+        })
+      },
+      goAccount () {
+        this.$router.push({
+          path: `/me/set/account`
+        })
       },
       warn () {
         this.$toast({
@@ -85,7 +95,7 @@
     right: 0;
     bottom: 0;
     z-index: 203;
-    background-color: rgba(238,233,233,1);
+    background-color: #f9f9f9;
   }
   .back{
     background: #1e2b39;

@@ -1,6 +1,7 @@
 <template>
-  <transition name="slide">
-    <div class="chatroom">
+<yd-layout>
+       
+<div class="chatroom">
 
       <yd-navbar :title="this.info.dissname">
           <router-link to="/chat" slot="left">
@@ -75,7 +76,10 @@
 
       <router-view></router-view>
     </div>
-  </transition>
+</yd-layout>
+  <!-- <transition name="slide">
+    
+  </transition> -->
 </template>
 
 <script type="text/ecmascript-6">
@@ -294,7 +298,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 19;
+    z-index: 1000;
   }
   .content{
     position: fixed;

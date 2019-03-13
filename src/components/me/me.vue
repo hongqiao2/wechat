@@ -2,11 +2,9 @@
   <div class="me">
     <div class="me-wrapper" ref="wrapper">
       <div class="me-content">
-        <yd-cell-group>
-            <yd-cell-item arrow class="aboutme">
-              <img 
+        <div  class="aboutme" v-on:click="goPersonal">
+            <img 
                 class="aboutme-img" 
-                @click="imgbeBig"
                 src="../../assets/me/minion.png" 
                 ref="aboutme" slot="left"
               />
@@ -14,17 +12,11 @@
                 <h2>minion</h2>
                 <p>微信号：DespicableMe</p>
               </div>
-              <img 
-                  class="aboutme-code"  slot="right"
-                  @click="codebeBig"
-                  src="../../assets/me/code.png" 
-                  :height="this.codeheight" 
-                  :width="this.codewidth" 
-                  ref="codeimg"
-                />
-            </yd-cell-item>
-        </yd-cell-group>
-        <router-link tag="div" class="me-list" to="/me/money">
+              <div class="yd-cell-right yd-cell-arrow">
+                <img src="../../assets/me/code.png"  class="aboutme-code">
+              </div>
+        </div>
+        <router-link tag="div" class="me-list" to="/me/bill">
           <img class="money-img" src="../../assets/me/packet.png" height="380" width="380" />
           <span class="money-name">支付宝红包</span>
         </router-link>
@@ -33,7 +25,7 @@
           <span class="money-name">云钱包</span>
         </router-link>
 
-        <router-link tag="div" class="me-list" to="/me/collection">
+        <router-link tag="div" class="me-list" to="/me/auth">
           <img class="collection-img" src="../../assets/me/approve.png" height="32" width="32" />
           <span class="collection-name">个人认证</span>
         </router-link>
@@ -42,15 +34,15 @@
           <span class="collection-name">收藏</span>
         </router-link>
 
-        <router-link tag="div" class="me-list me-spacing" to="/me/album">
+        <router-link tag="div" class="me-list me-spacing" to="/me/privacy">
           <img class="photo-img" src="../../assets/me/identity.png" height="32" width="32" />
           <span class="photo-name">隐私</span>
         </router-link>
-        <router-link tag="div" class="me-list me-spacing" to="/me/card">
+        <router-link tag="div" class="me-list me-spacing" to="/me/about">
           <img class="card-img" src="../../assets/me/about.png" height="32" width="32" />
           <span class="card-name">关于微聊</span>
         </router-link>
-        <router-link tag="div" class="me-list me-spacing" to="/me/card">
+        <router-link tag="div" class="me-list me-spacing" to="/me/help">
           <img class="card-img" src="../../assets/me/help.png" height="32" width="32" />
           <span class="card-name">帮助与反馈</span>
         </router-link>
@@ -90,35 +82,15 @@
       })
     },
     methods: {
-      imgbeBig () {
-        let pageWidth = this.$refs.wrapper.offsetWidth
-        if (this.height === 60) {
-          this.height = pageWidth
-          this.width = pageWidth
-          this.$refs.aboutme.style.left = 0
-          this.$refs.aboutme.style.transform = 'rotate(360deg)'
-        } else {
-          this.height = 60
-          this.width = 60
-          this.$refs.aboutme.style.left = 10 + 'px'
-          this.$refs.aboutme.style.transform = 'rotate(0deg)'
-        }
-      },
-      codebeBig () {
-        if (this.codeheight === 30) {
-          this.codeheight = 200
-          this.codewidth = 200
-          this.$refs.codeimg.style.transform = 'rotate(360deg)'
-        } else {
-          this.codeheight = 30
-          this.codewidth = 30
-          this.$refs.codeimg.style.transform = 'rotate(0deg)'
-        }
-      },
       warn () {
         this.$toast({
           message: '尚未添加表情包',
           duration: 1500
+        })
+      },
+      goPersonal () {
+        this.$router.push({
+          path: `/me/personal`
         })
       }
     }
@@ -151,6 +123,7 @@
     background-color: #fff;
     display: flex;
     align-items: center;
+    margin-bottom: 0.2rem;
   }
   .aboutme .aboutme-img{
     width: 1.2rem;

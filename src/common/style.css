@@ -27,9 +27,6 @@
 body{
   background-color: #F8F8F8;
 }
-a{
-  color: #434343 !important;
-}
 .icon-home:before {
   content: "\e900";
 }

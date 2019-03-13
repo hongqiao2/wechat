@@ -1,9 +1,13 @@
 import Vue from 'vue'
+import './common/style.css' // 这里需要引入基本的样式
+import './common/fonts/iconfont.css'
+import 'vue-ydui/dist/ydui.base.css'
+import 'vue-ydui/dist/ydui.rem.css'
 import MintUI from 'mint-ui'
 // import YDUI from 'vue-ydui' /* 相当于import YDUI from 'vue-ydui/ydui.rem.js' */
 import 'mint-ui/lib/style.css'
 import App from './App'
-import router from './router'
+
 import store from './store'
 import YDUI from 'vue-ydui'
 import VueLazyLoad from 'vue-lazyload'
@@ -15,11 +19,11 @@ import {Layout} from 'vue-ydui/dist/lib.rem/layout'
 import {Search} from 'vue-ydui/dist/lib.rem/search'
 import {KeyBoard} from 'vue-ydui/dist/lib.rem/keyboard'
 import {Dialog, Upload} from 'element-ui'
+import {SendCode} from 'vue-ydui/dist/lib.rem/sendcode'
+import {Popup} from 'vue-ydui/dist/lib.rem/popup'
+import {CitySelect} from 'vue-ydui/dist/lib.rem/cityselect'
 // import {Upload} from 'element-ui'
-import './common/style.css' // 这里需要引入基本的样式
-import './common/fonts/iconfont.css'
-import 'vue-ydui/dist/ydui.base.css'
-import 'vue-ydui/dist/ydui.rem.css'
+import router from './router'
 
 // /* eslint-disable no-unused-vars */  // 这一句必须写，用来规避ES6的语法检测
 // import vConsole from 'vconsole'  // 针对手机网页的前端 console 调试面板
@@ -45,6 +49,9 @@ Vue.component(CellItem.name, CellItem)
 Vue.component(KeyBoard.name, KeyBoard)
 Vue.use(YDUI)
 Vue.use(Dialog, Upload)
+Vue.component(SendCode.name, SendCode)
+Vue.component(Popup.name, Popup)
+Vue.component(CitySelect.name, CitySelect)
 // Vue.use(Upload)
 /* eslint-disable no-new */
 new Vue({

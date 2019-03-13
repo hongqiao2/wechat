@@ -1,123 +1,82 @@
 <template>
   <transition name="slide">
-    <div class="circle">
-      <div class="circle-wrap">
-        <div class="back">
-          <div @click="back">
-            <img src="../../../assets/返回.png" height="16" width="19" />
-          </div>
-          <span>我的钱包</span>
-        </div>
-        <div class="content">
-          <div class="content-wrapper" ref="wrapper">
-            <div class="content-text">
-              <div class="content-top">
-                <div class="payment" @click="payment">
-                  <img src="./收付款.png" height="40" width="40">
-                  <h4>收付款</h4>
-                </div>
-                <div class="pocket" @click="warn">
-                  <img src="./零钱.png" height="40" width="40">
-                  <h4>零钱</h4>
-                  <span>999,999</span>
-                </div>
-                <div class="card" @click="card">
-                  <img src="./银行卡.png" height="40" width="40">
-                  <h4>银行卡</h4>
-                </div>
-              </div>
-              <div class="content-body">
-                <h2>腾讯服务</h2>
-                <div class="server">
-                  <div>
-                    <p>银行卡还款</p>
-                    <p>手机充值</p>
-                    <p>理财通</p>
-                  </div>
-                  <div>
-                    <p>生活缴费</p>
-                    <p>城市服务</p>
-                    <p>腾讯公益</p>
-                  </div>
-                </div>
-                <h2>第三方服务</h2>
-                <div class="server">
-                  <div>
-                    <p>火车票机票</p>
-                    <p>美团外卖</p>
-                    <p>酒店预订</p>
-                  </div>
-                  <div>
-                    <p>滴滴出行</p>
-                    <p>电影赛事演出</p>
-                    <p>蘑菇街</p>
-                  </div>
-                  <div>
-                    <p>京东优选</p>
-                    <p>吃喝玩乐</p>
-                    <p>58到家</p>
-                  </div>
-                </div>
-              </div>
+    <div class="money">
+      <div class="content-wrapper" ref="wrapper">
+        <yd-navbar  @click="back" slot="navbar" title="我的钱包">
+            <router-link to="/me/bill" slot="left">
+                <yd-navbar-back-icon></yd-navbar-back-icon>
+            </router-link>
+        </yd-navbar>
+        <div class="money-top">
+            <p class="money-balance">账户余额</p>
+            <h2>￥0.00</h2>
+            <div class="money-withdrawal">
+              <p @click="goRecharge">
+                <img src="../../../assets/me/recharge.png"/>
+                充值
+              </p>
+              <p>
+                <img src="../../../assets/me/withdraw.png"/>
+                提现
+              </p>
             </div>
-          </div>
         </div>
+        <yd-cell-group>
+            <yd-cell-item arrow href="#" type="link">
+              <img  slot="icon" src="../../../assets/me/packet1.png"/>
+              <span slot="left">我的红包</span>
+            </yd-cell-item>
+            <yd-cell-item arrow href="#" type="link">
+              <img  slot="icon" src="../../../assets/me/account.png"/>
+              <span slot="left">账户信息</span>
+            </yd-cell-item>
+            <yd-cell-item arrow href="#" type="link">
+              <img  slot="icon" src="../../../assets/me/record.png"/>
+              <span slot="left">交易记录</span>
+            </yd-cell-item>
+            <yd-cell-item arrow href="#" type="link">
+              <img  slot="icon" src="../../../assets/me/security.png"/>
+              <span slot="left">安全设置</span>
+            </yd-cell-item>
+            <yd-cell-item arrow href="#" type="link">
+              <img  slot="icon" src="../../../assets/me/bank.png"/>
+              <span slot="left">银行卡设置</span>
+            </yd-cell-item>
+        </yd-cell-group>
       </div>
+      <router-view></router-view>
     </div>
   </transition>
+
 </template>
 
 <script type="text/ecmascript-6">
-  import BScroll from 'better-scroll'
-  import {MessageBox} from 'mint-ui'
-
   export default {
     components: {
-      BScroll,
-      MessageBox
+    },
+    data () {
+      return {
+        datetime3: '2016-06',
+        show: false
+      }
     },
     mounted () {
-      this.$nextTick(() => {
-        this.scroll = new BScroll(this.$refs.wrapper, {
-          click: true
-        })
-      })
     },
     methods: {
       back (event) {
-        // 为防止PC端时,点击事件会被执行两次,须作如下判断，但是这里暂时不需要，参考http://blog.csdn.net/alsnei/article/details/54375957
-        // if (!event._constructed) {
-        //   return
-        // }
         this.$router.back()   // 返回上一级
       },
-      warn () {
-        MessageBox({
-          title: '提现成功',
-          message: '已提现至银行卡，请注意查收',
-          showCancelButton: true
-        })
-      },
-      payment () {
-        MessageBox({
-          title: '提示',
-          message: '尚未开通收付款功能',
-          showCancelButton: true
-        })
-      },
-      card () {
-        MessageBox({
-          title: '提示',
-          message: '清先添加银行卡',
-          showCancelButton: true
+      goRecharge () {
+        this.$router.push({
+          path: `/me/money/recharge`
         })
       }
     }
   }
 </script>
 
-<style scoped>
-  .circle{
+<style>
+.money{
     position: fixed;
     width:100%;
     height:100%;
@@ -126,115 +85,53 @@
     right: 0;
     bottom: 0;
     z-index: 203;
-    background-color: rgba(238,233,233,1);
-  }
-  .back{
-    background: #1e2b39;
-    height: 50px;
-    color: #fff;
-    position: fixed;
-    width: 100%;
-    z-index: 99;
-  }
-  .back div{
-    height: 50px;
-    width: 50px;
-  }
-  .back img{
-    position: absolute;
-    top: 25px;
-    margin-top: -8px;
-    left: 14px;
-  }
-  .back span{
-    position: absolute;
-    font-size: 20px;
-    top: 25px;
-    margin-top: -10px;
-    left: 50px;
-    padding-left: 10px;
-    border-left: 1px solid #000;
-  }
-  .content{
-    position: fixed;
-    top: 50px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
-  .content-wrapper{
-    height: 100%;
-    overflow: hidden;
-  }
-  .content-top{
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 120px;
-    display: flex;
-    background-color: #666f76;
-  }
-  .payment, .pocket, .card{
-    flex: 1;
-    display: flex;
-    /*flex-direction: row | row-reverse | column | column-reverse;*/
-    flex-direction: column;
-    color: #fff;
-    justify-content: center;
-    align-items: center;
-  }
-  .pocket{
-    padding-top: 20px;
-  }
-  .payment h4, .pocket h4, .card h4{
-    margin-top: 10px;
-  }
-  .pocket span{
-    font-size: 12px;
-    margin-top: 2px;
-  }
-  .content-body{
-/*  position: fixed;
-    top: 120px;
-    left: 0;
-    right: 0;
-    padding-top: 20px;*/
-    padding-top: 120px;
-
-  }
-  .server{
-    display: flex;
-  }
-  .content-body h2{
-    font-size: 16px;
-    padding-top: 20px;
-    padding-left: 20px;
-    padding-bottom: 10px;
-  }
-  .server div{
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    
-  }
-  .server div p{
-    height: 90px;
-    border: 1px solid rgba(0,0,0,0.1);
-    width: 100%;
-    text-align: center;
-    font-size: 14px;
-    line-height: 90px;
-    background-color: #fff;
-  }
-
-  .slide-enter-active,.slide-leave-active{
-    transition: all 0.3s;
-  }
-  .slide-enter,.slide-leave-to{
-    transform: translate3d(100%, 0, 0);
-  }
-
+    background-color:#F9F9F9;
+}
+.money-top{
+  background: #8D66FA;
+  padding: 0.5rem 0 0;
+}
+.money-top .money-balance{
+  background: url("../../../assets/me/balance.png") no-repeat;
+  background-size: 0.48rem;
+  color: #fff;
+  background-position: 43% center;
+  height: 1rem;
+  line-height: 1rem;
+  text-align: center;
+  font-size: 0.28rem;
+  padding-left: 0.8rem;
+}
+.money-top h2{
+  font-size: 0.56rem;
+  color: #fff;
+  text-align: center;
+  margin-top: 0.2rem;
+}
+.money-withdrawal{
+  background: #885EFE;
+  display: flex;
+  color: #fff;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.28rem;
+  padding: 0.3rem 0;
+  margin-top: 0.4rem;
+}
+.money-withdrawal p:first-child{
+  
+  border-right: 1px solid #C2ACFF;
+}
+.money-withdrawal p{
+  padding: 0 1.2rem;
+}
+.money-withdrawal p img{
+  width: 0.4rem;
+  height: 0.4rem;
+  vertical-align: middle;
+  
+}
+.money .yd-cell-icon img{
+  height: .4rem;
+}
 </style>
