@@ -2,8 +2,8 @@
   <transition name="slide">
     <div class="auth">
       <div class="content-wrapper" ref="wrapper">
-        <yd-navbar  @click="back" slot="navbar" title="实名认证">
-            <router-link to="/me" slot="left">
+        <yd-navbar  @click.native="back" slot="navbar" title="实名认证">
+            <router-link to="" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
         </yd-navbar>

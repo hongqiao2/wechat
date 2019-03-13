@@ -2,8 +2,8 @@
   <transition name="slide">
     <div class="recharge">
       <div class="content-wrapper" ref="wrapper">
-        <yd-navbar  @click="back" slot="navbar" title="添加银行卡">
-            <router-link to="/me/money/recharge" slot="left">
+        <yd-navbar  @click.native="back" slot="navbar" title="添加银行卡">
+            <router-link to="" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
         </yd-navbar>

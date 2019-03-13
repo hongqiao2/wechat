@@ -3,7 +3,7 @@
     <div class="money">
       <div class="content-wrapper" ref="wrapper">
         <yd-navbar  @click="back" slot="navbar" title="我的钱包">
-            <router-link to="/me/bill" slot="left">
+            <router-link to="/me" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
         </yd-navbar>
@@ -15,30 +15,30 @@
                 <img src="../../../assets/me/recharge.png"/>
                 充值
               </p>
-              <p>
+              <p @click="goWithdraw">
                 <img src="../../../assets/me/withdraw.png"/>
                 提现
               </p>
             </div>
         </div>
         <yd-cell-group>
-            <yd-cell-item arrow href="#" type="link">
+            <yd-cell-item arrow href="/me/money/packet" type="link">
               <img  slot="icon" src="../../../assets/me/packet1.png"/>
               <span slot="left">我的红包</span>
             </yd-cell-item>
-            <yd-cell-item arrow href="#" type="link">
+            <yd-cell-item arrow href="/me/money/account" type="link">
               <img  slot="icon" src="../../../assets/me/account.png"/>
               <span slot="left">账户信息</span>
             </yd-cell-item>
-            <yd-cell-item arrow href="#" type="link">
+            <yd-cell-item arrow href="/me/money/trecord" type="link">
               <img  slot="icon" src="../../../assets/me/record.png"/>
               <span slot="left">交易记录</span>
             </yd-cell-item>
-            <yd-cell-item arrow href="#" type="link">
+            <yd-cell-item arrow href="/me/money/safety" type="link">
               <img  slot="icon" src="../../../assets/me/security.png"/>
               <span slot="left">安全设置</span>
             </yd-cell-item>
-            <yd-cell-item arrow href="#" type="link">
+            <yd-cell-item arrow href="/me/money/bankset" type="link">
               <img  slot="icon" src="../../../assets/me/bank.png"/>
               <span slot="left">银行卡设置</span>
             </yd-cell-item>
@@ -69,6 +69,16 @@
       goRecharge () {
         this.$router.push({
           path: `/me/money/recharge`
+        })
+      },
+      goPacket () {
+        this.$router.push({
+          path: `/me/money/packet`
+        })
+      },
+      goWithdraw () {
+        this.$router.push({
+          path: `/me/money/withdraw`
         })
       }
     }

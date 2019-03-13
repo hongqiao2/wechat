@@ -22,6 +22,14 @@ import AddressMore from '../components/address/address-detail/address-more/addre
 import AddressSet from '../components/address/address-detail/address-set/address-set'
 import Money from '../components/me/money/money'
 import MoneyRecharge from '../components/me/money/money-recharge/money-recharge'
+import MoneyWithdraw from '../components/me/money/money-withd/money-withd'
+import MoneyPacket from '../components/me/money/money-packet/money-packet'
+import MoneyAccount from '../components/me/money/money-account/money-account'
+import MoneyRecord from '../components/me/money/money-trecord/money-trecord'
+import MoneySafety from '../components/me/money/money-safety/money-safety'
+import AmendPwd from '../components/me/money/amend-pwd/amend-pwd'
+import FindPwd from '../components/me/money/find-pwd/find-pwd'
+import BankSet from '../components/me/money/bank-set/bank-set'
 import MoneyAdd from '../components/me/money/money-add/money-add'
 import MoneyPwd from '../components/me/money/money-pwd/money-pwd'
 import Collection from '../components/me/collection/collection'
@@ -262,12 +270,44 @@ export default new Router({
               component: MoneyRecharge
             },
             {
+              path: 'withdraw',
+              component: MoneyWithdraw
+            },
+            {
+              path: 'packet',
+              component: MoneyPacket
+            },
+            {
+              path: 'account',
+              component: MoneyAccount
+            },
+            {
               path: 'moneyadd',
               component: MoneyAdd
             },
             {
               path: 'moneypwd',
               component: MoneyPwd
+            },
+            {
+              path: 'bankset',
+              component: BankSet
+            },
+            {
+              path: 'trecord',
+              component: MoneyRecord
+            },
+            {
+              path: 'safety',
+              component: MoneySafety
+            },
+            {
+              path: 'amendpwd',
+              component: AmendPwd
+            },
+            {
+              path: 'findpwd',
+              component: FindPwd
             }
           ]
         },

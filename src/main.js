@@ -7,7 +7,6 @@ import MintUI from 'mint-ui'
 // import YDUI from 'vue-ydui' /* 相当于import YDUI from 'vue-ydui/ydui.rem.js' */
 import 'mint-ui/lib/style.css'
 import App from './App'
-
 import store from './store'
 import YDUI from 'vue-ydui'
 import VueLazyLoad from 'vue-lazyload'
@@ -24,7 +23,6 @@ import {Popup} from 'vue-ydui/dist/lib.rem/popup'
 import {CitySelect} from 'vue-ydui/dist/lib.rem/cityselect'
 // import {Upload} from 'element-ui'
 import router from './router'
-
 // /* eslint-disable no-unused-vars */  // 这一句必须写，用来规避ES6的语法检测
 // import vConsole from 'vconsole'  // 针对手机网页的前端 console 调试面板
 // console.log('test')

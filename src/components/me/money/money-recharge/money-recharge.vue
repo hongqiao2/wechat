@@ -29,8 +29,8 @@
             </yd-cell-item>
         </yd-cell-group>
         <div class="recharge-btn">
-          <!-- @click.native="openAlert" -->
-            <yd-button size="large" type="primary"   @click.native="codeShow = keyShow = true" >下一步</yd-button>
+            <yd-button size="large" type="primary" @click.native="openAlert">下一步</yd-button>
+             <!-- @click.native="codeShow = keyShow = true"  已绑定银行卡，输入验证码 -->
         </div>
       </div>
       <yd-popup v-model="ChooseShow" position="bottom" height="35%">
@@ -52,23 +52,15 @@
         <div class="choose-top">
           <p>请输入短信验证码</p>
         </div>
-        <div>
-          <input type="text" slot="right" placeholder="请输入手机号码">
+        <div class="recharge-input-box">
+          <input class="recharge-input" type="text" slot="right" placeholder="请输入手机号码">
           <yd-sendcode slot="right" 
               v-model="start1" 
               @click.native="sendCode1" 
-              type="warning"
+              type="hollow"
+              init-str="获取验证码"
             ></yd-sendcode>
         </div>
-        <!-- <yd-keyboard v-model="keyShow" :callback="done1" ref="keyboardDemo1"></yd-keyboard> -->
-        <!-- <yd-cell-group>
-            <input type="text" slot="right" placeholder="请输入手机号码">
-            <yd-sendcode slot="right" 
-              v-model="start1" 
-              @click.native="sendCode1" 
-              type="warning"
-            ></yd-sendcode>
-        </yd-cell-group> -->
       </yd-popup>
       <router-view></router-view>
     </div>
@@ -82,7 +74,7 @@
     },
     data () {
       return {
-        bankShow: true,
+        bankShow: false,
         ChooseShow: false,
         picked: 'one',
         codeShow: false,
@@ -115,15 +107,6 @@
             timeout: 1500
           })
         }, 1000)
-      },
-      done1 (val) {
-        console.log('输入的密码是：' + val)
-        this.$dialog.loading.open('验证支付密码')
-        /* 模拟异步验证密码 */
-        setTimeout(() => {
-          this.$refs.keyboardDemo1.$emit('ydui.keyboard.error', '对不起，您的支付密码不正确，请重新输入。')
-          this.$dialog.loading.close()
-        }, 2000)
       }
     }
   }
@@ -173,4 +156,20 @@
     font-size: 0.28rem;
     border-bottom: 1px solid #eee;
 }
+.recharge-input-box{
+  margin: 0.5rem 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.recharge-input{
+  height: 0.7rem;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 0.2rem;
+  width: 65%;
+  font-size: 0.28rem;
+}
+
 </style>
