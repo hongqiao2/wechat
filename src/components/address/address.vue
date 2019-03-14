@@ -2,7 +2,19 @@
   <yd-layout>
     <mt-index-list>
             <!-- <mt-cell class="top" title="" > -->
-                <div class="top-cell">
+              <yd-cell-item  class="addr-list" type="link" href="/address/friend">
+                  <img slot="icon" src="../../assets/address/newfriend.png">
+                  <span slot="left">新的朋友 </span>
+              </yd-cell-item>
+              <yd-cell-item class="addr-list" type="link" href="/address/group">
+                  <img slot="icon" src="../../assets/address/groupchat.png">
+                  <span slot="left">群聊 </span>
+              </yd-cell-item>
+              <yd-cell-item class="addr-list" type="link" href="/address/label">
+                  <img slot="icon" src="../../assets/address/label.png">
+                  <span slot="left">标签 </span>
+              </yd-cell-item>
+                <!-- <div class="top-cell">
                   <div class="new-friend" @click="newFriend">
                     <img src="../../assets/address/newfriend.png" />
                     <span>新的朋友</span>
@@ -15,7 +27,7 @@
                     <img src="../../assets/address/label.png" />
                     <span>标签</span>
                   </div>
-                </div>
+                </div> -->
               <!-- </mt-cell> -->
             <mt-index-section 
               v-for="(item, index) in personnelList" 
@@ -57,7 +69,6 @@
     },
     methods: {
       gotoDetail (info) {
-        console.log('测试')
         this.$router.push({
           path: `/address/${info.dissid}`
         })
@@ -66,12 +77,6 @@
       ...mapMutations({
         setAddress: 'SET_INFO'
       }),
-      newFriend () {
-        this.$toast({
-          message: '没有新的朋友',
-          duration: 1500
-        })
-      },
       warn () {
         MessageBox({
           title: '提示',
@@ -337,21 +342,20 @@
 </script>
 
 <style >
- .new-friend{
-  border-bottom: 1px solid #eee;
+ .addr-list{
   width: 100%;
-  padding: 0.2rem 0.3rem;
+  padding: 0.1rem 0.2rem;
   background: #fff;
   display: flex;
   align-items: center;
 }
-.new-friend img{
+.addr-list .yd-cell-icon img{
   width: 0.8rem;
   height: 0.8rem;
   border-radius: 5px;
   margin-right: 0.2rem;
 }
-.new-friend span{
+.addr-list span{
   font-size: 0.32rem;
   color: #464646;
 }

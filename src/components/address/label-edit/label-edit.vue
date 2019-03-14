@@ -1,14 +1,27 @@
 <template>
   <transition name="slide">
-    <div class="group" ref="content">
-        <yd-navbar title="发起群聊">
-            <router-link to="" @click.native="$router.back(-1)" slot="left">
-                <yd-navbar-back-icon ></yd-navbar-back-icon>
+    <div class="friend">
+      <div class="content-wrapper" ref="wrapper">
+        <yd-navbar  slot="navbar" title="编辑标签">
+            <router-link to="" slot="left" @click.native="back" >
+                <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
-            <p slot="right">完成({{checkbox1.length}})</p>
-        </yd-navbar> 
-        <yd-search v-model="value1" :on-submit="submitHandler"></yd-search>
-          <mt-index-list>
+             <router-link to="" slot="right">保存</router-link>
+             <!-- 标签名称 -->
+        </yd-navbar>
+        
+        <yd-cell-group title="标签">
+            <yd-cell-item>
+                <yd-input slot="right" v-model="input10" ref="input10" placeholder="未设置标签名字"></yd-input>
+            </yd-cell-item>
+        </yd-cell-group>
+        <p class="edit-num" v-html="'标签成员(' + personnelList.length +')'" ></p>
+        <yd-cell-group>
+            <yd-cell-item @click.native="goGroup">
+                <div slot="left" class="label-add"><i class="iconfont icon-tianjia"></i> 添加成员 </div>
+            </yd-cell-item>
+        </yd-cell-group>
+        <mt-index-list>
             <mt-index-section 
                 v-for="(item, index) in personnelList" 
                 :key="item.id" 
@@ -21,53 +34,26 @@
                 :title="info.dissname"
                 >
                 <div class="mt-cell-wrapper">
-                    <yd-checkbox-group v-model="checkbox1"><yd-checkbox :val="info.value" shape="circle"></yd-checkbox></yd-checkbox-group>
                     <img v-lazy="info.imgurl" height="40" width="40" />
                 </div>
                 </mt-cell>
             </mt-index-section>
           </mt-index-list> 
-    <router-view></router-view>
-      
+
+      </div>
+      <router-view></router-view>
     </div>
   </transition>
+
 </template>
 
 <script type="text/ecmascript-6">
-  import { IndexList, IndexSection, Toast, MessageBox } from 'mint-ui'
-  import {mapMutations} from 'vuex'
-
   export default {
     components: {
-      IndexList,
-      IndexSection,
-      Toast,
-      MessageBox
-    },
-    created () {
-      // console.log(this.personnelList)
-    },
-    methods: {
-      ...mapMutations({
-        setAddress: 'SET_INFO'
-      }),
-    //   gotoChat (info) {
-    //     this.$router.push({
-    //       path: `/chatroom`
-    //     })
-    //   },
-      submitHandler (value) {
-        console.log(this.personnelList)
-        this.personnelList = this.personnelList.filter(item => {
-        //   console.log(item)
-          return item.indexOf(value) !== -1
-        })
-        // this.$dialog.toast({mes: `搜索：${value}`})
-      }
     },
     data () {
       return {
-        value1: '',
+        input10: '同事',
         checkbox1: ['1'],
         personnelList: [
           {
@@ -336,68 +322,59 @@
           }
         ]
       }
+    },
+    mounted () {
+    },
+    methods: {
+      back (event) {
+        this.$router.back()   // 返回上一级
+      },
+      goGroup () {
+        this.$router.push({
+          path: `/group`
+        })
+      },
+      submitHandler (value) {
+        console.log(this.personnelList)
+        this.personnelList = this.personnelList.filter(item => {
+        //   console.log(item)
+          return item.indexOf(value) !== -1
+        })
+        // this.$dialog.toast({mes: `搜索：${value}`})
+      }
     }
   }
 </script>
 
 <style>
-.yd-checkbox-text{
-    color: transparent;
-}
-.yd-checkbox>input[type=checkbox]:checked+.yd-checkbox-icon{
-    color: #956EFF !important;
-}
-.yd-checkbox {
-    display: inline-block;
-    padding-right: 10px;
-    position: absolute;
-    left: 0.3rem;
-    top: 0.3rem;
-}
-.yd-navbar-item p{
-    color: #8D66FA;
-    font-size: 0.28rem;
-}
-.group{
+.friend{
     position: fixed;
-    top: 0px;
-    bottom: 0px;
+    width:100%;
+    height:100%;
+    top: 0;
     left: 0;
     right: 0;
-    z-index: 200;
-    background-color: #ebebeb;
+    bottom: 0;
+    z-index: 203;
+    background-color:#F9F9F9;
 }
-.group .address-item{
-    background-color: #fff;
-    padding-left:1.8rem;
-    height: 1rem;
-    padding-left: 1.7rem;
+.friend .yd-cell-icon img{
+  width: 1rem;
+  height: 1rem;
+  border-radius: 5px;
 }
-.group .address-item img {
-    position: absolute;
-    left: 0.9rem;
-    top: 0.1rem;
+.friend  .yd-navbar-item a{
+  color: #8D66FA;
+  font-size: 0.32rem;
 }
-.group .mint-cell img {
-    vertical-align: middle;
-    width: 0.8rem;
-    height: 0.8rem;
-    border-radius: 5px;
-    margin-left: 0.6rem;
+.label-add{
+    display: flex;
+    align-items: center;
+    color: #8D66FA;
 }
-.group .mint-cell-wrapper{
-    background-image: -webkit-linear-gradient(top, #eee, #eee 50%, transparent 50%);
-    background-image: linear-gradient(180deg, #eee, #eee 50%, transparent 50%);
+.edit-num{
+    color: #959595;
+    font-size: 0.28rem;
+    padding: .05rem .24rem .1rem;
 }
-.mint-indexlist-nav{
-  background:transparent;
-  border-left:none;
-} 
-.mint-indexlist-content{
-  margin: 0 !important;
-}
-.group .yd-input>input{
-  text-align: left;
-}
-    
 </style>

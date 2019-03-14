@@ -28,7 +28,9 @@
           >
             <div class="item-cell" @click="gotoChatroom(info)">
               <div class="img-unread">
-                <img class="item-img" :src="info.imgurl" /><span v-html="info.unread" v-show="info.unread"></span>
+                <img class="item-img" :src="info.imgurl" />
+                <yd-badge slot="badge" type="danger" v-show="info.unread">{{info.unread}}</yd-badge>
+                </span>
               </div>
               <h2 class="dissname" v-html="info.dissname"></h2>
               <p class="summary" v-html="info.summary"></p>
@@ -151,21 +153,14 @@
     float: left;
     margin-right: 0.2rem;
   }
-  .img-unread span{
-    position: absolute;
-    top: -0.1rem;
-    left: 0.8rem;
-    font-size: 0.12rem;
-    line-height: 0.24rem;
+  .chat-wrapper .yd-badge-danger{
+    background-color: #ef4f4f;
     color: #fff;
-    height: 0.29rem;
-    width: 0.29rem;
-    text-align: center;
-    vertical-align: middle;
-    background-color: red;
-    border: 1px solid red;
-    border-radius: 50%;
+    position: absolute;
+    right: -0.2rem;
+    top: -0.1rem;
   }
+    
   .item-img{
     float: left;
     border-radius: 0.1rem;
@@ -174,7 +169,7 @@
     margin-right: 0.2rem;
   }
   .dissname{
-    font-size: 0.34rem;
+    font-size: 0.32rem;
     font-weight: 400;
   }
   .summary{

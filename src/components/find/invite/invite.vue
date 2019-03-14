@@ -1,11 +1,11 @@
 <template>
   <transition name="slide">
-    <div class="group" ref="content">
-        <yd-navbar title="发起群聊">
-            <router-link to="" @click.native="$router.back(-1)" slot="left">
-                <yd-navbar-back-icon ></yd-navbar-back-icon>
+    <div class="chatroom-card" ref="content">
+        <yd-navbar title="邀请手机联系人">
+            <router-link to="#" slot="left">
+                <yd-navbar-back-icon @click.native="$router.back(-1)"></yd-navbar-back-icon>
             </router-link>
-            <p slot="right">完成({{checkbox1.length}})</p>
+            <!-- <p slot="right">完成({{checkbox1.length}})</p> -->
         </yd-navbar> 
         <yd-search v-model="value1" :on-submit="submitHandler"></yd-search>
           <mt-index-list>
@@ -26,7 +26,12 @@
                 </div>
                 </mt-cell>
             </mt-index-section>
+            <div style="height: 0.9rem;"></div>
           </mt-index-list> 
+          
+          <div class="invite-bottom">
+              邀请使用微聊({{checkbox1.length}})
+          </div>
     <router-view></router-view>
       
     </div>
@@ -358,7 +363,7 @@
     color: #8D66FA;
     font-size: 0.28rem;
 }
-.group{
+.chatroom-card{
     position: fixed;
     top: 0px;
     bottom: 0px;
@@ -367,37 +372,45 @@
     z-index: 200;
     background-color: #ebebeb;
 }
-.group .address-item{
+.address-item{
+    /* border-bottom: 0.2px solid #eee; */
     background-color: #fff;
     padding-left:1.8rem;
     height: 1rem;
-    padding-left: 1.7rem;
 }
-.group .address-item img {
+.address-item img {
     position: absolute;
     left: 0.9rem;
     top: 0.1rem;
 }
-.group .mint-cell img {
+.mint-cell img {
     vertical-align: middle;
     width: 0.8rem;
     height: 0.8rem;
     border-radius: 5px;
-    margin-left: 0.6rem;
 }
-.group .mint-cell-wrapper{
+.mint-cell-wrapper{
     background-image: -webkit-linear-gradient(top, #eee, #eee 50%, transparent 50%);
     background-image: linear-gradient(180deg, #eee, #eee 50%, transparent 50%);
 }
 .mint-indexlist-nav{
-  background:transparent;
-  border-left:none;
+background:transparent;
+border-left:none;
 } 
 .mint-indexlist-content{
-  margin: 0 !important;
+margin: 0 !important;
 }
-.group .yd-input>input{
-  text-align: left;
+.invite-bottom{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    background: #F8F8F8;
+    text-align: center;
+    width: 100%;
+    height: 0.9rem;
+    line-height: 0.9rem;
+    font-size: 0.32rem;
+    z-index: 111;
+    color: #8D66FA;
 }
-    
 </style>

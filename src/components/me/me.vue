@@ -105,7 +105,7 @@
     left: 0;
     right: 0;
     z-index: 99;
-    background-color: rgba(238,233,233,0.6);
+    background-color:#f9f9f9;
   }
   .me-wrapper{
     /*border: 1px solid red;*/
@@ -167,6 +167,7 @@
   .money-img, .collection-img, .photo-img, .card-img, .emoticon-img, .setup-img{
     height: 0.6rem;
     width: 0.6rem;
+    margin-right: 0.1rem;
   }
   .yd-cell-right img{
     width: 0.5rem;

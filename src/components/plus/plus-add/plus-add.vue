@@ -1,9 +1,9 @@
 <template>
   <transition name="slide">
     <div class="plus-add" ref="content">
-        <yd-navbar title="添加朋友">
-            <router-link to="#" slot="left">
-                <yd-navbar-back-icon @click.native="$router.back(-1)"></yd-navbar-back-icon>
+        <yd-navbar title="添加朋友"  @click.native="back">
+            <router-link to="" slot="left">
+                <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
         </yd-navbar> 
         <div class="add-search" @click="goSearch">
@@ -35,6 +35,9 @@
     computed: {
     },
     methods: {
+      back (event) {
+        this.$router.back()   // 返回上一级
+      },
       goSearch () {
         this.$router.push({
           path: `/search`
