@@ -18,7 +18,7 @@
             </yd-cell-item>
         </yd-cell-group>
         <div class="recharge-btn">
-            <yd-button size="large" type="primary">确认提交</yd-button>
+            <yd-button size="large"  bgcolor="#8D66FA" color="#FFF" >确认提交</yd-button>
         </div>
       </div>
       <router-view></router-view>

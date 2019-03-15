@@ -15,7 +15,7 @@
             </yd-cell-item>
           </yd-cell-group>
           <div class="recharge-btn">
-              <yd-button size="large" type="primary" @click.native="nextStep">下一步</yd-button>
+              <yd-button size="large"  bgcolor="#8D66FA" color="#FFF"  @click.native="nextStep">下一步</yd-button>
           </div>
         </div>
         <div v-if="show2">
@@ -53,7 +53,7 @@
           </yd-cell-group>
           <router-link to="#" slot="left" class="add-agreement">《金融魔方用户协议》</router-link>
           <div class="recharge-btn">
-              <yd-button size="large" type="primary" @click.native="goMoneypwd">同意协议并确定</yd-button>
+              <yd-button size="large"  bgcolor="#8D66FA" color="#FFF"  @click.native="goMoneypwd">同意协议并确定</yd-button>
           </div>
         </div>
         

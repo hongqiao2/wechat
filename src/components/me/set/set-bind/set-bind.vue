@@ -13,7 +13,7 @@
             <p>绑定微信可同步微信头像、昵称到微聊，方便好友认识</p>
             <p>微信昵称：明军西</p>
         </div>
-        <div class="helpDetail-btn"><yd-button size="large" type="primary">绑定微信</yd-button></div>
+        <div class="helpDetail-btn"><yd-button size="large"  bgcolor="#8D66FA" color="#FFF" >绑定微信</yd-button></div>
       </div>
     </div>
       <router-view></router-view>

@@ -26,6 +26,7 @@ import ChatroomNotice from '../components/chatroom/chatroom-notice/chatroom-noti
 import ChatroomSuit from '../components/chatroom/chatroom-suit/chatroom-suit'
 import AddressMore from '../components/address/address-detail/address-more/address-more'
 import AddressSet from '../components/address/address-detail/address-set/address-set'
+import AddressRemark from '../components/address/address-detail/address-remark/address-remark'
 import Money from '../components/me/money/money'
 import MoneyRecharge from '../components/me/money/money-recharge/money-recharge'
 import MoneyWithdraw from '../components/me/money/money-withd/money-withd'
@@ -210,6 +211,14 @@ export default new Router({
                 menuShow: false
               },
               component: AddressSet
+            },
+            {
+              path: 'remark',
+              meta: {
+                navShow: false,
+                menuShow: false
+              },
+              component: AddressRemark
             }
           ]
         }
@@ -317,6 +326,7 @@ export default new Router({
             },
             {
               path: 'account/:type',
+              // path: 'account',
               component: MoneyAccount
             },
             {

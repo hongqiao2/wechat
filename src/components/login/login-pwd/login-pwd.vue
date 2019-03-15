@@ -5,21 +5,14 @@
         </div>
         <yd-cell-group>
             <yd-cell-item>
-                <yd-input slot="right" v-model="input8" required :show-success-icon="false" :show-error-icon="false" regex="mobile" placeholder="请输入手机号码"></yd-input>
+                <yd-input slot="right" v-model="input8" required :show-success-icon="false" :show-error-icon="false" regex="mobile" placeholder="请输入手机号"></yd-input>
             </yd-cell-item>
             <yd-cell-item>
-                <input type="text" slot="right" placeholder="请输入验证码">
-                <yd-sendcode slot="right" 
-                v-model="start1" 
-                @click.native="sendCode1" 
-                type="hollow"
-                init-str="获取验证码"
-                ></yd-sendcode>
-
+                <yd-input slot="right" type="password" v-model="input2" placeholder="请输入密码"></yd-input>
             </yd-cell-item>
         </yd-cell-group>
          <div class="login-btn">
-            <yd-button type="primary" size="large">登录</yd-button>
+            <yd-button bgcolor="#8D66FA" color="#FFF" size="large">登录</yd-button>
          </div>
          <div class="login-way">
              <span @click="goLogin">使用短信验证码登录</span>

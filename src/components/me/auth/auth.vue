@@ -15,7 +15,7 @@
             <img src="../../../assets/me/identity.png">提前防范身份信息冒用
           </p>
           <div class="auth-btn">
-            <yd-button size="large" type="primary" @click.native="cert">立即实名认证</yd-button>
+            <yd-button size="large"  bgcolor="#8D66FA" color="#FFF"  @click.native="cert">立即实名认证</yd-button>
           </div>
         </div>
         <div v-if="secondStep">
@@ -34,7 +34,7 @@
               </yd-cell-item>
             </yd-cell-group>
             <yd-button-group class="auth-btn">
-              <yd-button size="large" @click.native="toastSuccess">立即认证</yd-button>
+              <yd-button size="large" bgcolor="#8D66FA" color="#FFF"  @click.native="toastSuccess">立即认证</yd-button>
             </yd-button-group>
           </div>
         </div>

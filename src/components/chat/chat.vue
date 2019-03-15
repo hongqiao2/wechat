@@ -23,8 +23,10 @@
             <div class="item-cell" @click="gotoChatroom(info)">
               <div class="img-unread">
                 <img class="item-img" :src="info.imgurl">
-                <span v-html="info.unread" v-show="info.unread"></span>
+               <yd-badge slot="badge" type="danger">2</yd-badge>
+                <!-- <span v-html="info.unread" v-show="info.unread"></span> -->
               </div>
+               
               <h2 class="dissname" v-html="info.dissname"></h2>
               <p class="summary" v-html="info.summary"></p>
               <span class="item-time" v-html="info.time"></span>
@@ -174,21 +176,11 @@ export default {
   float: left;
   margin-right: 0.2rem;
 }
-.img-unread span {
+.img-unread span{
   position: absolute;
-  top: -0.1rem;
-  left: 0.8rem;
-  font-size: 0.12rem;
-  line-height: 0.24rem;
-  color: #fff;
-  height: 0.29rem;
-  width: 0.29rem;
-  text-align: center;
-  vertical-align: middle;
-  background-color: red;
-  border: 1px solid red;
-  border-radius: 50%;
-}
+  right: -0.15rem;
+  top: -0.12rem;
+} 
 .item-img {
   float: left;
   border-radius: 0.1rem;

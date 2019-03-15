@@ -1,23 +1,11 @@
 <template>
   <!-- <transition name="slide"> -->
     <yd-layout  class="address-detail">
-        <yd-navbar  @click="back" slot="navbar" title="资料设置">
+        <yd-navbar  @click.native="back" slot="navbar" title="设置备注">
             <router-link to="#" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
         </yd-navbar>
-      <yd-cell-group>
-        <yd-cell-item arrow @click.native="goRemark(info.dissid)">
-            <span slot="left">设置备注名称</span>
-        </yd-cell-item>
-        <yd-cell-item arrow>
-            <span slot="left">投诉</span>
-        </yd-cell-item>
-        <yd-cell-item>
-            <span slot="left">加入黑名单</span>
-            <yd-switch slot="right" v-model="ydswitch"></yd-switch>
-        </yd-cell-item>
-      </yd-cell-group>
        <router-view></router-view>
     </yd-layout>
 </template>
@@ -79,9 +67,9 @@
       doAddList (info) {
         this.setaddList(info)
       },
-      goRemark (dissid) {
+      goRemark () {
         this.$router.push({
-          path: `/address/${dissid}/remark`
+          path: `/address/remark`
         })
       },
       // gotoMore (info) {

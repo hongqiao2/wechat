@@ -17,7 +17,7 @@
               slot="right"
               v-model="start1"
               @click.native="sendCode1"
-              type="primary"
+               bgcolor="#8D66FA" color="#FFF" 
               init-str="获取验证码"
             ></yd-sendcode>
           </yd-cell-item>
@@ -31,7 +31,7 @@
           </yd-cell-item>
         </yd-cell-group>
         <div class="account-btn">
-          <yd-button size="large" @click.native="upPass" type="primary">确认密码</yd-button>
+          <yd-button size="large" @click.native="upPass"  bgcolor="#8D66FA" color="#FFF" >确认密码</yd-button>
         </div>
       </div>
     </div>

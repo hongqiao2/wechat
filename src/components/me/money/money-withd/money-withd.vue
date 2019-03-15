@@ -35,7 +35,7 @@
         </div>
         
         <div class="recharge-btn">
-            <yd-button size="large" type="primary" >下一步</yd-button>
+            <yd-button size="large"  bgcolor="#8D66FA" color="#FFF"  >下一步</yd-button>
             <!-- @click.native="openAlert" 未绑定银行卡，提示请绑定卡 -->
             <p>提示：单人单日限额5000元，每日限提现三次</p>
         </div>

@@ -1,37 +1,36 @@
 <template>
   <!-- <transition name="slide"> -->
     <yd-layout  class="address-detail">
-        <yd-navbar  @click="back" slot="navbar" title="详细信息">
-            <router-link to="" slot="left"  @click.native="$router.back(-1)">
+        <yd-navbar slot="navbar" title="详细信息">
+            <router-link to=""  @click.native="back"  slot="left">
                 <yd-navbar-back-icon ></yd-navbar-back-icon>
             </router-link>
-            <router-link to="#" slot="right">
-                <yd-icon name="more" @click.native="goDset(this.info.dissid)" size="0.4rem"></yd-icon>
+            <router-link to="#" slot="right" @click.native="goDset(info.dissid)" >
+              <i class="iconfont icon-xiazai9"  style="color:#101010;"></i>
             </router-link>
-            
         </yd-navbar>
-
         <div class="content" ref="content">
         <div class="content-name">
-          <img class="smallImg" :src="this.info.imgurl" />
+          <img class="smallImg" :src="info.imgurl" />
           <!-- <img class="bagImg" @click="changBig" ref="bagImge" :src="this.info.imgurl" /> -->
           <div class="content-disname">
-            <h2 class="" v-html="this.info.dissname"></h2>
-            <p class="">微信号：{{this.info.dissid}}</p>
+            <h2 class="" v-html="info.dissname"></h2>
+            <p class="">微信号：{{info.dissid}}</p>
+            <p>测试{{info.dissid}}</p>
           </div>
         </div>
         <div class="content-note">设置备注和描述 </div>
         <div class="content-intro">
-          <span class="content-label">地区</span>{{this.info.location}}
+          <span class="content-label">地区</span>{{info.location}}
         </div>
         <div class="content-intro">
-          <span class="content-label">个性签名</span>{{this.info.sign}}
+          <span class="content-label">个性签名</span>{{info.sign}}
         </div>
         <div class="content-intro">
-          <span class="content-label">兴趣爱好</span>{{this.info.hobby}}
+          <span class="content-label">兴趣爱好</span>{{info.hobby}}
         </div>
         <div class="content-intro">
-          <span class="content-label">来源</span>{{this.info.source}}
+          <span class="content-label">来源</span>{{info.source}}
         </div>
         <!-- <div class="content-album">
           <span style="font-weight:bold;">个人相册 </span>
@@ -44,48 +43,9 @@
               <router-link to='/chatroom'> 发消息 </router-link>
             </yd-button>
         </div>
+        <router-view></router-view>
       </div>
     </yd-layout>
-
-
-    <!-- <div class="address-detail">
-      <div class="back">
-        <div @click="back">
-          <img src="../../../assets/返回.png" height="16" width="19" />
-        </div>
-        <span>详细信息</span>
-      </div>
-      <div class="content" ref="content">
-        <div class="content-name">
-          <img class="" :src="this.info.imgurl" height="60" width="60" />
-          <img class="bagImg" @click="changBig" ref="bagImge" :src="this.info.imgurl" />
-          <div>
-            <h2 class="" v-html="this.info.dissname"></h2>
-            <p class="">微信号：{{this.info.dissid}}</p>
-          </div>
-        </div>
-        <div class="content-phone">
-          <span style="font-weight:bold;">电话号码：&nbsp</span>{{this.info.phone}}
-        </div>
-        <div class="content-location">
-          <span style="font-weight:bold;">地区: </span>{{this.info.location}}
-        </div>
-        <div class="content-album">
-          <span style="font-weight:bold;">个人相册 </span>
-          <img :src="this.info.album" height="50" width="50" />
-          <img :src="this.info.album" height="50" width="50" />
-          <img :src="this.info.album" height="50" width="50" />
-        </div>
-        
-        <div class="content-message" @click="doAddList(info)">
-          <router-link to='/chatroom' class="message">
-            <span>发消息</span>
-          </router-link>
-        </div>
-      </div>
-      <router-view></router-view>
-    </div> -->
-  <!-- </transition> -->
 </template>
 
 <script type="text/ecmascript-6">

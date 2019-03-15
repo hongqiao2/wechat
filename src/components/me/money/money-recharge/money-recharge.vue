@@ -7,7 +7,7 @@
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
             <router-link class="recharge-query" to="#" slot="right" @click.native="show = true">
-                <yd-icon name="question" size="0.4rem"></yd-icon>
+              <i class="iconfont icon-explanation"></i>
             </router-link>
         </yd-navbar>
         <div class="recharge-bank" @click="goRechargeadd">
@@ -29,7 +29,7 @@
             </yd-cell-item>
         </yd-cell-group>
         <div class="recharge-btn">
-            <yd-button size="large" type="primary" @click.native="openAlert">下一步</yd-button>
+            <yd-button size="large" bgcolor="#8D66FA" color="#FFF" @click.native="openAlert">下一步</yd-button>
              <!-- @click.native="codeShow = keyShow = true"  已绑定银行卡，输入验证码 -->
         </div>
       </div>
@@ -126,6 +126,7 @@
 }
 .recharge-query i{
     color: #101010;
+    font-size: 0.5rem;
 }
 .recharge-bank{
     background: #fff;
@@ -133,7 +134,7 @@
     text-align: center;
     font-size: 0.28rem;
     padding: 0.3rem 0;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.5rem;
 }
 .recharge-btn{
     width: 85%;
