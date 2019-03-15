@@ -189,8 +189,7 @@ export default {
       if (
         !captcha ||
         !kaptcha ||
-        !/^\d{6}$/.test(captcha) ||
-        kaptcha != captcha
+        !/^\d{6}$/.test(captcha)
       ) {
         this.$dialog.toast({
           mes: "短信验证码有误，请重填",
