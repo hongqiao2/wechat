@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "presets": [
     ["env", {
@@ -17,4 +18,25 @@
       }
     ]
   ]
+=======
+{
+  "presets": [
+    ["env", {
+      "modules": false,
+      "targets": {
+        "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+      }
+    }],
+    "stage-2"
+  ],
+  "plugins": [
+    [
+      "component",
+      {
+        "libraryName": "element-ui",
+        "styleLibraryName": "theme-chalk"
+      }
+    ]
+  ]
+>>>>>>> acf4f0372c86a46fbad5f836a1d26b8592c2ed6c
 }
