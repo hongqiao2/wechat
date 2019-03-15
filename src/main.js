@@ -100,7 +100,8 @@ new Vue({
   el: '#app',
   data: function () {
     return {
-      $webSocket: null // 全局声明webSocket
+      $webSocket: null, // 全局声明webSocket
+      $webSocketUrl: 'ws://localhost:8080/boot/app/chat-room/',// webSocket 请求地址
     }
   },
   router,

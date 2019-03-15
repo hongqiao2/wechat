@@ -59,7 +59,7 @@ export default {
     let userinfo = JSON.parse(localStorage.getItem("access_token"));
     let web = this.$root.$webSocket;
     if (!web) {
-      let urlPrefix = "ws://localhost:8080/boot/app/chat-room/";
+      let urlPrefix = this.$root.$webSocketUrl;
       this.$root.$webSocket = new WebSocket(urlPrefix + userinfo.id);
       web = this.$root.$webSocket;
     }
