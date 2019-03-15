@@ -85,7 +85,8 @@
     },
     methods: {
       back () {
-        this.$router.back()   // 返回上一级
+        console.log(this.value1)
+        //this.$router.back()   // 返回上一级
       },
       show (ev) {
         this.$refs.tips.style.marginTop = 280 + 'px'

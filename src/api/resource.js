@@ -57,9 +57,11 @@ const api = {
   updateName(that, params) {
     return that.$http.post(baseURL + '/user/updateName', params);
   },
+  // 获取黑名单列表
   getBlackList(that, params) {
     return that.$http.post(baseURL + '/findBlacklist', params);
   },
+  // 修改用户新消息配置
   updateSysUserNewMessageConf(that, params){
     return that.$http.post(baseURL + '/user/updateSysUserNewMessageConf', params);
   }

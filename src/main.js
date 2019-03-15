@@ -98,6 +98,11 @@ Vue.http.options.emulateHTTP = true
 
 new Vue({
   el: '#app',
+  data: function () {
+    return {
+      $webSocket: null // 全局声明webSocket
+    }
+  },
   router,
   store,
   render: h => h(App)
