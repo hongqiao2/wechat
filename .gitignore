@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 .DS_Store
 node_modules/
 dist/
@@ -12,18 +11,3 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
-=======
-.DS_Store
-node_modules/
-dist/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Editor directories and files
-.idea
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
->>>>>>> acf4f0372c86a46fbad5f836a1d26b8592c2ed6c
