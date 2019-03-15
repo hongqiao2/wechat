@@ -1,16 +1,14 @@
 <template>
   <transition name="slide">
-    <div class="chatroom-card" ref="content">
+    <div class="group" ref="content">
         <yd-navbar title="发起群聊">
-            <router-link to="#" slot="left">
-                <yd-navbar-back-icon @click.native="$router.back(-1)"></yd-navbar-back-icon>
+            <router-link to="" @click.native="$router.back(-1)" slot="left">
+                <yd-navbar-back-icon ></yd-navbar-back-icon>
             </router-link>
             <p slot="right">完成({{checkbox1.length}})</p>
         </yd-navbar> 
         <yd-search v-model="value1" :on-submit="submitHandler"></yd-search>
-
-        
-            <mt-index-list>
+          <mt-index-list>
             <mt-index-section 
                 v-for="(item, index) in personnelList" 
                 :key="item.id" 
@@ -28,29 +26,7 @@
                 </div>
                 </mt-cell>
             </mt-index-section>
-            </mt-index-list> 
-            <!-- <yd-checkbox val="2" shape="circle">啊啊啊</yd-checkbox>
-            <yd-checkbox val="3" shape="circle">喔喔喔</yd-checkbox> -->
-        
-        <!-- <mt-index-list>
-            <mt-index-section 
-                v-for="(item, index) in personnelList" 
-                :key="item.id" 
-                :index="item.group" 
-            >
-                <mt-cell 
-                class="address-item" 
-                v-for="info in item.info" 
-                :key="info.id" 
-                :title="info.dissname"
-                    v-on:click.native="gotoChat(info)"
-                >
-                <div class="mt-cell-wrapper">
-                    <img v-lazy="info.imgurl" height="40" width="40" />
-                </div>
-                </mt-cell>
-            </mt-index-section>
-        </mt-index-list> -->
+          </mt-index-list> 
     <router-view></router-view>
       
     </div>
@@ -382,7 +358,7 @@
     color: #8D66FA;
     font-size: 0.28rem;
 }
-.chatroom-card{
+.group{
     position: fixed;
     top: 0px;
     bottom: 0px;
@@ -391,32 +367,37 @@
     z-index: 200;
     background-color: #ebebeb;
 }
-.address-item{
-    /* border-bottom: 0.2px solid #eee; */
+.group .address-item{
     background-color: #fff;
     padding-left:1.8rem;
     height: 1rem;
+    padding-left: 1.7rem;
 }
-.address-item img {
+.group .address-item img {
     position: absolute;
     left: 0.9rem;
     top: 0.1rem;
 }
-.mint-cell img {
+.group .mint-cell img {
     vertical-align: middle;
     width: 0.8rem;
     height: 0.8rem;
     border-radius: 5px;
+    margin-left: 0.6rem;
 }
-.mint-cell-wrapper{
+.group .mint-cell-wrapper{
     background-image: -webkit-linear-gradient(top, #eee, #eee 50%, transparent 50%);
     background-image: linear-gradient(180deg, #eee, #eee 50%, transparent 50%);
 }
 .mint-indexlist-nav{
-background:transparent;
-border-left:none;
+  background:transparent;
+  border-left:none;
 } 
 .mint-indexlist-content{
-margin: 0 !important;
+  margin: 0 !important;
 }
+.group .yd-input>input{
+  text-align: left;
+}
+    
 </style>

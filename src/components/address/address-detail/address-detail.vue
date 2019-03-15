@@ -2,8 +2,8 @@
   <!-- <transition name="slide"> -->
     <yd-layout  class="address-detail">
         <yd-navbar  @click="back" slot="navbar" title="详细信息">
-            <router-link to="#" slot="left">
-                <yd-navbar-back-icon  @click.native="$router.back(-1)"></yd-navbar-back-icon>
+            <router-link to="" slot="left"  @click.native="$router.back(-1)">
+                <yd-navbar-back-icon ></yd-navbar-back-icon>
             </router-link>
             <router-link to="#" slot="right">
                 <yd-icon name="more" @click.native="goDset(this.info.dissid)" size="0.4rem"></yd-icon>
@@ -40,7 +40,7 @@
           <img :src="this.info.album" height="50" width="50" />
         </div> -->
         <div class="content-message">
-          <yd-button size="large" type="primary"  shape="circle" @click="doAddList(info)">
+          <yd-button size="large" bgcolor="#8D66FA" color="#FFF"  shape="circle" @click="doAddList(info)">
               <router-link to='/chatroom'> 发消息 </router-link>
             </yd-button>
         </div>

@@ -6,23 +6,23 @@
           <img class="find-img" src="../../assets/find/circle.png" />
           <span class="find-item">朋友圈</span>
         </router-link>
-        <router-link tag="div" class="find-list find-spacing" @click="warn" to="/find/scan">
+        <router-link tag="div" class="find-list find-spacing" to="/find/scan">
           <img class="find-img" src="../../assets/find/sweep.png" />
           <span class="find-item">扫一扫</span>
         </router-link>
-        <router-link tag="div" class="find-list" @click="warn" to="/find/scan">
+        <router-link tag="div" class="find-list" to="/search">
           <img class="find-img" src="../../assets/find/number.png" />
           <span class="find-item">按号码查找</span>
         </router-link>
-        <router-link tag="div" class="find-list" @click="warn" to="/find/scan">
+        <router-link tag="div" class="find-list" to="/find/contact">
           <img class="find-img" src="../../assets/find/add.png" />
           <span class="find-item">添加手机联系人</span>
         </router-link>
-        <router-link tag="div" class="find-list find-spacing" @click="warn" to="/find/scan">
+        <router-link tag="div" class="find-list find-spacing" to="/find/invite">
           <img class="find-img" src="../../assets/find/invite.png" />
           <span class="find-item">邀请手机联系人</span>
         </router-link>
-         <router-link tag="div" class="find-list" @click="warn" to="/find/scan">
+         <router-link tag="div" class="find-list" to="">
           <img class="find-img" src="../../assets/find/invite1.png" />
           <span class="find-item">邀请微信好友</span>
         </router-link>
@@ -76,7 +76,7 @@
     left: 0;
     right: 0;
     z-index: 99;
-    background-color: rgba(238,233,233,0.6);
+    background-color:#f9f9f9;
   }
   .find-wrapper{
     height: 100%;
@@ -99,6 +99,7 @@
   .find-img{
     height: 0.64rem;
     width: 0.64rem;
+    margin-right: 0.1rem;
   }
   .find-spacing{
     margin-bottom: 0.2rem;

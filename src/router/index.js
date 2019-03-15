@@ -9,9 +9,15 @@ import Me from '../components/me/me'
 import Chatroom from '../components/chatroom/chatroom'
 import Search from '../components/search/search'
 import AddressDetail from '../components/address/address-detail/address-detail'
+import AddressFriend from '../components/address/address-friend/address-friend'
+import AddressLabel from '../components/address/address-label/address-label'
+import LabelEdit from '../components/address/label-edit/label-edit'
+import GroupChat from '../components/address/group-chat/group-chat'
 import FriendCircle from '../components/find/friend-circle/friend-circle'
 import Scan from '../components/find/scan/scan'
 import Shake from '../components/find/shake/shake'
+import Contact from '../components/find/contact/contact'
+import Invite from '../components/find/invite/invite'
 import ChatroomUser from '../components/chatroom/chatroom-user/chatroom-user'
 import ChatroomPacket from '../components/chatroom/chatroom-packet/chatroom-packet'
 import ChatroomCard from '../components/chatroom/chatroom-card/chatroom-card'
@@ -166,6 +172,22 @@ export default new Router({
       component: Address,
       children: [
         {
+          path: 'friend',
+          component: AddressFriend
+        },
+        {
+          path: 'group',
+          component: GroupChat
+        },
+        {
+          path: 'label',
+          component: AddressLabel
+        },
+        {
+          path: 'labeledit',
+          component: LabelEdit
+        },
+        {
           path: ':id', // 传入不同的id,就可以跳转到不同的子路由
           meta: {
             navShow: false,
@@ -218,12 +240,28 @@ export default new Router({
           component: Scan
         },
         {
+          path: 'contact',
+          meta: {
+            navShow: false,
+            menuShow: false
+          },
+          component: Contact
+        },
+        {
           path: 'shake',
           meta: {
             navShow: false,
             menuShow: false
           },
           component: Shake
+        },
+        {
+          path: 'invite',
+          meta: {
+            navShow: false,
+            menuShow: false
+          },
+          component: Invite
         }
       ]
     },

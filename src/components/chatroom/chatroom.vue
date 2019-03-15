@@ -62,14 +62,14 @@
         <button class="voice-btn" v-if="showVoice" @click="changeStatus">语音</button>
         <button class="text-btn" v-if="showText"  @click="changeStatus">键盘</button>
         <div class="send" v-if="showVoice">
-          
-          <input type="text" placeholder="请输入聊天内容" class="sText" ref="sTest"/>
+          <input type="text" placeholder="请输入聊天内容"  v-model="value" class="sText" ref="sTest" @input="sendInput" />
         </div>
         <div class="speak" v-if="showText">
           按住 说话
           <!-- <input type="text" placeholder="请输入聊天内容" class="sText" ref="sTest"/> -->
         </div>
-        <input type="button" class="btn" value="发送" @click="sendContent" />
+        <yd-button bgcolor="#8D66FA" color="#FFF" class="btn"  v-if="sendShow" @click.native="sendContent" >发送</yd-button>
+        <!-- <input type="button" class="btn" value="发送" v-if="sendShow" @click="sendContent" /> -->
         <button class="express-btn">表情</button>
         <button class="more-btn" @click="moreBtn">更多</button>
     </yd-tabbar>
@@ -98,6 +98,8 @@
         showText: true, // 键盘按钮
         popHeight: false, // 更多弹出
         showPop: false, // 更多显示
+        sendShow: false, // 发送按钮
+        value: '',
         randomReply: [
           '你谁啊？',
           '请你再说一遍！',
@@ -172,14 +174,20 @@
       },
       changeStatus () {
         if (this.showVoice) {
+          this.sendShow = false
           this.showVoice = false
           this.showText = true
         } else if (this.showText) {
+          if (this.value !== '') {
+            this.sendShow = true
+          }
           this.showVoice = true
           this.showText = false
         }
       },
       sendContent () {
+        this.value = ''
+        this.sendShow = false
         this.text = this.$refs.sTest.value
         if (this.text !== '') {
           this.content.push({
@@ -210,6 +218,13 @@
       },
       clearContent () {
         this.content = []
+      },
+      sendInput () {
+        if (this.value !== '') {
+          this.sendShow = true
+        } else {
+          this.sendShow = false
+        }
       }
     }
   }
@@ -357,15 +372,17 @@
   .ask p {
     float: right;
     padding: 0.1rem 0.25rem;
-    max-width: 182px;
+    max-width: 4rem;
     background: #C2ACFF;
     color: #101010;
+    white-space: pre-wrap;
+    word-break: break-all;
   }
   .reply p {
     left: 2pc;
     float: left;
-    padding: 3px 10px;
-    max-width: 190px;
+    padding: 0.1rem 0.25rem;
+    max-width: 4rem;
     background: #fff;
   }
   .chatroom-bottom{
@@ -385,17 +402,26 @@
     -ms-flex: 6;
     flex: 6;
     height: 0.7rem;
+    line-height: .7rem;
     margin: 0.2rem;
     padding-left: 8px;
     border: 1px solid #eee;
     font-size: 0.3rem;
     border-radius: 0.1rem;
-  }
-  .sText.active{
-    background-color: red;
+    outline: none;
+    -webkit-appearance: none; 
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   }
   .btn{
-    background-color: #09BB07;
+      position: absolute;
+      right: 0.1rem;
+      color: #fff;
+      border: none;
+      width: 0.8rem;
+      height: 0.5rem;
+      padding: 0;
+      border-radius: 5px;
   }
 
   .slide-enter-active,.slide-leave-active{
