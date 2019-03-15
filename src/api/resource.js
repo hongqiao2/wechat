@@ -1,15 +1,4 @@
 const baseURL = 'http://192.168.1.168:8080/boot/app';
-const headers = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "PUT,POST,GET,DELETE,OPTIONS",
-  "Access-Control-Allow-Headers": "x-request-with, content-type"
-};
-
-const postHeader = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "PUT,POST,GET,DELETE,OPTIONS",
-  "Content-Type": "application/x-www-form-urlencoded"
-};
 const fileHeader = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "PUT,POST,GET,DELETE,OPTIONS",

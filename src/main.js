@@ -96,12 +96,14 @@ Vue.http.options.xhr = { withCredentials: true }
 Vue.http.options.crossOrigin = true
 Vue.http.options.emulateHTTP = true
 
+
+Vue.prototype.webSocketUrl = 'ws://localhost:8080/boot/app/chat-room/'// webSocket 请求地址
+
 new Vue({
   el: '#app',
   data: function () {
     return {
       $webSocket: null, // 全局声明webSocket
-      $webSocketUrl: 'ws://localhost:8080/boot/app/chat-room/',// webSocket 请求地址
     }
   },
   router,

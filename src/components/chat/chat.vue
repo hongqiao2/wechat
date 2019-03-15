@@ -59,7 +59,7 @@ export default {
     let userinfo = JSON.parse(localStorage.getItem("access_token"));
     let web = this.$root.$webSocket;
     if (!web) {
-      let urlPrefix = this.$root.$webSocketUrl;
+      let urlPrefix = this.webSocketUrl;
       this.$root.$webSocket = new WebSocket(urlPrefix + userinfo.id);
       web = this.$root.$webSocket;
     }
