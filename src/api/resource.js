@@ -53,6 +53,14 @@ const api = {
   // 修改用户新消息配置
   updateSysUserNewMessageConf(that, params){
     return that.$http.post(baseURL + '/user/updateSysUserNewMessageConf', params);
+  },
+  // 用户搜索
+  findUserInfoByNameOrPhone(that, params){
+    return that.$http.get(baseURL + '/user/findUserInfoByNameOrPhone', params);
+  },
+  // 查询用户聊天列表
+  findSysChatList(that, params){
+    return that.$http.get(baseURL + '/findSysChatList', params);
   }
 };
 

@@ -39,6 +39,7 @@
 <script type="text/ecmascript-6">
 import Scroll from "../../base/scroll/scroll";
 import { mapMutations, mapGetters } from "vuex";
+import api from '@/api/resource.js'
 
 export default {
   components: {
@@ -56,17 +57,31 @@ export default {
     ])
   },
   mounted() {
+    // webSocket 初始化
     let userinfo = JSON.parse(localStorage.getItem("access_token"));
     let web = this.$root.$webSocket;
     if (!web) {
       let urlPrefix = this.webSocketUrl;
       this.$root.$webSocket = new WebSocket(urlPrefix + userinfo.id);
       web = this.$root.$webSocket;
+      web.onerror = this.setErrorMessage;
+      // 连接成功
+      web.onopen = this.setOnopenMessage;
+      web.onmessage = this.setOnMessage;
     }
-    web.onerror = this.setErrorMessage;
-    // 连接成功
-    web.onopen = this.setOnopenMessage;
-    web.onmessage = this.setOnMessage;
+    // 聊天列表初始化，刷新
+    api.findSysChatList(this, {
+      params: {
+        id: userinfo.id
+      }
+    }).then( res => {
+      let val = res.body;
+      if(val.code == "200"){
+        console.log(val)
+      }
+    }).catch( err => {
+      onsole.log(err)
+    })
   },
   methods: {
     enterMessage() {
@@ -92,7 +107,7 @@ export default {
     // 收到服务器发送过来的信息
     setOnMessage(e) {
       console.log(e);
-    },
+    }
   },
   data() {
     return {
