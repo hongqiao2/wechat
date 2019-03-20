@@ -8,7 +8,32 @@
           </router-link>
           <yd-search slot="left" v-model="value1" :on-submit="submitHandler" :on-cancel="back" style=" width: 100%;"></yd-search>
         </div>
+        <yd-cell-group title="联系人">
+          <yd-cell-item>
+              <img slot="icon" src="../../assets/chatroom/photo4.png">
+              <div slot="left" class="search-list-name">
+                <p>车小晶</p>
+              </div>
+          </yd-cell-item>
+      </yd-cell-group>
+      <yd-cell-group title="聊天记录" v-if="recordShow">
+        <yd-cell-item>
+            <img slot="icon" src="../../assets/chatroom/photo4.png">
+            <div slot="left" class="search-list-name">
+              <p>姐姐</p>
+              <p>28条相关聊天记录</p>
+            </div>
+        </yd-cell-item>
+        <yd-cell-item>
+            <img slot="icon" src="../../assets/chatroom/photo4.png">
+            <div slot="left" class="search-list-name">
+              <p>车小晶</p>
+            </div>
+        </yd-cell-item>
+      </yd-cell-group>
+        <router-view></router-view>
       </div>
+      
     </transition>
   </yd-layout>
 </template>
@@ -19,7 +44,8 @@ import api from '@/api/resource.js'
 export default {
   data() {
     return {
-      value1: ""
+      value1: "",
+      recordShow: false
     };
   },
   methods: {
@@ -69,5 +95,30 @@ export default {
 }
 .search .yd-search-input .yd-input>input{
   text-align: left;
+}
+.search .yd-cell-item{
+    padding: 0.2rem;
+}
+.search .yd-cell-icon img{
+  width: 1rem;
+  height: 1rem;
+  border-radius: 5px;
+  margin-right: 0.1rem;
+}
+.search-list-name p:nth-child(1){
+  font-size:0.32rem;
+}
+.search-list-name p:nth-child(2){
+  font-size: 0.24rem;
+  color: #888;
+}
+.search .yd-cell-box{
+  background: #fff;
+}
+.search .yd-cell-title{
+      padding: 0.18rem 0.2rem;
+}
+.search .yd-cell-title:after,.search .yd-cell-item:not(:last-child):after{
+  background: #eee;
 }
 </style>

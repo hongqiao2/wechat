@@ -1,5 +1,5 @@
 <template>
-    <div class="chatroom-user">
+    <yd-layout  class="chatroom-user">
       <div class="content-wrapper" ref="wrapper">
         <div class="content-text">
           <yd-navbar  slot="navbar" title="聊天详情">
@@ -36,9 +36,9 @@
             </yd-cell-item>
         </yd-cell-group>
         </div>
+        <router-view></router-view>
       </div>
-      <router-view></router-view>
-    </div>
+    </yd-layout>
 </template>
 
 <script type="text/ecmascript-6">
@@ -92,7 +92,7 @@
     bottom: 0px;
     left: 0;
     right: 0;
-    z-index: 200;
+    z-index: 1000;
     background-color: #ebebeb;
     width:100%;
     height:100%;

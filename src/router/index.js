@@ -14,6 +14,7 @@ import AddressLabel from '../components/address/address-label/address-label'
 import LabelEdit from '../components/address/label-edit/label-edit'
 import GroupChat from '../components/address/group-chat/group-chat'
 import FriendCircle from '../components/find/friend-circle/friend-circle'
+import FriendAlbum from '../components/find/friend-circle/album/album'
 import Scan from '../components/find/scan/scan'
 import Shake from '../components/find/shake/shake'
 import Contact from '../components/find/contact/contact'
@@ -238,7 +239,13 @@ export default new Router({
             navShow: false,
             menuShow: false
           },
-          component: FriendCircle
+          component: FriendCircle,
+          children: [
+            {
+              path: 'falbum',
+              component: FriendAlbum
+            }
+          ]
         },
         {
           path: 'scan',
