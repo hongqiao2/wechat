@@ -6,7 +6,7 @@
           <yd-navbar-back-icon></yd-navbar-back-icon>
         </router-link>
       </yd-navbar>
-      
+
       <yd-cell-item v-for="(item, index) in userInfoList" :key="item.id">
         <img slot="icon" :src="item.headPortrait">
         <span slot="left">{{item.realName ? item.realName : nickName}}</span>
@@ -37,15 +37,26 @@ export default {
     api
       .findUsersByIphones(this, {
         params: {
-          "id": userInfo.id,
-          "iphones": JSON.stringify(userIphone)
+          id: userInfo.id,
+          iphones: JSON.stringify(userIphone)
         }
       })
       .then(res => {
         let val = res.body;
-        if(val.code == "200"){
-          if(val.userInfo){
-            this.userInfo = val.userInfo;
+        if (val.code == "200") {
+          let userInfo = val.userInfo;
+          if (userInfo) {
+            let userInfoList = {};
+            userInfo.forEach(function(item, index) {
+              let realName = item.realName;
+              let nickName = item.nickName;
+              if (realName) {
+                this.chickChinese(userInfoList, realName.substring(0,1))
+              } else {
+                this.chickChinese(userInfoList, nickName.substring(0,1))
+              }
+            });
+            console.log(JSON.stringify(userInfoList))
           }
         }
       })
@@ -112,6 +123,31 @@ export default {
         },
         function(e) {}
       );
+    },
+    chickChinese(userInfoList,realNameSub) {
+      var isChinese = /^[\u4e00-\u9fa5]+$/;
+      // 判断是否是文字，判断是否是字母
+      if (isChinese.test(realNameSub)) {
+        if (!userInfoList[realNameSub]) {
+          userInfoList[realNameSub] = [];
+        }
+        userInfoList[realNameSub].push(item);
+      } else {
+        // 判读是否是英文字母
+        isChinese = /^[A-Za-z]/;
+        if (isChinese.test(realNameSub)) {
+          let keyV = realNameSub.toUpperCase();
+          if (!userInfoList[keyV]) {
+            userInfoList[keyV] = [];
+          }
+          userInfoList[keyV].push(item);
+        } else {
+          if (!userInfoList["#"]) {
+            userInfoList["#"] = [];
+          }
+          userInfoList["#"].push(item);
+        }
+      }
     }
   }
 };

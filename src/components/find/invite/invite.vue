@@ -105,14 +105,20 @@ export default {
                 }
               });
               let list = that.personnelList;
+              let mailLists = [];
               for (let key in mailList) {
                 for (let ikey in mailList[key]) {
                   if (ikey != "name") {
+                    mailLists.push(ikey.replace("+86", "").replace(/\s/g, ""));
                     // 判断是否是文字，判断是否是字母
                      var isChinese = /^[\u4e00-\u9fa5]+$/;
                      let subVal = key.substring(0,1);
                      if(isChinese.test(subVal)){
-                       list[chineseTurn(subVal).substring(0,1)].push({
+                       let keyV = chineseTurn(subVal).substring(0,1);
+                       if(!list[keyV]) {
+                         list[keyV] = [];
+                       }
+                       list[keyV].push({
                          dissname: key,
                          phone: ikey
                        });
@@ -120,11 +126,18 @@ export default {
                        // 判读是否是英文字母
                       isChinese = /^[A-Za-z]/;
                       if(isChinese.test(subVal)){
-                        list[subVal.toUpperCase()].push({
+                        let keyV = subVal.toUpperCase();
+                        if(!list[keyV]){
+                          list[keyV] = [];
+                        }
+                        list[keyV].push({
                          dissname: key,
                          phone: ikey
                        });
                       }else{
+                        if(!list["#"]){
+                          list["#"] = [];
+                        }
                         list["#"].push({
                          dissname: key,
                          phone: ikey
@@ -134,8 +147,8 @@ export default {
                   }
                 }
               }
+              localStorage.setItem("userIphones", JSON.stringify(mailLists));
               that.personnelList = list;
-              console.log(JSON.stringify(list))
             },
             function() {},
             { multiple: true }
