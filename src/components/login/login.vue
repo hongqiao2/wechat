@@ -110,7 +110,7 @@ export default {
         })
         .then(res => {
           let cookie = res.body.cookie;
-          this.$cookies.set(cookie.name, cookie.value, cookie.maxAge);
+          localStorage.setItem("KAPTCHA_SESSION_KEY", cookie.value)
           setTimeout(() => {
             this.start1 = true;
             this.$dialog.loading.close();
@@ -185,7 +185,7 @@ export default {
         });
         return false;
       }
-      let kaptcha = this.$cookies.get("KAPTCHA_SESSION_KEY");
+      let kaptcha = localStorage.getItem("KAPTCHA_SESSION_KEY");
       if (
         !captcha ||
         !kaptcha ||
