@@ -26,7 +26,7 @@
         </yd-cell-item>
       </yd-cell-group>
       <div class="login-btn" @click="loginBtn">
-        <yd-button type="primary" size="large">登录</yd-button>
+        <yd-button bgcolor="#8D66FA" color="#FFF" size="large">登录</yd-button>
       </div>
       <div class="login-btn">
         <p @click="goPwd">使用密码登录</p>

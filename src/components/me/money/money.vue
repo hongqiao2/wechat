@@ -26,7 +26,7 @@
               <img  slot="icon" src="../../../assets/me/packet1.png"/>
               <span slot="left">我的红包</span>
             </yd-cell-item>
-            <yd-cell-item arrow href="/me/money/account" type="link">
+            <yd-cell-item arrow href="/me/money/account/${1}" type="link">
               <img  slot="icon" src="../../../assets/me/account.png"/>
               <span slot="left">账户信息</span>
             </yd-cell-item>

@@ -9,7 +9,7 @@
         <yd-cell-item>
             <img slot="icon" src="../../../assets/chatroom/photo4.png">
             <span slot="left">赵宇</span>
-            <yd-button slot="right" type="primary">添加</yd-button>
+            <yd-button slot="right"  bgcolor="#8D66FA" color="#FFF" >添加</yd-button>
         </yd-cell-item>
       </div>
       <router-view></router-view>

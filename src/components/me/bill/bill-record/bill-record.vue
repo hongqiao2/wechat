@@ -7,7 +7,7 @@
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
             <router-link class="record-more" to="#" slot="right" @click.native="show = true">
-                <yd-icon name="more"  size="0.4rem"></yd-icon>
+                <i class="iconfont icon-xiazai9"></i>
             </router-link>
             
         </yd-navbar>

@@ -8,24 +8,23 @@
     <ul v-for="(item, index) in info">
       <li @click="goDetail">
         <div class="everyuser"  >
-          <img class="user-photo" :src="item.imgurl" />
+          <!-- <img class="user-photo" :src="item.imgurl" /> -->
           <div>
             <div class="username">
-              
-              <h2 v-html="item.dissname"></h2>
               <p v-html="item.sign"></p>
             </div>
             <div class="useralbum" v-if="item.album.length" v-for="img in item.album">
               <img :src="img.album1" height="100" width="100" />
             </div>
             <div class="usertime">
-              <p>收藏于{{item.time}}</p>
+              <p><span v-html="item.dissname"></span> <span style="margin-left: 0.4rem;">收藏于{{item.time}}</span></p>
             </div>
           </div>
         </div>
       </li>
     </ul>
     <div style="text-align: center;opacity: 0.6;margin-top: 20px;" >----没有更多收藏了----</div>
+    <router-view></router-view>
   </yd-layout>
 </template>
 
@@ -50,7 +49,7 @@
           },
           {
             dissname: '关羽',
-            sign: '玉可碎不可改其质,竹可焚不可毁其节。',
+            sign: '',
             imgurl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1503761569656&di=01696cee833e1c3af42186949cf5a8fc&imgtype=0&src=http%3A%2F%2Fimg11.weikeimg.com%2Fupload%2Fnews%2F2011121315404465027.jpg',
             album: [
               {
@@ -122,6 +121,7 @@
         item.num += 1
       },
       goDetail () {
+        console.log('123')
         this.$router.push({
           path: `/me/collection/coDetail`
         })
@@ -171,8 +171,8 @@
   }
   .usertime{
     color:#A2A2A2;
-    font-size: 0.28rem;
-    margin-top: 0.2rem;
+    font-size: 0.24rem;
+    margin-top: 0.1rem;
   }
   .slide-enter-active,.slide-leave-active{
     transition: all 0.3s;

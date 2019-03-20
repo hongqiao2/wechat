@@ -20,7 +20,7 @@
             </yd-cell-item>
         </yd-cell-group>
         <div class="account-btn" v-if="isApprove">
-            <yd-button size="large" type="primary" @click.native="goAuth">设置账户信息</yd-button>
+            <yd-button size="large"  bgcolor="#8D66FA" color="#FFF"  @click.native="goAuth">设置账户信息</yd-button>
         </div>
       </div>
       <router-view></router-view>
@@ -42,6 +42,14 @@
     },
     mounted () {
       this.userInfo = JSON.parse(localStorage.getItem("access_token"));
+      let user = this.userInfo
+      console.log(user)
+      if(!user.idNumber && !user.realName) {
+        // 如果没有身份信息
+				this.isApprove =true
+			} else {
+				this.isApprove =false
+			}
     },
     methods: {
       back (event) {
@@ -75,7 +83,7 @@
     width: 100%;
 }
 .account .yd-cell-left span{
-    width: 18%;
+    width: 13%;
     display: inline-block;
 }
 .account-btn{

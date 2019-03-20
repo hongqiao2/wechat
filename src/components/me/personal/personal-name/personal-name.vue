@@ -125,7 +125,7 @@
     font-size: 0.28rem;
   }
   .personal-name .yd-textarea{
-    padding: 0;
+    padding: .2rem 0;
   }
   .yd-navbar-center-title{
     color: #242424 !important;

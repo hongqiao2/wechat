@@ -1,48 +1,44 @@
 <template>
-  <transition name="slide">
-    <div class="chatroom-user" ref="content">
-      <yd-navbar title="聊天详情">
-          <router-link to="/chatroom" slot="left">
-              <yd-navbar-back-icon></yd-navbar-back-icon>
-          </router-link>
-      </yd-navbar> 
-
-      <div class="user">
-        <img class="smallImg" :src="info.imgurl" @click="goInfo(info)" />
-        <img class="addIcon" src="../../../assets/chatroom/addPerson.png"/>
-        <p v-html="info.dissname"></p>
-        
-        <!-- <div>
-<img src="../../assets/chatroom/collect1.png"/>
-        </div> -->
-        
-        <!-- <img src="../../assets/chatroom/addPerson.png"/> -->
+    <div class="chatroom-user">
+      <div class="content-wrapper" ref="wrapper">
+        <div class="content-text">
+          <yd-navbar  slot="navbar" title="聊天详情">
+              <router-link to="" @click.native="back" slot="left">
+                  <yd-navbar-back-icon></yd-navbar-back-icon>
+              </router-link>
+          </yd-navbar>
+          <div class="user">
+            <img class="smallImg" :src="info.imgurl" @click="goInfo(info)" />
+            <img class="addIcon" src="../../../assets/chatroom/addPerson.png"/>
+            <p v-html="info.dissname"></p>
+          </div>
+          <yd-cell-group title="">
+            <yd-cell-group>
+                <yd-cell-item type="label">
+                    <div slot="left">置顶聊天</div>
+                    <yd-switch slot="right" v-model="ydswitch1"></yd-switch>
+                </yd-cell-item>
+            </yd-cell-group>
+            <yd-cell-group>
+                <yd-cell-item type="label">
+                    <div slot="left">消息免打扰</div>
+                    <yd-switch slot="right" v-model="ydswitch2"></yd-switch>
+                </yd-cell-item>
+            </yd-cell-group>
+            <yd-cell-item arrow href="#" type="link" v-on:click.native="deleteall">
+                <span slot="left">清空聊天记录</span>
+            </yd-cell-item>
+            <yd-cell-item arrow href="/chatroom/complain" type="link">
+                <span slot="left">投诉</span>
+            </yd-cell-item>
+            <yd-cell-item arrow href="#" type="link">
+                <span slot="left">查找聊天内容</span>
+            </yd-cell-item>
+        </yd-cell-group>
+        </div>
       </div>
-      <yd-cell-group title="">
-        <yd-cell-group>
-            <yd-cell-item type="label">
-                <div slot="left">置顶聊天</div>
-                <yd-switch slot="right" v-model="ydswitch1"></yd-switch>
-            </yd-cell-item>
-        </yd-cell-group>
-        <yd-cell-group>
-            <yd-cell-item type="label">
-                <div slot="left">消息免打扰</div>
-                <yd-switch slot="right" v-model="ydswitch2"></yd-switch>
-            </yd-cell-item>
-        </yd-cell-group>
-        <yd-cell-item arrow href="#" type="link" v-on:click.native="deleteall">
-            <span slot="left">清空聊天记录</span>
-        </yd-cell-item>
-        <yd-cell-item arrow href="/chatroom/complain" type="link">
-            <span slot="left">投诉</span>
-        </yd-cell-item>
-        <yd-cell-item arrow href="#" type="link">
-            <span slot="left">查找聊天内容</span>
-        </yd-cell-item>
-    </yd-cell-group>
+      <router-view></router-view>
     </div>
-  </transition>
 </template>
 
 <script type="text/ecmascript-6">
@@ -81,12 +77,15 @@
         this.$router.push({
           path: `/address/${info.dissid}`
         })
+      },
+      back (event) {
+        this.$router.back()   // 返回上一级
       }
     }
   }
 </script>
 
-<style scoped>
+<style>
   .chatroom-user{
     position: fixed;
     top: 0px;
@@ -95,12 +94,14 @@
     right: 0;
     z-index: 200;
     background-color: #ebebeb;
+    width:100%;
+    height:100%;
     /*border: 1px solid red;*/
   }
   .yd-cell-box{
     margin: 0;
   }
-  .yd-cell-box:nth-child(2){
+  .chatroom-user .yd-cell-box:nth-child(2){
     border-bottom: 0.2rem solid #eee;
   }
   

@@ -65,5 +65,9 @@ export default {
 }
 .search .yd-search-input {
   background: transparent;
+
+}
+.search .yd-search-input .yd-input>input{
+  text-align: left;
 }
 </style>
