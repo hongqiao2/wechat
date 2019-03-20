@@ -265,11 +265,7 @@ export default {
 
 .third-login {
   text-align: center;
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0.6rem;
-  margin: auto;
+  margin: 3rem auto 0;
 }
 
 .third-login p {

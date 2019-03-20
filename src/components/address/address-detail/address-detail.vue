@@ -16,10 +16,9 @@
           <div class="content-disname">
             <h2 class="" v-html="info.dissname"></h2>
             <p class="">微信号：{{info.dissid}}</p>
-            <p>测试{{info.dissid}}</p>
           </div>
         </div>
-        <div class="content-note">设置备注和描述 </div>
+        <div class="content-note" @click="goRemark(info.dissid)">设置备注和描述 </div>
         <div class="content-intro">
           <span class="content-label">地区</span>{{info.location}}
         </div>
@@ -105,12 +104,11 @@
           path: `/address/${dissid}/dset`
         })
       },
-      // gotoMore (info) {
-      //   this.$router.push({
-      //     path: `/address/${info.dissid}/more`
-      //   })
-      //   console.log('测试')
-      // },
+      goRemark (dissid) {
+        this.$router.push({
+          path: `/address/${dissid}/remark`
+        })
+      },
       changBig () {
         if (this.$refs.bagImge.offsetWidth < 100) {
           let pageWidth = this.$refs.content.offsetWidth

@@ -56,6 +56,7 @@
     </div>
   </transition>
 </template>
+
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll'
 // import {Toast} from 'mint-ui'

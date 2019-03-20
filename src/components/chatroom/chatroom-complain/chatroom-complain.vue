@@ -2,7 +2,7 @@
   <transition name="slide">
     <div class="chatroom-complain" ref="content">
       <yd-navbar title="投诉建议">
-          <router-link to="/chatroom/user" slot="left">
+          <router-link  to=""  @click.native="back"  slot="left">
               <yd-navbar-back-icon></yd-navbar-back-icon>
           </router-link>
       </yd-navbar> 
@@ -55,7 +55,11 @@
       }
     },
     computed: {},
-    methods: {}
+    methods: {
+      back () {
+        this.$router.back()   // 返回上一级
+      }
+    }
   }
 </script>
 

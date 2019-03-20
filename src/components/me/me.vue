@@ -112,7 +112,7 @@
 		left: 0;
 		right: 0;
 		z-index: 99;
-		background-color: rgba(238, 233, 233, 0.6);
+		background-color:#f9f9f9;
 	}
 	
 	.me-wrapper {

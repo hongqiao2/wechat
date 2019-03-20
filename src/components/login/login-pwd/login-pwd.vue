@@ -100,12 +100,8 @@
     font-size: 0.32rem;
   }
   .third-login{
-      text-align: center;
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0.6rem;
-      margin: auto;
+    text-align: center;
+    margin: 3rem auto 0;
   }
   .third-login p{
       color: #A2A2A2;

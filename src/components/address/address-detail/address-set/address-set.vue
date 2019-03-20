@@ -1,8 +1,8 @@
 <template>
   <!-- <transition name="slide"> -->
     <yd-layout  class="address-detail">
-        <yd-navbar  @click="back" slot="navbar" title="资料设置">
-            <router-link to="#" slot="left">
+        <yd-navbar slot="navbar" title="资料设置">
+            <router-link to=""  @click.native="back"  slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
         </yd-navbar>
@@ -10,7 +10,7 @@
         <yd-cell-item arrow @click.native="goRemark(info.dissid)">
             <span slot="left">设置备注名称</span>
         </yd-cell-item>
-        <yd-cell-item arrow>
+        <yd-cell-item arrow  @click.native="goComplain()">
             <span slot="left">投诉</span>
         </yd-cell-item>
         <yd-cell-item>
@@ -84,12 +84,11 @@
           path: `/address/${dissid}/remark`
         })
       },
-      // gotoMore (info) {
-      //   this.$router.push({
-      //     path: `/address/${info.dissid}/more`
-      //   })
-      //   console.log('测试')
-      // },
+      goComplain () {
+        this.$router.push({
+          path: `/chatroom/complain`
+        })
+      },
       changBig () {
         if (this.$refs.bagImge.offsetWidth < 100) {
           let pageWidth = this.$refs.content.offsetWidth

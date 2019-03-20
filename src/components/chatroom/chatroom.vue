@@ -211,7 +211,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 203;
+     z-index: 500;
     background-color:#F9F9F9;
   }
   .chatroom .content{
@@ -262,14 +262,6 @@
     border: none;
     margin-right: 0.25rem;
 }
-.chatroom-bottom{
-    position: fixed;
-    height: 50px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: #fff;
-  }
   .send{
     display: flex;
     width: 70%;
@@ -361,11 +353,7 @@
     background: #fff;
   }
   .chatroom-bottom{
-    position: fixed;
     height: 50px;
-    bottom: 0;
-    left: 0;
-    right: 0;
     background-color: #fff;
   }
   .send{
