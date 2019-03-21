@@ -184,30 +184,30 @@
   .circle a i{
     font-size: 0.5rem;
   }
-  .userphoto{
+  .circle .userphoto{
     width: 0.8rem;
     height: 0.8rem;
     border-radius: 5px;
   }
-  .content{
+  .circle .content{
     position: fixed;
     top: 50px;
     left: 0;
     right: 0;
     bottom: 0;
   }
-  .content-wrapper{
+  .circle .content-wrapper{
     height: 100%;
     overflow: hidden;
   }
-  .content-top{
+  .circle .content-top{
     position: relative;
   }
-  .circle-bg{
+  .circle .circle-bg{
     width: 100%;
     margin-bottom: 20px;
   }
-  .user{
+  .circle .user{
     position: absolute;
     bottom: 0px;
     right: 10px;
@@ -215,28 +215,28 @@
     align-items: center;
     color: #fff;
   }
-  .user span{
+  .circle .user span{
     font-size: 20px;
     font-weight: bold;
     padding-bottom: 20px;
     margin-right: 10px;
   }
-  .user img{
+  .circle .user img{
     width: 1.4rem;
     height: 1.4rem;
     border-radius: 5px;
   }
-  .everyuser{
+  .circle .everyuser{
     position: relative;
     border-bottom: 1px solid #EBEBEB;
     margin: 0;
     padding: 0.3rem 0.3rem;
     display: flex;
   }
-  .everyuser img{
+  .circle .everyuser img{
     margin-right: 10px;
   }
-  .username h2{
+  .circle .username h2{
     color: #485273;
     font-family: '\6977\4F53';
     font-size: 0.32rem;
@@ -244,23 +244,23 @@
     line-height: 0.34rem;
     margin-bottom: 0.1rem;
   }
-  .username p{
+  .circle .username p{
     font-size: 0.32rem;
     margin-bottom: 0.1rem;
   }
-  .usertime{
+  .circle .usertime{
     font-size: 0.26rem;
     margin-top: 0.2rem;
     color: #B7B7B7;
   }
-  .usertime span{
+  .circle .usertime span{
     position: absolute;
     right: 20px;
     bottom: 20px;
     font-size: 14px;
     line-height: 14px;
   }
-  .usertime img{
+  .circle .usertime img{
     position: absolute;
     right: 30px;
     bottom: 20px;

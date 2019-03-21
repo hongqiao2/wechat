@@ -98,33 +98,33 @@
     height:100%;
     /*border: 1px solid red;*/
   }
-  .yd-cell-box{
+  .chatroom-user .yd-cell-box{
     margin: 0;
   }
   .chatroom-user .yd-cell-box:nth-child(2){
     border-bottom: 0.2rem solid #eee;
   }
   
- .yd-cell-left div{
+ .chatroom-user .yd-cell-left div{
     font-size: 0.3rem;
   }
-  .user{
+  .chatroom-user .user{
     width: 100%;
     background-color: #fff;
     padding: 0.2rem 0.3rem;
     margin-bottom: 0.2rem;
   }
-  .user .smallImg{
+  .chatroom-user .user .smallImg{
     height: 1rem;
     width: 1rem;
     border-radius: 5px;
     margin-right: 0.2rem;
   }
-  .user p{
+  .chatroom-user .user p{
     text-align: center;
     width: 1rem;
   }
-  .addIcon{
+  .chatroom-user .addIcon{
     width:1rem;
     height:1rem;
   }

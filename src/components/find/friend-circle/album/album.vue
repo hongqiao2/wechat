@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div class="circle">
+    <div class="album">
       <div class="circle-wrap">
         <yd-navbar   slot="navbar" title="我的相册">
             <router-link to="" @click.native="back" slot="left">
@@ -118,7 +118,7 @@
 </script>
 
 <style scoped>
-  .circle{
+  .album{
     position: fixed;
     width:100%;
     height:100%;
@@ -129,25 +129,25 @@
     z-index: 203;
     background-color:#fff;
   }
-  .content{
+  .album .content{
     position: fixed;
     top: 50px;
     left: 0;
     right: 0;
     bottom: 0;
   }
-  .content-wrapper{
+  .album .content-wrapper{
     height: 100%;
     overflow: hidden;
   }
-  .content-top{
+  .album .content-top{
     position: relative;
   }
-  .circle-bg{
+  .album .circle-bg{
     width: 100%;
     margin-bottom: 20px;
   }
-  .user{
+  .album .user{
     position: absolute;
     bottom: 0px;
     right: 10px;
@@ -155,28 +155,18 @@
     align-items: center;
     color: #fff;
   }
-  .user span{
+  .album .user span{
     font-size: 20px;
     font-weight: bold;
     padding-bottom: 20px;
     margin-right: 10px;
   }
-  .user img{
+  .album .user img{
     width: 1.4rem;
     height: 1.4rem;
     border-radius: 5px;
   }
-  f{
-    position: relative;
-    border-bottom: 1px solid rgba(153,153,153,0.4);
-    margin: 5px 0;
-    padding: 20px 10px;
-    display: flex;
-  }
-  f img{
-    margin-right: 10px;
-  }
-  .username h2{
+  .album .username h2{
     color: blue;
     font-family: '楷体';
     font-size: 16px;
@@ -184,22 +174,22 @@
     line-height: 16px;
     margin-bottom: 10px;
   }
-  .username p{
+  .album .username p{
     font-size: 16px;
     line-height: 30px;
   }
-  .usertime{
+  .album .usertime{
     font-size: 14px;
     margin-top: 15px;
   }
-  .usertime span{
+  .album .usertime span{
     position: absolute;
     right: 20px;
     bottom: 20px;
     font-size: 14px;
     line-height: 14px;
   }
-  .usertime img{
+  .album .usertime img{
     position: absolute;
     right: 30px;
     bottom: 20px;
