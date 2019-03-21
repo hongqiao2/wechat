@@ -51,9 +51,9 @@
           bgcolor="#8D66FA"
           color="#FFF"
           shape="circle"
-          @click="addFriend(info)"
+          @click.native="goAddfriend(info.id)"
         >
-          <router-link to="/chatroom">添加到通讯录</router-link>
+          <router-link  to="">添加到通讯录</router-link>
         </yd-button>
       </div>
       <router-view></router-view>
@@ -134,8 +134,10 @@ export default {
       this.setaddList(info);
     },
     // 添加好友到通讯录
-    addFriend(info){
-
+    goAddfriend (dissid) {
+      this.$router.push({
+        path: `/address/${dissid}/addfriend`
+      });
     },
     goDset(dissid) {
       this.$router.push({
