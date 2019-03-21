@@ -17,7 +17,7 @@
                 <img class="circle-bg" src="../../../assets/find/bg.png" />
                 <div class="user">
                   <span>minion</span>
-                  <img src="../../../assets/me/minion.png" />
+                  <img src="../../../assets/me/minion.png" @click="goAlbum" />
                 </div>
               </div>
               <div class="content-body">
@@ -154,15 +154,16 @@
     },
     methods: {
       back (event) {
-        // 为防止PC端时,点击事件会被执行两次,须作如下判断，但是这里暂时不需要，参考http://blog.csdn.net/alsnei/article/details/54375957
-        // if (!event._constructed) {
-        //   return
-        // }
         this.$router.back()   // 返回上一级
       },
       admire (item) {
         console.log(item)
         item.num += 1
+      },
+      goAlbum () {
+        this.$router.push({
+          path: `/find/friendcircle/falbum`
+        });
       }
     }
   }

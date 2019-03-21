@@ -15,6 +15,7 @@ import LabelEdit from '../components/address/label-edit/label-edit'
 import GroupChat from '../components/address/group-chat/group-chat'
 import FriendCircle from '../components/find/friend-circle/friend-circle'
 import FriendAlbum from '../components/find/friend-circle/album/album'
+import MsgList from '../components/find/friend-circle/msg-list/msg-list'
 import Scan from '../components/find/scan/scan'
 import Shake from '../components/find/shake/shake'
 import Contact from '../components/find/contact/contact'
@@ -48,7 +49,6 @@ import PrivacyBlacklist from '../components/me/privacy/privacy-blacklist/privacy
 import About from '../components/me/about/about'
 import Help from '../components/me/help/help'
 import HelpDetail from '../components/me/help/help-detail/help-detail'
-import Album from '../components/me/album/album'
 import Bill from '../components/me/bill/bill'
 import BillRecord from '../components/me/bill/bill-record/bill-record'
 import Card from '../components/me/card/card'
@@ -244,6 +244,10 @@ export default new Router({
             {
               path: 'falbum',
               component: FriendAlbum
+            },
+            {
+              path: 'msglist',
+              component: MsgList
             }
           ]
         },
@@ -423,14 +427,6 @@ export default new Router({
               component: HelpDetail
             }
           ]
-        },
-        {
-          path: 'album',
-          meta: {
-            navShow: false,
-            menuShow: false
-          },
-          component: Album
         },
         {
           path: 'bill',

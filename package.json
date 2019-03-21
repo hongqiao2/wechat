@@ -15,6 +15,7 @@
     "d": "^1.0.0",
     "element-ui": "^2.6.1",
     "emoji-vue": "^0.2.4",
+    "img-vuer": "^0.17.1",
     "mint-ui": "^2.2.9",
     "v-emoji-picker": "^1.0.9",
     "vue": "^2.3.3",

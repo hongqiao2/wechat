@@ -2,8 +2,8 @@
   <transition name="slide">
     <div class="chatroom-card" ref="content">
       <yd-navbar title="邀请手机联系人">
-        <router-link to="#" slot="left">
-          <yd-navbar-back-icon @click.native="$router.back(-1)"></yd-navbar-back-icon>
+        <router-link to=""  @click.native="back" slot="left">
+          <yd-navbar-back-icon></yd-navbar-back-icon>
         </router-link>
         <!-- <p slot="right">完成({{checkbox1.length}})</p> -->
       </yd-navbar>
@@ -59,6 +59,9 @@ export default {
     ...mapMutations({
       setAddress: "SET_INFO"
     }),
+    back (event) {
+      this.$router.back()   // 返回上一级
+    },
     //   gotoChat (info) {
     //     this.$router.push({
     //       path: `/chatroom`
