@@ -36,7 +36,7 @@
 <script type="text/ecmascript-6">
 import { IndexList, IndexSection, Toast, MessageBox } from "mint-ui";
 import { mapMutations } from "vuex";
-import chineseTurn from '@/api/chineseTurnEnglish.js'
+import chineseTurn from "@/api/chineseTurnEnglish.js";
 
 export default {
   components: {
@@ -111,39 +111,39 @@ export default {
                   if (ikey != "name") {
                     mailLists.push(ikey.replace("+86", "").replace(/\s/g, ""));
                     // 判断是否是文字，判断是否是字母
-                     var isChinese = /^[\u4e00-\u9fa5]+$/;
-                     let subVal = key.substring(0,1);
-                     if(isChinese.test(subVal)){
-                       let keyV = chineseTurn(subVal).substring(0,1);
-                       if(!list[keyV]) {
-                         list[keyV] = [];
-                       }
-                       list[keyV].push({
-                         dissname: key,
-                         phone: ikey
-                       });
-                     }else{
-                       // 判读是否是英文字母
+                    var isChinese = /^[\u4e00-\u9fa5]+$/;
+                    let subVal = key.substring(0, 1);
+                    if (isChinese.test(subVal)) {
+                      let keyV = chineseTurn(subVal).substring(0, 1);
+                      if (!list[keyV]) {
+                        list[keyV] = [];
+                      }
+                      list[keyV].push({
+                        dissname: key,
+                        phone: ikey
+                      });
+                    } else {
+                      // 判读是否是英文字母
                       isChinese = /^[A-Za-z]/;
-                      if(isChinese.test(subVal)){
+                      if (isChinese.test(subVal)) {
                         let keyV = subVal.toUpperCase();
-                        if(!list[keyV]){
+                        if (!list[keyV]) {
                           list[keyV] = [];
                         }
                         list[keyV].push({
-                         dissname: key,
-                         phone: ikey
-                       });
-                      }else{
-                        if(!list["#"]){
+                          dissname: key,
+                          phone: ikey
+                        });
+                      } else {
+                        if (!list["#"]) {
                           list["#"] = [];
                         }
                         list["#"].push({
-                         dissname: key,
-                         phone: ikey
-                       });
+                          dissname: key,
+                          phone: ikey
+                        });
                       }
-                     }
+                    }
                   }
                 }
               }
@@ -163,9 +163,7 @@ export default {
     return {
       value1: "",
       checkbox1: ["0"],
-      personnelList: {
-      
-      }
+      personnelList: {}
     };
   }
 };
