@@ -65,6 +65,18 @@ const api = {
   // 根据手机联系人电话，获取联系人列表
   findUsersByIphones(that, params){
     return that.$http.get(baseURL + '/user/findUsersByIphones', params);
+  },
+  // 添加新朋友
+  addNewFriend(that, params){
+    return that.$http.post(baseURL + '/newFriend/saveNewFriend', params);
+  },
+  // 查询新朋友, 只查询最新的十条
+  findNewFriend(that, params){
+    return that.$http.post(baseURL + '/newFriend/findNewFriend', params);
+  },
+  // 同意好友请求
+  agreeFriendReq(that, params){
+    return that.$http.post(baseURL + '/newFriend/agreeFriendReq', params);
   }
 };
 

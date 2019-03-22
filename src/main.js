@@ -22,8 +22,9 @@ import { Dialog, Upload } from 'element-ui'
 import { SendCode } from 'vue-ydui/dist/lib.rem/sendcode'
 import { Popup } from 'vue-ydui/dist/lib.rem/popup'
 import { CitySelect } from 'vue-ydui/dist/lib.rem/cityselect'
-import {ActionSheet} from 'vue-ydui/dist/lib.rem/actionsheet'
-import {InfiniteScroll} from 'vue-ydui/dist/lib.rem/infinitescroll'
+import { ActionSheet } from 'vue-ydui/dist/lib.rem/actionsheet'
+import { InfiniteScroll } from 'vue-ydui/dist/lib.rem/infinitescroll'
+import chineseTurn from "@/api/chineseTurnEnglish.js";
 // import {Upload} from 'element-ui'
 import router from './router'
 // /* eslint-disable no-unused-vars */  // 这一句必须写，用来规避ES6的语法检测
@@ -93,7 +94,69 @@ Vue.http.options.xhr = { withCredentials: true }
 Vue.http.options.crossOrigin = true
 Vue.http.options.emulateHTTP = true
 
-Vue.prototype.webSocketUrl = 'ws://localhost:8080/boot/app/chat-room/'// webSocket 请求地址
+Vue.prototype.webSocketUrl = 'ws://localhost:8080/boot/socketServer/'// webSocket 请求地址
+
+// 接收服务发来的消息
+Vue.prototype.setOnMessage = function (e) {
+  console.log(e.data);
+  let userinfo = JSON.parse(localStorage.getItem("access_token"));
+  let _data = JSON.parse(e.data);
+  if (_data.isNewFriend) {
+    // 新朋友消息
+    api
+      .findNewFriend(this, {
+        id: userinfo.id
+      })
+      .then(res => {
+        let val = res.body;
+        if (val.code == "200") {
+          // 缓存10条最新的朋友消息，
+          localStorage.setItem('addFriendList', JSON.stringify(val.list));
+        }
+      })
+      .catch(err => {
+        console.log(JSON.stringify(err));
+      });
+
+    return;
+  }
+
+
+  // 聊天列表初始化，刷新
+  api
+    .findSysChatList(this, {
+      params: {
+        id: userinfo.id
+      }
+    })
+    .then(res => {
+      let val = res.body;
+      if (val.code == "200") {
+        // 需要判断是否为添加朋友后的生成列表
+        let userChatList = JSON.parse(val.userChatList);
+        // 聊天列表缓存
+        let chatList = JSON.parse(localStorage.getItem("chatListCache"));
+        userChatList.foreach(function(item, index){
+          chatList[item.chat_bject] = item;
+        })
+        localStorage.setItem(JSON.stringify(chatList))
+      }
+    })
+    .catch(err => {
+      onsole.log(err);
+    });
+
+
+}
+// 连接异常
+Vue.prototype.setErrorMessage = function (e) {
+  console.log(e);
+},
+  // 建立连接
+  Vue.prototype.setOnopenMessage = function (e) {
+    console.info("已建立连接");
+  }
+
 
 new Vue({
   el: '#app',

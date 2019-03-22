@@ -1,35 +1,17 @@
 <template>
   <div class="chat">
-    <scroll class="chat-wrapper" :data="chatList">
+    <scroll class="chat-wrapper">
       <div>
-        <ul>
-          <router-link
-            to="/chatroom"
-            tag="li"
-            v-for="addinfo in this.addList"
-            :key="addinfo.id"
-            class="item"
-          >
-            <div class="item-cell" @click="gotoChatroom">
-              <img class="item-img" :src="addinfo.imgurl">
-              <h2 class="dissname" v-html="addinfo.dissname"></h2>
-              <p class="summary">点击发送消息</p>
-              <span class="item-time">刚刚</span>
-            </div>
-          </router-link>
-        </ul>
         <ul>
           <router-link to="/chatroom" tag="li" v-for="info in chatList" :key="info.id" class="item">
             <div class="item-cell" @click="gotoChatroom(info)">
               <div class="img-unread">
-                <img class="item-img" :src="info.imgurl">
-               <yd-badge slot="badge" type="danger">2</yd-badge>
-                <!-- <span v-html="info.unread" v-show="info.unread"></span> -->
+                <img class="item-img" :src="info.head_portrait">
+                <yd-badge slot="badge" type="danger">{{info.news_number}}</yd-badge>
               </div>
-               
-              <h2 class="dissname" v-html="info.dissname"></h2>
-              <p class="summary" v-html="info.summary"></p>
-              <span class="item-time" v-html="info.time"></span>
+              <h2 class="dissname" v-html="info.nick_name"></h2>
+              <p class="summary" v-html="info.latest_news"></p>
+              <span class="item-time" v-html="formatDate(info.rtime)"></span>
             </div>
           </router-link>
         </ul>
@@ -41,7 +23,7 @@
 <script type="text/ecmascript-6">
 import Scroll from "../../base/scroll/scroll";
 import { mapMutations, mapGetters } from "vuex";
-import api from '@/api/resource.js'
+import api from "@/api/resource.js";
 
 export default {
   components: {
@@ -61,29 +43,48 @@ export default {
   mounted() {
     // webSocket 初始化
     let userinfo = JSON.parse(localStorage.getItem("access_token"));
-    let web = this.$root.$webSocket;
-    if (!web) {
-      let urlPrefix = this.webSocketUrl;
-      this.$root.$webSocket = new WebSocket(urlPrefix + userinfo.id);
-      web = this.$root.$webSocket;
-      web.onerror = this.setErrorMessage;
-      // 连接成功
-      web.onopen = this.setOnopenMessage;
-      web.onmessage = this.setOnMessage;
-    }
     // 聊天列表初始化，刷新
-    api.findSysChatList(this, {
-      params: {
+    api
+      .findSysChatList(this, {
+        params: {
+          id: userinfo.id
+        }
+      })
+      .then(res => {
+        let val = res.body;
+        if (val.code == "200") {
+          // 需要判断是否为添加朋友后的生成列表
+          let userChatList = JSON.parse(val.userChatList);
+          // 聊天列表缓存
+          let chatList = JSON.parse(localStorage.getItem("chatListCache"))
+            ? JSON.parse(localStorage.getItem("chatListCache"))
+            : {};
+          let i = 0;
+          for (i; i < userChatList.length; i++) {
+            chatList[userChatList[i].chat_bject] = userChatList[i];
+          }
+          localStorage.setItem("chatListCache", JSON.stringify(chatList));
+          this.chatList = chatList;
+        }
+      })
+      .catch(err => {
+        onsole.log(err);
+      });
+    // 新朋友消息
+    api
+      .findNewFriend(this, {
         id: userinfo.id
-      }
-    }).then( res => {
-      let val = res.body;
-      if(val.code == "200"){
-        console.log(val)
-      }
-    }).catch( err => {
-      onsole.log(err)
-    })
+      })
+      .then(res => {
+        let val = res.body;
+        if (val.code == "200") {
+          // 缓存10条最新的朋友消息，
+          localStorage.setItem("addFriendList", JSON.stringify(val.list));
+        }
+      })
+      .catch(err => {
+        console.log(JSON.stringify(err));
+      });
   },
   methods: {
     enterMessage() {
@@ -98,73 +99,61 @@ export default {
     ...mapMutations({
       setAddress: "SET_INFO"
     }),
-    // 连接异常
-    setErrorMessage(e) {
-      console.log(e);
-    },
-    // 建立连接
-    setOnopenMessage(e) {
-      console.info("已建立连接");
-    },
-    // 收到服务器发送过来的信息
-    setOnMessage(e) {
-      console.log(e);
+    formatDate(time) {
+      let dateTimeStamp = time * 1000;
+      var now = new Date();
+      var y = now.getFullYear();
+      var m = now.getMonth() + 1;
+      var d = now.getDate();
+      // 兼容苹果替换日期yyyy-MM-dd格式为yyyy/MM/dd
+      if (typeof dateTimeStamp == "string") {
+        var reg = getRegExp("-", "g");
+        dateTimeStamp = dateTimeStamp.replace(reg, "/");
+      }
+      var date = new Date(dateTimeStamp);
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
+      var hour = date.getHours();
+      var minute = date.getMinutes();
+
+      var result = "";
+      if (year == y) {
+        var n1 = new Date(y + "/" + m + "/" + d);
+        var d1 = new Date(year + "/" + month + "/" + day);
+        var diff = parseInt(n1 - d1);
+        var cMinute = 1000 * 60;
+        var cHour = cMinute * 60;
+        var cDay = cHour * 24;
+        var dayC = diff / cDay;
+        // 补0
+        month = month < 10 ? "0" + month + "" : "" + month + "";
+        day = day < 10 ? "0" + day + "" : "" + day + "";
+        hour = hour < 10 ? "0" + hour + "" : "" + hour + "";
+        minute = minute < 10 ? "0" + minute + "" : "" + minute + "";
+
+        if (dayC == 0) {
+          result = "今天 " + hour + ":" + minute + "";
+        } else if (dayC == 1) {
+          result = "昨天 " + hour + ":" + minute + "";
+        } else {
+          result = month + "-" + day + " " + hour + ":" + minute + "";
+        }
+      } else {
+        result =
+          year + "-" + month + "-" + day + " " + hour + ":" + minute + "";
+      }
+      return result;
+    } 
+  },
+  watch: {
+    $route(to, from) {
+      // 监听路由变化刷新页面
     }
   },
   data() {
     return {
-      chatList: [
-        {
-          dissname: "诸葛亮",
-          dissid: "zhugeliang",
-          phone: "18312345678",
-          imgurl:
-            "http://static.bbs.9wee.com/attachment/forum/201306/07/210751qbp4p4c5yzhhbpym.jpg",
-          location: "蜀国",
-          album: "http://src.zhigame.com/news/20130123/2013012310413268.jpg",
-          source: "通过搜索手机号添加",
-          summary: "点击发送消息",
-          unread: "",
-          time: "08:25"
-        },
-        {
-          dissname: "赵云",
-          dissid: "zhaoyun",
-          phone: "18312345678",
-          imgurl: "http://p5.so.qhimgs1.com/t0171807b9d0a9ac16b.jpg",
-          location: "蜀国",
-          album: "http://src.zhigame.com/news/20130123/2013012310413268.jpg",
-          source: "通过扫一扫添加",
-          summary: "有2个未读消息",
-          unread: 2,
-          time: "12:36"
-        },
-        {
-          dissname: "司马懿",
-          dissid: "simayi",
-          phone: "18312345678",
-          imgurl:
-            "http://www.e3ol.com/biography/upfiles/2008/20089822301342545.jpg",
-          location: "魏国",
-          album: "http://src.zhigame.com/news/20130123/2013012310413268.jpg",
-          source: "通过扫一扫添加",
-          summary: "有3个未读消息",
-          unread: 3,
-          time: "昨天"
-        },
-        {
-          dissname: "华佗",
-          dissid: "huatuo",
-          phone: "18312345678",
-          imgurl: "http://img1.gamedog.cn/2014/01/23/30-1401230942040.jpg",
-          location: "东汉",
-          album: "http://src.zhigame.com/news/20130123/2013012310413268.jpg",
-          source: "通过扫一扫添加",
-          summary: "有1个未读消息",
-          unread: 1,
-          time: "8月18日"
-        }
-      ],
+      chatList: {},
       moreList: []
     };
   }
@@ -191,11 +180,11 @@ export default {
   float: left;
   margin-right: 0.2rem;
 }
-.img-unread span{
+.img-unread span {
   position: absolute;
   right: -0.15rem;
   top: -0.12rem;
-} 
+}
 .item-img {
   float: left;
   border-radius: 0.1rem;

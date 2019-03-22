@@ -13,7 +13,7 @@
       <div class="content-name">
         <img class="smallImg" :src="info.headPortrait">
         <div class="content-disname">
-          <h2 class v-html="info.realName ? info.realName : info.nickName"></h2>
+          <h2 class v-html="info.remarkName ? info.remarkName : info.nickName"></h2>
         </div>
       </div>
       <div class="content-note" v-if="currentUserId" @click="goRemark(info.id)">设置备注和描述</div>
@@ -33,7 +33,7 @@
         <span class="content-label">来源</span>
         {{info.source == 1 ? "通过手机或者账号搜索" : "通过二维码搜索"}}
       </div>
-     
+
       <div class="content-message" v-if="msgShow">
         <yd-button
           size="large"
@@ -53,7 +53,7 @@
           shape="circle"
           @click.native="goAddfriend(info.id)"
         >
-          <router-link  to="">添加到通讯录</router-link>
+          <router-link to>添加到通讯录</router-link>
         </yd-button>
       </div>
       <router-view></router-view>
@@ -99,13 +99,12 @@ export default {
   data() {
     return {
       info: {},
-      currentUserId: true,// 是否本人
+      currentUserId: true, // 是否本人
       msgShow: true, // 发送消息按钮控制
-      addFriendShow: false, // 添加到通讯录控制
+      addFriendShow: false // 添加到通讯录控制
     };
   },
-  computed: {
-  },
+  computed: {},
   created() {
     // console.log(this.info)
   },
@@ -114,16 +113,39 @@ export default {
     let access_token = JSON.parse(localStorage.getItem("access_token"));
     let friend = JSON.parse(localStorage.getItem("jumpFriendCache"));
     if (friend) {
-      if(friend.id == access_token.id){
+      if (friend.id == access_token.id) {
         // 如果是自己
         this.currentUserId = false;
         this.msgShow = false;
-      }
-      if(!friend.isFriend){
-        this.msgShow = false;
-        this.addFriendShow = true;
+      } else {
+        if (!friend.isFriend) {
+          this.msgShow = false;
+          this.addFriendShow = true;
+          this.currentUserId = false;
+        }
       }
       this.info = friend;
+    }
+  },
+  watch: {
+    $route(to, from) {
+      // 获取查询到的缓存信息，如果没有则不管
+      let access_token = JSON.parse(localStorage.getItem("access_token"));
+      let friend = JSON.parse(localStorage.getItem("jumpFriendCache"));
+      if (friend) {
+        if (friend.id == access_token.id) {
+          // 如果是自己
+          this.currentUserId = false;
+          this.msgShow = false;
+        } else {
+          if (!friend.isFriend) {
+            this.msgShow = false;
+            this.addFriendShow = true;
+            this.currentUserId = false;
+          }
+        }
+        this.info = friend;
+      }
     }
   },
   methods: {
@@ -134,7 +156,7 @@ export default {
       this.setaddList(info);
     },
     // 添加好友到通讯录
-    goAddfriend (dissid) {
+    goAddfriend(dissid) {
       this.$router.push({
         path: `/address/${dissid}/addfriend`
       });

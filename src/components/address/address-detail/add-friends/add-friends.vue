@@ -6,11 +6,11 @@
               <router-link to="" slot="left">
                   <yd-navbar-back-icon></yd-navbar-back-icon>
               </router-link>
-              <router-link to="#" slot="right">发送</router-link>
+              <router-link to="#" @click.native="goNewFriend" slot="right">发送</router-link>
           </yd-navbar>
           <yd-cell-group title="你需要发送的验证申请，等待对方验证通过">
               <yd-cell-item>
-                  <yd-textarea slot="right" placeholder=""></yd-textarea>
+                  <yd-textarea slot="right" v-model="remarks" placeholder=""></yd-textarea>
               </yd-cell-item>
           </yd-cell-group>
         </div>
@@ -22,6 +22,7 @@
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll'
   import {MessageBox} from 'mint-ui'
+  import api from '@/api/resource.js'
 
   export default {
     components: {
@@ -30,12 +31,8 @@
     },
     data () {
       return {
-        value1: false,
-        value2: true,
-        value3: true,
-        value4: false,
-        value5: true,
-        title: 11
+        remarks: '',
+        friendId: this.$route.params.id
       }
     },
     mounted () {
@@ -60,9 +57,29 @@
         })
       },
       goPname () {
-        console.log('1234')
         this.$router.push({
           path: `/me/personal/Pname`
+        })
+      },
+      // 添加好友
+      goNewFriend(){
+        let access_token = JSON.parse(localStorage.getItem("access_token"));
+        let friend = JSON.parse(localStorage.getItem("jumpFriendCache"));
+        let id = access_token.id;
+        api.addNewFriend(this, {
+          'addPeople': id,
+          'thePersonBeingAdded': friend.id,
+          'source': friend.source,
+          'remarks': this.remarks
+        }).then( res => {
+          let val = res.body;
+          if(val.code == "200"){
+            this.$router.push({
+              path: `/address/friend`
+            });
+          }
+        }).catch( err => {
+          console.log(JSON.stringify(err))
         })
       }
     }

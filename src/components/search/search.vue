@@ -18,7 +18,7 @@
           <yd-cell-item @click.native="detailsJump">
             <img slot="icon" :src="friend.headPortrait">
             <div slot="left" class="search-list-name">
-              <p>{{friend.realName ? friend.realName : friend.nickName}}</p>
+              <p>{{friend.remarkName ? friend.remarkName : friend.nickName}}</p>
             </div>
           </yd-cell-item>
         </yd-cell-group>
@@ -90,6 +90,7 @@ export default {
       let friend = this.friend;
       friend["source"] = 1;
       localStorage.setItem("jumpFriendCache", JSON.stringify(friend));
+      this.$router
       this.$router.push({
         path: `/address/${this.friend.nickName}`
       });

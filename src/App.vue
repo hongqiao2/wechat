@@ -14,7 +14,7 @@
     <yd-tabbar slot="tabbar" v-if="$route.meta.menuShow">
       <yd-tabbar-item title="消息" link="/chat">
           <yd-icon name="message" custom slot="icon" size="0.45rem"></yd-icon>
-          <yd-badge slot="badge" type="danger">2</yd-badge>
+          <yd-badge slot="badge" type="danger">{{showMsgNum}}</yd-badge>
       </yd-tabbar-item>
       <yd-tabbar-item title="通讯录" link="/address">
           <yd-icon name="tongxunlu" custom slot="icon" size="0.45rem"></yd-icon>
@@ -34,6 +34,7 @@
 <!--<script src="../static/mui/js/mui.min.js"></script>-->  
 <script>
 import Plus from './components/plus/plus'
+import api from "@/api/resource.js";
 export default {
   name: 'app',
   components: {
@@ -41,7 +42,9 @@ export default {
   },
   data () {
     return {
-      isShowPlus: false
+      isShowPlus: false,
+      showMsgNum: 0,
+      userinfo: {}
     }
   },
   methods: {
@@ -51,6 +54,51 @@ export default {
     logClick () {
       this.isShowPlus = true
     }
+  },
+  mounted(){
+    // webSocket 初始化
+    let userinfo = JSON.parse(localStorage.getItem("access_token"));
+    this.userinfo = userinfo;
+    let web = this.$root.$webSocket;
+    if (!web) {
+      let urlPrefix = this.webSocketUrl;
+      this.$root.$webSocket = new WebSocket(urlPrefix + userinfo.id);
+      web = this.$root.$webSocket;
+      web.onerror = this.setErrorMessage;
+      // 连接成功
+      web.onopen = this.setOnopenMessage;
+      web.onmessage = this.setOnMessage;
+    }
+    // 聊天列表初始化，刷新
+    api
+      .findSysChatList(this, {
+        params: {
+          id: userinfo.id
+        }
+      })
+      .then(res => {
+        let val = res.body;
+        if (val.code == "200") {
+          // 需要判断是否为添加朋友后的生成列表
+          let userChatList = JSON.parse(val.userChatList);
+          // 聊天列表缓存
+          let chatList = JSON.parse(localStorage.getItem("chatListCache"))
+            ? JSON.parse(localStorage.getItem("chatListCache"))
+            : {};
+          let showMsgNum = 0;
+          let i = 0;
+          for (i; i < userChatList.length; i++) {
+            showMsgNum += userChatList[i].news_number;
+            chatList[userChatList[i].chat_bject] = userChatList[i];
+          }
+          localStorage.setItem("chatListCache", JSON.stringify(chatList));
+          this.chatList = chatList;
+          this.showMsgNum += showMsgNum;
+        }
+      })
+      .catch(err => {
+        onsole.log(err);
+      });
   }
 }
 </script>
