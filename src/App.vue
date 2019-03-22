@@ -14,7 +14,7 @@
     <yd-tabbar slot="tabbar" v-if="$route.meta.menuShow">
       <yd-tabbar-item title="消息" link="/chat">
           <yd-icon name="message" custom slot="icon" size="0.45rem"></yd-icon>
-          <yd-badge slot="badge" type="danger">{{showMsgNum}}</yd-badge>
+          <yd-badge slot="badge" type="danger" v-if="showMsgNum > 0">{{showMsgNum}}</yd-badge>
       </yd-tabbar-item>
       <yd-tabbar-item title="通讯录" link="/address">
           <yd-icon name="tongxunlu" custom slot="icon" size="0.45rem"></yd-icon>

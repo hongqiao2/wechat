@@ -94,7 +94,7 @@ Vue.http.options.xhr = { withCredentials: true }
 Vue.http.options.crossOrigin = true
 Vue.http.options.emulateHTTP = true
 
-Vue.prototype.webSocketUrl = 'ws://localhost:8080/boot/socketServer/'// webSocket 请求地址
+Vue.prototype.webSocketUrl = 'ws://192.168.1.168:8080/boot/socketServer/'// webSocket 请求地址
 
 // 接收服务发来的消息
 Vue.prototype.setOnMessage = function (e) {
