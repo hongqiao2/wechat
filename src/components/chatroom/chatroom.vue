@@ -288,14 +288,16 @@
     margin-bottom: .3rem;
 }
   .btn{
-      position: absolute;
-      right: 0.1rem;
-      color: #fff;
-      border: none;
-      width: 0.8rem;
-      height: 0.5rem;
-      padding: 0;
-      border-radius: 5px;
+    position: absolute;
+    right: .1rem;
+    top: 0.2rem;
+    color: #fff;
+    border: none;
+    width: .8rem;
+    height: .6rem;
+    padding: 0;
+    border-radius: 5px;
+    z-index: 111;
   }
   .speak{
     height: 0.7rem;
@@ -353,7 +355,7 @@
     background: #fff;
   }
   .chatroom-bottom{
-    height: 50px;
+    height: 1rem;
     background-color: #fff;
   }
   .send{

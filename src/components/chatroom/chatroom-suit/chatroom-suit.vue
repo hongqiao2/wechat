@@ -2,7 +2,7 @@
   <transition name="slide">
     <div class="chatroom-complain" ref="content">
       <yd-navbar title="投诉建议">
-          <router-link to="/chatroom/complain" slot="left">
+          <router-link to="" @click.native="back"  slot="left">
               <yd-navbar-back-icon></yd-navbar-back-icon>
           </router-link>
       </yd-navbar> 
@@ -70,6 +70,9 @@
         }).catch(error => {
             alert('上传图片出错！');
         })    
+      },
+      back () {
+        this.$router.back()   // 返回上一级
       }
     }
   }

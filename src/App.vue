@@ -97,7 +97,7 @@ export default {
         }
       })
       .catch(err => {
-        onsole.log(err);
+        console.log(err);
       });
   }
 }
