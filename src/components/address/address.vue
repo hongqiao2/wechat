@@ -36,6 +36,8 @@
 <script type="text/ecmascript-6">
 import { IndexList, IndexSection, Toast, MessageBox } from "mint-ui";
 import { mapMutations } from "vuex";
+import api from "@/api/resource.js";
+import chineseTurn from "@/api/chineseTurnEnglish.js";
 
 export default {
   components: {
@@ -48,12 +50,70 @@ export default {
     // console.log(this.personnelList)
   },
   mounted() {
-    
+    let userinfo = JSON.parse(localStorage.getItem("access_token"));
+    // 获取好友列表
+    api
+      .findSysUserFriendList(this, {
+        id: userinfo.id
+      })
+      .then(res => {
+        let _val = res.body;
+        if (_val.code == "200") {
+          let friendList = JSON.parse(_val.friendList);
+          console.log(JSON.stringify(friendList))
+          // 需要进行排序的好友列表
+          let personnelList = {};
+          friendList.forEach(function(item, index) {
+            let userName = typeof(item.remark_name) != "undefined" ? item.remark_name : item.nick_name;
+            // 判断是否是文字，判断是否是字母
+            var isChinese = /^[\u4e00-\u9fa5]+$/;
+            let subVal = userName.substring(0, 1);
+            if (isChinese.test(subVal)) {
+              let keyV = chineseTurn(subVal).substring(0, 1);
+              if (!personnelList[keyV]) {
+                personnelList[keyV] = [];
+              }
+              personnelList[keyV].push({
+                id: item.griend_id,
+                dissname: userName,
+                imgurl: item.head_portrait
+              });
+            } else {
+              // 判读是否是英文字母
+              isChinese = /^[A-Za-z]/;
+              if (isChinese.test(subVal)) {
+                let keyV = subVal.toUpperCase();
+                if (!personnelList[keyV]) {
+                  personnelList[keyV] = [];
+                }
+                personnelList[keyV].push({
+                id: item.griend_id,
+                dissname: userName,
+                imgurl: item.head_portrait
+              });
+              } else {
+                if (!personnelList["#"]) {
+                  personnelList["#"] = [];
+                }
+                personnelList["#"].push({
+                id: item.griend_id,
+                dissname: userName,
+                imgurl: item.head_portrait
+              });
+              }
+            }
+          });
+           this.personnelList = personnelList;
+        }
+      })
+      .catch(err => {
+        console.log(JSON.stringify(err));
+      });
   },
   methods: {
     gotoDetail(info) {
       this.$router.push({
-        path: `/address/${info.dissid}`
+        path: `/address/${info.id}`
       });
       this.setAddress(info);
     },
@@ -71,73 +131,6 @@ export default {
   data() {
     return {
       personnelList: {
-        C: [
-          {
-            dissname: "曹操",
-            dissid: "caocao",
-            phone: "18312345678",
-            imgurl:
-              "http://a3.att.hudong.com/63/87/19300001392461132480875422046.jpg",
-            location: "这个人很懒...还没有设置地址",
-            album: "http://src.zhigame.com/news/20130123/2013012310413268.jpg",
-            source: "通过搜索手机号添加",
-            sign: "这个人很懒没有留下签名",
-            hobby: "这个人很懒没有什么爱好"
-          }
-        ],
-        D: [
-          {
-            dissname: "典韦",
-            dissid: "dianwei",
-            phone: "18312345678",
-            imgurl:
-              "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1614597475,2162289114&fm=26&gp=0.jpg",
-            location: "魏国 洛阳",
-            album: "http://src.zhigame.com/news/20130123/2013012310413268.jpg",
-            source: "通过扫一扫添加",
-            sign: "这个人很懒没有留下签名",
-            hobby: "这个人很懒没有什么爱好"
-          },
-          {
-            dissname: "大乔",
-            dissid: "daqiao",
-            phone: "18312345678",
-            imgurl:
-              "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502995554006&di=70ab3f456e05a25f092c613fed0df1d3&imgtype=0&src=http%3A%2F%2Fimg3.redocn.com%2Ftupian%2F20141231%2FdaqiaorenwuchahuaJPG_3711796.jpg",
-            location: "吴国 建业",
-            album: "http://src.zhigame.com/news/20130123/2013012310413268.jpg",
-            source: "通过扫一扫添加",
-            sign: "这个人很懒没有留下签名",
-            hobby: "这个人很懒没有什么爱好"
-          }
-        ],
-        G: [
-          {
-            dissname: "关羽",
-            dissid: "guanyu",
-            phone: "18312345678",
-            imgurl:
-              "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1503761569656&di=01696cee833e1c3af42186949cf5a8fc&imgtype=0&src=http%3A%2F%2Fimg11.weikeimg.com%2Fupload%2Fnews%2F2011121315404465027.jpg",
-            location: "蜀国",
-            album: "http://src.zhigame.com/news/20130123/2013012310413268.jpg",
-            source: "通过扫一扫添加",
-            sign: "这个人很懒没有留下签名",
-            hobby: "这个人很懒没有什么爱好"
-          }
-        ],
-        H: [
-          {
-            dissname: "华佗",
-            dissid: "huatuo",
-            phone: "18312345678",
-            imgurl: "http://img1.gamedog.cn/2014/01/23/30-1401230942040.jpg",
-            location: "东汉",
-            album: "http://src.zhigame.com/news/20130123/2013012310413268.jpg",
-            source: "通过扫一扫添加",
-            sign: "这个人很懒没有留下签名",
-            hobby: "这个人很懒没有什么爱好"
-          }
-        ]
       }
     };
   }

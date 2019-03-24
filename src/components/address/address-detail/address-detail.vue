@@ -63,7 +63,7 @@
 
 <script type="text/ecmascript-6">
 import { mapGetters, mapMutations } from "vuex";
-
+import api from "@/api/resource.js";
 export default {
   components: {},
   props: {
@@ -101,7 +101,8 @@ export default {
       info: {},
       currentUserId: true, // 是否本人
       msgShow: true, // 发送消息按钮控制
-      addFriendShow: false // 添加到通讯录控制
+      addFriendShow: false, // 添加到通讯录控制
+      friendId: this.$route.params.id
     };
   },
   computed: {},
@@ -113,18 +114,39 @@ export default {
     let access_token = JSON.parse(localStorage.getItem("access_token"));
     let friend = JSON.parse(localStorage.getItem("jumpFriendCache"));
     if (friend) {
-      if (friend.id == access_token.id) {
-        // 如果是自己
-        this.currentUserId = false;
-        this.msgShow = false;
+      if (friend.id != this.friendId) {
+        api.findUserById(this, {
+          params: {
+            id: this.friendId
+          }
+        }).then( res => {
+          let _val = res.body;
+          if(_val.code == "200"){
+            console.log(JSON.stringify(_val))
+            if(_val.userInfo.id == access_token.id){
+              // 如果是自己
+              this.currentUserId = false;
+              this.msgShow = false;
+            }
+            this.info = _val.userInfo;
+          }
+        }).catch( err => {
+          console.log(JSON.stringify(err))
+        })
       } else {
-        if (!friend.isFriend) {
-          this.msgShow = false;
-          this.addFriendShow = true;
+        if (friend.id == access_token.id) {
+          // 如果是自己
           this.currentUserId = false;
+          this.msgShow = false;
+        } else {
+          if (!friend.isFriend) {
+            this.msgShow = false;
+            this.addFriendShow = true;
+            this.currentUserId = false;
+          }
         }
+        this.info = friend;
       }
-      this.info = friend;
     }
   },
   watch: {

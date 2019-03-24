@@ -9,7 +9,7 @@
                 <img class="item-img" :src="info.head_portrait">
                 <yd-badge slot="badge" type="danger">{{info.news_number}}</yd-badge>
               </div>
-              <h2 class="dissname" v-html="info.nick_name"></h2>
+              <h2 class="dissname" v-html="info.remark_name ? info.remark_name : info.nick_name"></h2>
               <p class="summary" v-html="info.latest_news"></p>
               <span class="item-time" v-html="formatDate(info.rtime)"></span>
             </div>
@@ -59,11 +59,13 @@ export default {
           let chatList = JSON.parse(localStorage.getItem("chatListCache"))
             ? JSON.parse(localStorage.getItem("chatListCache"))
             : {};
-          let i = 0;
-          for (i; i < userChatList.length; i++) {
-            chatList[userChatList[i].chat_bject] = userChatList[i];
+          if (userChatList) {
+            let i = 0;
+            for (i; i < userChatList.length; i++) {
+              chatList[userChatList[i].chat_bject] = userChatList[i];
+            }
+            localStorage.setItem("chatListCache", JSON.stringify(chatList));
           }
-          localStorage.setItem("chatListCache", JSON.stringify(chatList));
           this.chatList = chatList;
         }
       })
@@ -91,14 +93,9 @@ export default {
       console.log(12);
     },
     gotoChatroom(info) {
-      info.unread = ""; // 点击后使未读消息的提示消失
-      info.summary = "点击发送消息"; // 点击后使未读消息的提示消失
-      info.time = "刚刚";
-      this.setAddress(info);
+      info.news_number = ""; // 点击后使未读消息的提示消失
+      //this.setAddress(info);
     },
-    ...mapMutations({
-      setAddress: "SET_INFO"
-    }),
     formatDate(time) {
       let dateTimeStamp = time * 1000;
       var now = new Date();
@@ -144,7 +141,7 @@ export default {
           year + "-" + month + "-" + day + " " + hour + ":" + minute + "";
       }
       return result;
-    } 
+    }
   },
   watch: {
     $route(to, from) {
