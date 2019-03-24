@@ -7,7 +7,7 @@
             <div class="item-cell" @click="gotoChatroom(info)">
               <div class="img-unread">
                 <img class="item-img" :src="info.head_portrait">
-                <yd-badge slot="badge" type="danger">{{info.news_number}}</yd-badge>
+                <yd-badge slot="badge" type="danger" v-if="info.news_number != 0">{{info.news_number}}</yd-badge>
               </div>
               <h2 class="dissname" v-html="info.remark_name ? info.remark_name : info.nick_name"></h2>
               <p class="summary" v-html="info.latest_news"></p>
@@ -93,9 +93,12 @@ export default {
       console.log(12);
     },
     gotoChatroom(info) {
-      info.news_number = ""; // 点击后使未读消息的提示消失
-      //this.setAddress(info);
+      // 点击后使未读消息的提示消失
+      this.setAddress(info);
     },
+    ...mapMutations({
+      setAddress: "SET_INFO"
+    }),
     formatDate(time) {
       let dateTimeStamp = time * 1000;
       var now = new Date();

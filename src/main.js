@@ -145,9 +145,8 @@ Vue.prototype.setOnMessage = function (e) {
     .catch(err => {
       onsole.log(err);
     });
-
-
 }
+
 // 连接异常
 Vue.prototype.setErrorMessage = function (e) {
   console.log(e);

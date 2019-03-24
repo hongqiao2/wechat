@@ -128,7 +128,8 @@ export default {
         "哈哈哈"
       ],
       content: [], // 聊天内容[{userImg: "用户头像", sendMsg: "内容", isSend: "是否发送者", isAddFriend: "是否是好友通知"]
-      userinfo: {}
+      userinfo: {},
+      updateStateType: false // 如果有新消息，或者发送了消息，就需要在返回时运行findSysUserNewLogList方法
     };
   },
   mounted() {
@@ -137,6 +138,7 @@ export default {
         click: true
       });
     });
+
     // 获取最新信息
     let userinfo = JSON.parse(localStorage.getItem("access_token"));
     this.userinfo = userinfo;
@@ -178,30 +180,32 @@ export default {
   },
   methods: {
     back(event) {
-      // 修改消息状态为已读
-      api
-        .updateMsgState(this, {
-          id: this.userinfo.id,
-          chat_bject: this.info.chat_bject
-        })
-        .then(res => {
-          let _val = res.body;
-          if (_val.code == "200") {
-            console.log(this.info.chat_bject)
-            let chatList = localStorage.getItem("chatListCache");
-            let info = chatList[this.info.chat_bject];
-            console.log(JSON.stringify(info))
-            if (this.value !== "") {
-              info.latest_news = this.text;
+      if (this.updateStateType) {
+        // 修改消息状态为已读
+        api
+          .updateMsgState(this, {
+            id: this.userinfo.id,
+            chat_bject: this.info.chat_bject
+          })
+          .then(res => {
+            let _val = res.body;
+            if (_val.code == "200") {
+              let _infoId = this.info.chat_bject;
+              let chatList = JSON.parse(localStorage.getItem("chatListCache"));
+              let _userinfo = chatList[_infoId];
+              if (this.text !== "") {
+                _userinfo.latest_news = this.text;
+              }
+              _userinfo.news_number = 0;
+              chatList[_infoId] = _userinfo;
+              localStorage.setItem("chatListCache", JSON.stringify(chatList));
             }
-            info.news_number = 0;
-            localStorage.setItem("chatListCache", JSON.stringify(info));
-            this.$router.back(); // 返回上一级
-          }
-        })
-        .catch(err => {
-          console.log(JSON.stringify(err));
-        });
+          })
+          .catch(err => {
+            console.log(JSON.stringify(err));
+          });
+      }
+      this.$router.back(); // 返回上一级
     },
     gotoUser(info) {
       this.$router.push({
@@ -278,7 +282,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["info"])
+    ...mapGetters({
+      info: "info"
+    })
+  },
+  watch : {
+    info: function(val){
+      console.log(1)
+      console.log(JSON.stringify(val))
+    }
   }
 };
 </script>
