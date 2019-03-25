@@ -69,8 +69,7 @@
           @input="sendInput"
         >
       </div>
-      <div class="speak" v-if="showText">
-        按住 说话
+      <div class="speak" v-if="showText">按住 说话
         <!-- <input type="text" placeholder="请输入聊天内容" class="sText" ref="sTest"/> -->
       </div>
       <yd-button
@@ -146,7 +145,9 @@ export default {
     api
       .findSysUserNewLogList(this, {
         id: userinfo.id,
-        chat_bject: this.info.griend_id ? this.info.griend_id : this.info.chat_bject,
+        chat_bject: this.info.griend_id
+          ? this.info.griend_id
+          : this.info.chat_bject,
         pageNo: 0,
         pageSize: 10
       })
@@ -186,18 +187,22 @@ export default {
         api
           .updateMsgState(this, {
             id: this.userinfo.id,
-            chat_bject: this.info.griend_id ? this.info.griend_id : this.info.chat_bject
+            chat_bject: this.info.griend_id
+              ? this.info.griend_id
+              : this.info.chat_bject
           })
           .then(res => {
             let _val = res.body;
             if (_val.code == "200") {
-              let _infoId = this.info.griend_id ? this.info.griend_id : this.info.chat_bject;
+              let _infoId = this.info.griend_id
+                ? this.info.griend_id
+                : this.info.chat_bject;
               let chatList = JSON.parse(localStorage.getItem("chatListCache"));
               let _userinfo = chatList[_infoId];
               if (this.text !== "") {
                 _userinfo.latest_news = this.text;
               }
-              this.num =  this.num - _userinfo.news_number;
+              this.num = this.num - _userinfo.news_number;
               this.setShowNun(this.num);
               _userinfo.news_number = 0;
               chatList[_infoId] = _userinfo;
@@ -247,21 +252,23 @@ export default {
       this.text = this.$refs.sTest.value;
       if (this.text !== "") {
         // 发送消息到服务器
+        this.content.push({
+          userImg: this.userinfo.headPortrait,
+          sendMsg: this.text,
+          isSend: 0,
+          isAddFriend: 0
+        });
         api
           .saveSendMsg(this, {
             id: this.userinfo.id,
-            chat_bject: this.info.griend_id ? this.info.griend_id : this.info.chat_bject,
+            chat_bject: this.info.griend_id
+              ? this.info.griend_id
+              : this.info.chat_bject,
             sendMsg: this.text
           })
           .then(res => {
             let _val = res.body;
             if (_val.code == "200") {
-              this.content.push({
-                userImg: userinfo.headPortrait,
-                sendMsg: this.text,
-                isSend: 0,
-                isAddFriend: 0
-              });
             }
           })
           .catch(err => {
@@ -293,9 +300,9 @@ export default {
       num: "num"
     })
   },
-  watch : {
-    info: function(val){
-      console.log(JSON.stringify(val))
+  watch: {
+    info: function(val) {
+      console.log(JSON.stringify(val));
     }
   }
 };
@@ -409,7 +416,7 @@ export default {
   font-weight: 500;
   width: 64%;
 }
-.inHtml{
+.inHtml {
   text-align: center;
 }
 .inHtml img {
@@ -499,15 +506,15 @@ export default {
   height: 0.9rem;
 }
 
-.chatroom-hint{
-    background: #bbb;
-    color: #fff;
-    opacity: 0.9;
-    padding: 0 0.2rem;
-    border-radius: 5px;
-    height: 0.55rem;
-    display: inline-block;
-    margin-bottom: 0.3rem;
-    line-height: 0.56rem;
+.chatroom-hint {
+  background: #bbb;
+  color: #fff;
+  opacity: 0.9;
+  padding: 0 0.2rem;
+  border-radius: 5px;
+  height: 0.55rem;
+  display: inline-block;
+  margin-bottom: 0.3rem;
+  line-height: 0.56rem;
 }
 </style>
