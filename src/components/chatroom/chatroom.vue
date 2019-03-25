@@ -17,11 +17,13 @@
           <div class="content-body" ref="body">
             <ul class="inHtml" v-for="item in content" :key="item.sendMsg">
               <span v-if="item.isAddFriend == 1" class="chatroom-hint">我们已经成为好友啦</span>
-              <li class="ask" v-if="item.isSend == 1 && item.isAddFriend == 0">
+              <li class="ask" v-if="item.isSend == 0 && item.isAddFriend == 0" >
                 <img :src="item.userImg">
                 <p>{{item.sendMsg}}</p>
+                <div class="loading" v-if="loading"></div>
+                <div class="failure iconfont icon-tixingtishi" v-if="fail"></div>
               </li>
-              <li class="reply" v-if="item.isSend == 0 && item.isAddFriend == 0">
+              <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0" >
                 <img :src="item.userImg">
                 <p>{{item.sendMsg}}</p>
               </li>
@@ -104,6 +106,8 @@ export default {
       popHeight: false, // 更多弹出
       showPop: false, // 更多显示
       sendShow: false, // 发送按钮
+      loading: false,
+      fail: true,
       value: "",
       randomReply: [
         "你谁啊？",
@@ -517,5 +521,61 @@ export default {
   display: inline-block;
   margin-bottom: 0.3rem;
   line-height: 0.56rem;
+}
+[class*="loading"] {
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    color: #bbb;
+    vertical-align: middle;
+    pointer-events: none;
+} 
+
+.loading {
+    border: .2em solid transparent;
+    border-top-color: currentcolor;
+    border-radius: 50%;
+    -webkit-animation: 1s loading linear infinite;
+    animation: 1s loading linear infinite;
+    position: relative;
+    margin: 0.2rem 0.1rem;
+}
+.loading:before {
+    content: '';
+    display: block;
+    width: inherit;
+    height: inherit;
+    position: absolute;
+    top: -.2em;
+    left: -.2em;
+    border: .2em solid currentcolor;
+    border-radius: 50%;
+    opacity: .5;
+}
+@-webkit-keyframes loading{
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes loading {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+.chatroom .failure{
+    color: red;
+    font-size: 0.5rem;
+    margin: 0.1rem;
+    display: inline-block;
 }
 </style>
