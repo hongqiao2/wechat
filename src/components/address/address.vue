@@ -60,7 +60,6 @@ export default {
         let _val = res.body;
         if (_val.code == "200") {
           let friendList = JSON.parse(_val.friendList);
-          console.log(JSON.stringify(friendList))
           // 需要进行排序的好友列表
           let personnelList = {};
           friendList.forEach(function(item, index) {

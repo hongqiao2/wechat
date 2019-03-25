@@ -1,4 +1,5 @@
 import * as types from './mutation-types'  // 从mutation-types中拿到定义的常量
+import { type } from 'os';
 
 // mutations可以看做一个对象，里面有一些方法
 // 通俗的理解mutations,里面装着一些改变数据方法的集合，这是Veux设计很重要的一点，就是把处理数据逻辑方法全部放在mutations里面，使得数据和视图分离。
@@ -10,6 +11,9 @@ const mutations = {
   },
   [types.SET_ADDLIST] (state, addList) {
     state.addList.unshift(addList)  // 将点击的联系人添加到首页的开始部位
+  },
+  [types.SET_NUM] (state, num){
+    state.num = num;
   }
 }
 

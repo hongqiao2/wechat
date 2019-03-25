@@ -37,8 +37,8 @@ export default {
     ...mapGetters([
       // 拿到info的状态
       "info",
-      "addList"
-    ])
+      "addList"    
+      ])
   },
   mounted() {
     // webSocket 初始化
@@ -59,18 +59,21 @@ export default {
           let chatList = JSON.parse(localStorage.getItem("chatListCache"))
             ? JSON.parse(localStorage.getItem("chatListCache"))
             : {};
+            let num = 0; // 共计显示的消息数量
           if (userChatList) {
             let i = 0;
             for (i; i < userChatList.length; i++) {
+              num += userChatList[i].news_number;
               chatList[userChatList[i].chat_bject] = userChatList[i];
             }
             localStorage.setItem("chatListCache", JSON.stringify(chatList));
           }
           this.chatList = chatList;
+          this.setShowNun(num);
         }
       })
       .catch(err => {
-        onsole.log(err);
+        console.log(err);
       });
     // 新朋友消息
     api
@@ -98,6 +101,9 @@ export default {
     },
     ...mapMutations({
       setAddress: "SET_INFO"
+    }),
+    ...mapMutations({
+      setShowNun: "SET_NUM"
     }),
     formatDate(time) {
       let dateTimeStamp = time * 1000;

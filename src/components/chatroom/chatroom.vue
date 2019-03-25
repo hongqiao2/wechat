@@ -90,7 +90,7 @@
 
 <script type="text/ecmascript-6">
 import BScroll from "better-scroll";
-import { mapGetters } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 import api from "@/api/resource.js";
 export default {
   components: {
@@ -196,6 +196,8 @@ export default {
               if (this.text !== "") {
                 _userinfo.latest_news = this.text;
               }
+              this.num =  this.num - _userinfo.news_number;
+              this.setShowNun(this.num);
               _userinfo.news_number = 0;
               chatList[_infoId] = _userinfo;
               localStorage.setItem("chatListCache", JSON.stringify(chatList));
@@ -207,6 +209,9 @@ export default {
       }
       this.$router.back(); // 返回上一级
     },
+    ...mapMutations({
+      setShowNun: "SET_NUM"
+    }),
     gotoUser(info) {
       this.$router.push({
         path: `/chatroom/user`
@@ -283,7 +288,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      info: "info"
+      info: "info",
+      num: "num"
     })
   },
   watch : {
