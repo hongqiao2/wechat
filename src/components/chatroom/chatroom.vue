@@ -17,13 +17,13 @@
           <div class="content-body" ref="body">
             <ul class="inHtml" v-for="item in content" :key="item.sendMsg">
               <span v-if="item.isAddFriend == 1" class="chatroom-hint">我们已经成为好友啦</span>
-              <li class="ask" v-if="item.sendType == 1 && item.isAddFriend == 0">
+              <li class="ask" v-if="item.isSend == 1 && item.isAddFriend == 0">
                 <img :src="item.userImg">
-                <p>{{item.sendMsg}} aaa</p>
+                <p>{{item.sendMsg}}</p>
               </li>
-              <li class="reply" v-if="item.sendType == 0 && item.isAddFriend == 0">
+              <li class="reply" v-if="item.isSend == 0 && item.isAddFriend == 0">
                 <img :src="item.userImg">
-                <p>{{item.sendMsg}}bb</p>
+                <p>{{item.sendMsg}}</p>
               </li>
             </ul>
           </div>
@@ -264,7 +264,8 @@ export default {
             chat_bject: this.info.griend_id
               ? this.info.griend_id
               : this.info.chat_bject,
-            sendMsg: this.text
+            sendMsg: this.text,
+            is_group: 0
           })
           .then(res => {
             let _val = res.body;
