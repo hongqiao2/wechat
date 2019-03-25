@@ -7,9 +7,9 @@
             <div class="item-cell" @click="gotoChatroom(info)">
               <div class="img-unread">
                 <img class="item-img" :src="info.head_portrait">
-                <yd-badge slot="badge" type="danger">{{info.news_number}}</yd-badge>
+                <yd-badge slot="badge" type="danger" v-if="info.news_number != 0">{{info.news_number}}</yd-badge>
               </div>
-              <h2 class="dissname" v-html="info.nick_name"></h2>
+              <h2 class="dissname" v-html="info.remark_name ? info.remark_name : info.nick_name"></h2>
               <p class="summary" v-html="info.latest_news"></p>
               <span class="item-time" v-html="formatDate(info.rtime)"></span>
             </div>
@@ -37,8 +37,8 @@ export default {
     ...mapGetters([
       // 拿到info的状态
       "info",
-      "addList"
-    ])
+      "addList"    
+      ])
   },
   mounted() {
     // webSocket 初始化
@@ -59,16 +59,21 @@ export default {
           let chatList = JSON.parse(localStorage.getItem("chatListCache"))
             ? JSON.parse(localStorage.getItem("chatListCache"))
             : {};
-          let i = 0;
-          for (i; i < userChatList.length; i++) {
-            chatList[userChatList[i].chat_bject] = userChatList[i];
+            let num = 0; // 共计显示的消息数量
+          if (userChatList) {
+            let i = 0;
+            for (i; i < userChatList.length; i++) {
+              num += userChatList[i].news_number;
+              chatList[userChatList[i].chat_bject] = userChatList[i];
+            }
+            localStorage.setItem("chatListCache", JSON.stringify(chatList));
           }
-          localStorage.setItem("chatListCache", JSON.stringify(chatList));
           this.chatList = chatList;
+          this.setShowNun(num);
         }
       })
       .catch(err => {
-        onsole.log(err);
+        console.log(err);
       });
     // 新朋友消息
     api
@@ -91,13 +96,14 @@ export default {
       console.log(12);
     },
     gotoChatroom(info) {
-      info.unread = ""; // 点击后使未读消息的提示消失
-      info.summary = "点击发送消息"; // 点击后使未读消息的提示消失
-      info.time = "刚刚";
+      // 点击后使未读消息的提示消失
       this.setAddress(info);
     },
     ...mapMutations({
       setAddress: "SET_INFO"
+    }),
+    ...mapMutations({
+      setShowNun: "SET_NUM"
     }),
     formatDate(time) {
       let dateTimeStamp = time * 1000;
@@ -144,7 +150,7 @@ export default {
           year + "-" + month + "-" + day + " " + hour + ":" + minute + "";
       }
       return result;
-    } 
+    }
   },
   watch: {
     $route(to, from) {

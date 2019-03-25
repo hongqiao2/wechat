@@ -94,60 +94,63 @@ Vue.http.options.xhr = { withCredentials: true }
 Vue.http.options.crossOrigin = true
 Vue.http.options.emulateHTTP = true
 
-Vue.prototype.webSocketUrl = 'ws://localhost:8080/boot/socketServer/'// webSocket 请求地址
+Vue.prototype.webSocketUrl = 'ws://192.168.1.168:8080/boot/socketServer/'// webSocket 请求地址
 
 // 接收服务发来的消息
 Vue.prototype.setOnMessage = function (e) {
   console.log(e.data);
-  let userinfo = JSON.parse(localStorage.getItem("access_token"));
-  let _data = JSON.parse(e.data);
-  if (_data.isNewFriend) {
-    // 新朋友消息
-    api
-      .findNewFriend(this, {
-        id: userinfo.id
-      })
-      .then(res => {
-        let val = res.body;
-        if (val.code == "200") {
-          // 缓存10条最新的朋友消息，
-          localStorage.setItem('addFriendList', JSON.stringify(val.list));
-        }
-      })
-      .catch(err => {
-        console.log(JSON.stringify(err));
-      });
+  // let userinfo = JSON.parse(localStorage.getItem("access_token"));
+  // let _data = JSON.parse(e.data);
+  // if (_data.isNewFriend) {
+  //   // 新朋友消息
+  //   api
+  //     .findNewFriend(this, {
+  //       id: userinfo.id
+  //     })
+  //     .then(res => {
+  //       let val = res.body;
+  //       if (val.code == "200") {
+  //         // 缓存10条最新的朋友消息，
+  //         localStorage.setItem('addFriendList', JSON.stringify(val.list));
+  //       }
+  //     })
+  //     .catch(err => {
+  //       console.log(JSON.stringify(err));
+  //     });
 
-    return;
-  }
+  //   return;
+  // }
 
 
-  // 聊天列表初始化，刷新
-  api
-    .findSysChatList(this, {
-      params: {
-        id: userinfo.id
-      }
-    })
-    .then(res => {
-      let val = res.body;
-      if (val.code == "200") {
-        // 需要判断是否为添加朋友后的生成列表
-        let userChatList = JSON.parse(val.userChatList);
-        // 聊天列表缓存
-        let chatList = JSON.parse(localStorage.getItem("chatListCache"));
-        userChatList.foreach(function(item, index){
-          chatList[item.chat_bject] = item;
-        })
-        localStorage.setItem(JSON.stringify(chatList))
-      }
-    })
-    .catch(err => {
-      onsole.log(err);
-    });
-
+  // // 聊天列表初始化，刷新
+  // api
+  //   .findSysChatList(this, {
+  //     params: {
+  //       id: userinfo.id
+  //     }
+  //   })
+  //   .then(res => {
+  //     let val = res.body;
+  //     if (val.code == "200") {
+  //       // 需要判断是否为添加朋友后的生成列表
+  //       let userChatList = JSON.parse(val.userChatList);
+  //       // 聊天列表缓存
+  //       let chatList = JSON.parse(localStorage.getItem("chatListCache"));
+  //       userChatList.foreach(function(item, index){
+  //         chatList[item.chat_bject] = item;
+  //       })
+  //       localStorage.setItem(JSON.stringify(chatList))
+  //     }
+  //   })
+  //   .catch(err => {
+  //     onsole.log(err);
+  //   });
+    // store.commit('SET_INFO', {
+    //   id: 10
+    // })
 
 }
+
 // 连接异常
 Vue.prototype.setErrorMessage = function (e) {
   console.log(e);

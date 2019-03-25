@@ -77,7 +77,27 @@ const api = {
   // 同意好友请求
   agreeFriendReq(that, params){
     return that.$http.post(baseURL + '/newFriend/agreeFriendReq', params);
-  }
+  },
+  // 获取我的好友
+  findSysUserFriendList(that, params){
+    return that.$http.post(baseURL + '/userFriend/findSysUserFriendList', params);
+  },
+  // 获取我的好友信息，签名等
+  findUserById(that, params){
+    return that.$http.get(baseURL + '/user/findUserById', params);
+  },
+  // 获取用户聊天记录
+  findSysUserNewLogList(that, params){
+    return that.$http.post(baseURL + '/newsLog/findSysUserNewLogList', params);
+  },
+  // 给好友发送信息
+  saveSendMsg(that, params){
+    return that.$http.post(baseURL + '/newsLog/saveSendMsg', params);
+  },
+  // 修改消息，以及消息列表的状态
+  updateMsgState(that, params){
+    return that.$http.post(baseURL + '/newsLog/updateMsgState', params);
+  },
 };
 
 export default api
