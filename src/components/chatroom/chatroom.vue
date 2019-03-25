@@ -16,13 +16,14 @@
         <div class="content-text">
           <div class="content-body" ref="body">
             <ul class="inHtml" v-for="item in content" :key="item.sendMsg">
-              <li class="ask" v-if="item.sendType == 1">
+              <span v-if="item.isAddFriend == 1" class="chatroom-hint">我们已经成为好友啦</span>
+              <li class="ask" v-if="item.sendType == 1 && item.isAddFriend == 0">
                 <img :src="item.userImg">
-                <p>{{item.sendMsg}}</p>
+                <p>{{item.sendMsg}} aaa</p>
               </li>
-              <li class="reply" v-else>
+              <li class="reply" v-if="item.sendType == 0 && item.isAddFriend == 0">
                 <img :src="item.userImg">
-                <p>{{item.sendMsg}}</p>
+                <p>{{item.sendMsg}}bb</p>
               </li>
             </ul>
           </div>
@@ -294,7 +295,6 @@ export default {
   },
   watch : {
     info: function(val){
-      console.log(1)
       console.log(JSON.stringify(val))
     }
   }
@@ -409,6 +409,9 @@ export default {
   font-weight: 500;
   width: 64%;
 }
+.inHtml{
+  text-align: center;
+}
 .inHtml img {
   position: relative;
   width: 0.8rem;
@@ -494,5 +497,17 @@ export default {
 .chat-more img {
   width: 0.9rem;
   height: 0.9rem;
+}
+
+.chatroom-hint{
+    background: #bbb;
+    color: #fff;
+    opacity: 0.9;
+    padding: 0 0.2rem;
+    border-radius: 5px;
+    height: 0.55rem;
+    display: inline-block;
+    margin-bottom: 0.3rem;
+    line-height: 0.56rem;
 }
 </style>

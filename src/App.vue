@@ -63,6 +63,17 @@ export default {
     }
   },
   mounted(){
+    let userinfo = JSON.parse(localStorage.getItem("access_token"));
+    let web = this.$root.$webSocket;
+    if (!web) {
+      let urlPrefix = this.webSocketUrl;
+      this.$root.$webSocket = new WebSocket(urlPrefix + userinfo.id);
+      web = this.$root.$webSocket;
+      web.onerror = this.setErrorMessage;
+      // 连接成功
+      web.onopen = this.setOnopenMessage;
+      web.onmessage = this.setOnMessage;
+    }
   }
 }
 </script>

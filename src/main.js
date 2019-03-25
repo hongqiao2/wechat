@@ -99,27 +99,39 @@ Vue.prototype.webSocketUrl = 'ws://192.168.1.168:8080/boot/socketServer/'// webS
 // 接收服务发来的消息
 Vue.prototype.setOnMessage = function (e) {
   console.log(e.data);
-  // let userinfo = JSON.parse(localStorage.getItem("access_token"));
-  // let _data = JSON.parse(e.data);
-  // if (_data.isNewFriend) {
-  //   // 新朋友消息
-  //   api
-  //     .findNewFriend(this, {
-  //       id: userinfo.id
-  //     })
-  //     .then(res => {
-  //       let val = res.body;
-  //       if (val.code == "200") {
-  //         // 缓存10条最新的朋友消息，
-  //         localStorage.setItem('addFriendList', JSON.stringify(val.list));
-  //       }
-  //     })
-  //     .catch(err => {
-  //       console.log(JSON.stringify(err));
-  //     });
+  let _data = JSON.parse(e.data);
+  let userinfo = JSON.parse(localStorage.getItem("access_token"));
+  //1.判断是否是好友添加的信息，同意添加好友的信息， 是的话就更新聊天列表，以及新的朋友列表
+  if(_data.isGroup == 3){ // 朋友圈通知
+    return;
+  }
+  if(_data.isGroup == 2){ // 好友通知
+    api
+    .findNewFriend(this, {
+      id: userinfo.id
+    })
+    .then(res => {
+      let val = res.body;
+      if (val.code == "200") {
+        // 缓存10条最新的朋友消息，
+        localStorage.setItem('addFriendList', JSON.stringify(val.list));
+      }
+    })
+    .catch(err => {
+      console.log(JSON.stringify(err));
+    });
+    return;
+  }
+  if(_data.isGroup == 1 && groupId != 0){ // 群消息通知
+    return;
+  }
+  if(_data.isGroup == 0){ // 好友消息通知，以及添加好友成功通知
+    let _info = store.state.info;
+    if(_info){ // 如果当前聊天界面不为空，判断是否是同一个好友发送的信息
+      
+    }
+  }
 
-  //   return;
-  // }
 
 
   // // 聊天列表初始化，刷新
@@ -148,17 +160,17 @@ Vue.prototype.setOnMessage = function (e) {
     // store.commit('SET_INFO', {
     //   id: 10
     // })
-
+  console.log(JSON.stringify(store.state))
 }
 
 // 连接异常
 Vue.prototype.setErrorMessage = function (e) {
   console.log(e);
 },
-  // 建立连接
-  Vue.prototype.setOnopenMessage = function (e) {
-    console.info("已建立连接");
-  }
+// 建立连接
+Vue.prototype.setOnopenMessage = function (e) {
+  console.info("已建立连接");
+}
 
 
 new Vue({

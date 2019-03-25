@@ -33,10 +33,6 @@ export default {
   components: {
     Scroll
   },
-  // updated () {
-  //   console.log('测试：测试：')
-  //   console.log(this.addList)
-  // },
   computed: {
     ...mapGetters([
       // 拿到info的状态
@@ -45,7 +41,6 @@ export default {
     ])
   },
   mounted() {
-    // webSocket 初始化
     let userinfo = JSON.parse(localStorage.getItem("access_token"));
     this.findChatList(userinfo);
     this.findNewFriendList(userinfo);
