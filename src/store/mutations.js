@@ -14,6 +14,9 @@ const mutations = {
   },
   [types.SET_NUM] (state, num){
     state.num = num;
+  },
+  [types.SET_USER_FRIEND_LIST_CACHE] (state, user_friend_list_cache){
+    state.userFriendList = user_friend_list_cache;
   }
 }
 

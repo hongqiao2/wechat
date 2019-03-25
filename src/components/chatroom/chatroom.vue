@@ -145,7 +145,7 @@ export default {
     api
       .findSysUserNewLogList(this, {
         id: userinfo.id,
-        chat_bject: this.info.chat_bject,
+        chat_bject: this.info.griend_id ? this.info.griend_id : this.info.chat_bject,
         pageNo: 0,
         pageSize: 10
       })
@@ -185,12 +185,12 @@ export default {
         api
           .updateMsgState(this, {
             id: this.userinfo.id,
-            chat_bject: this.info.chat_bject
+            chat_bject: this.info.griend_id ? this.info.griend_id : this.info.chat_bject
           })
           .then(res => {
             let _val = res.body;
             if (_val.code == "200") {
-              let _infoId = this.info.chat_bject;
+              let _infoId = this.info.griend_id ? this.info.griend_id : this.info.chat_bject;
               let chatList = JSON.parse(localStorage.getItem("chatListCache"));
               let _userinfo = chatList[_infoId];
               if (this.text !== "") {
@@ -249,7 +249,7 @@ export default {
         api
           .saveSendMsg(this, {
             id: this.userinfo.id,
-            chat_bject: this.info.chat_bject,
+            chat_bject: this.info.griend_id ? this.info.griend_id : this.info.chat_bject,
             sendMsg: this.text
           })
           .then(res => {

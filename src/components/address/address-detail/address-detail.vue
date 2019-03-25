@@ -5,18 +5,18 @@
       <router-link to @click.native="back" slot="left">
         <yd-navbar-back-icon></yd-navbar-back-icon>
       </router-link>
-      <router-link to="#" slot="right" @click.native="goDset(info.id)">
+      <router-link to="#" slot="right" @click.native="goDset(info.griend_id)">
         <i class="iconfont icon-xiazai9" style="color:#101010;"></i>
       </router-link>
     </yd-navbar>
     <div class="content" ref="content">
       <div class="content-name">
-        <img class="smallImg" :src="info.headPortrait">
+        <img class="smallImg" :src="info.head_portrait">
         <div class="content-disname">
-          <h2 class v-html="info.remarkName ? info.remarkName : info.nickName"></h2>
+          <h2 class v-html="info.remark_name ? info.remark_name : info.nick_name"></h2>
         </div>
       </div>
-      <div class="content-note" v-if="currentUserId" @click="goRemark(info.id)">设置备注和描述</div>
+      <div class="content-note" v-if="currentUserId" @click="goRemark(info.griend_id)">设置备注和描述</div>
       <div class="content-intro">
         <span class="content-label">地区</span>
         {{info.country ? info.region ? info.country + " " +info.region : "这个人很懒...还没有设置地址" : "这个人很懒...还没有设置地址"}}
@@ -51,7 +51,7 @@
           bgcolor="#8D66FA"
           color="#FFF"
           shape="circle"
-          @click.native="goAddfriend(info.id)"
+          @click.native="goAddfriend(info.griend_id)"
         >
           <router-link to>添加到通讯录</router-link>
         </yd-button>
@@ -98,76 +98,43 @@ export default {
   },
   data() {
     return {
-      info: {},
       currentUserId: true, // 是否本人
       msgShow: true, // 发送消息按钮控制
       addFriendShow: false, // 添加到通讯录控制
       friendId: this.$route.params.id
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters([
+      // 拿到info的状态
+      "info"
+      ])
+  },
   created() {
-    // console.log(this.info)
   },
   mounted() {
-    // 获取查询到的缓存信息，如果没有则不管
-    let access_token = JSON.parse(localStorage.getItem("access_token"));
-    let friend = JSON.parse(localStorage.getItem("jumpFriendCache"));
-    if (friend) {
-      if (friend.id != this.friendId) {
-        api.findUserById(this, {
-          params: {
-            id: this.friendId
-          }
-        }).then( res => {
-          let _val = res.body;
-          if(_val.code == "200"){
-            console.log(JSON.stringify(_val))
-            if(_val.userInfo.id == access_token.id){
-              // 如果是自己
-              this.currentUserId = false;
-              this.msgShow = false;
-            }
-            this.info = _val.userInfo;
-          }
-        }).catch( err => {
-          console.log(JSON.stringify(err))
-        })
-      } else {
-        if (friend.id == access_token.id) {
-          // 如果是自己
-          this.currentUserId = false;
-          this.msgShow = false;
-        } else {
-          if (!friend.isFriend) {
-            this.msgShow = false;
-            this.addFriendShow = true;
-            this.currentUserId = false;
-          }
-        }
-        this.info = friend;
-      }
-    }
+    
   },
   watch: {
     $route(to, from) {
+      //console.log(JSON.stringify(this.info))
       // 获取查询到的缓存信息，如果没有则不管
-      let access_token = JSON.parse(localStorage.getItem("access_token"));
-      let friend = JSON.parse(localStorage.getItem("jumpFriendCache"));
-      if (friend) {
-        if (friend.id == access_token.id) {
-          // 如果是自己
-          this.currentUserId = false;
-          this.msgShow = false;
-        } else {
-          if (!friend.isFriend) {
-            this.msgShow = false;
-            this.addFriendShow = true;
-            this.currentUserId = false;
-          }
-        }
-        this.info = friend;
-      }
+      // let access_token = JSON.parse(localStorage.getItem("access_token"));
+      // let friend = JSON.parse(localStorage.getItem("jumpFriendCache"));
+      // if (friend) {
+      //   if (friend.id == access_token.id) {
+      //     // 如果是自己
+      //     this.currentUserId = false;
+      //     this.msgShow = false;
+      //   } else {
+      //     if (!friend.isFriend) {
+      //       this.msgShow = false;
+      //       this.addFriendShow = true;
+      //       this.currentUserId = false;
+      //     }
+      //   }
+      //   this.info = friend;
+      // }
     }
   },
   methods: {

@@ -35,7 +35,7 @@
 
 <script type="text/ecmascript-6">
 import { IndexList, IndexSection, Toast, MessageBox } from "mint-ui";
-import { mapMutations } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 import api from "@/api/resource.js";
 import chineseTurn from "@/api/chineseTurnEnglish.js";
 
@@ -46,75 +46,67 @@ export default {
     Toast,
     MessageBox
   },
+  computed: {
+    ...mapGetters([
+      // 拿到info的状态
+      "userFriendList"
+    ])
+  },
   created() {
-    // console.log(this.personnelList)
   },
   mounted() {
-    let userinfo = JSON.parse(localStorage.getItem("access_token"));
-    // 获取好友列表
-    api
-      .findSysUserFriendList(this, {
-        id: userinfo.id
-      })
-      .then(res => {
-        let _val = res.body;
-        if (_val.code == "200") {
-          let friendList = JSON.parse(_val.friendList);
-          // 需要进行排序的好友列表
-          let personnelList = {};
-          friendList.forEach(function(item, index) {
-            let userName = typeof(item.remark_name) != "undefined" ? item.remark_name : item.nick_name;
-            // 判断是否是文字，判断是否是字母
-            var isChinese = /^[\u4e00-\u9fa5]+$/;
-            let subVal = userName.substring(0, 1);
-            if (isChinese.test(subVal)) {
-              let keyV = chineseTurn(subVal).substring(0, 1);
-              if (!personnelList[keyV]) {
-                personnelList[keyV] = [];
-              }
-              personnelList[keyV].push({
-                id: item.griend_id,
-                dissname: userName,
-                imgurl: item.head_portrait
-              });
-            } else {
-              // 判读是否是英文字母
-              isChinese = /^[A-Za-z]/;
-              if (isChinese.test(subVal)) {
-                let keyV = subVal.toUpperCase();
-                if (!personnelList[keyV]) {
-                  personnelList[keyV] = [];
-                }
-                personnelList[keyV].push({
-                id: item.griend_id,
-                dissname: userName,
-                imgurl: item.head_portrait
-              });
-              } else {
-                if (!personnelList["#"]) {
-                  personnelList["#"] = [];
-                }
-                personnelList["#"].push({
-                id: item.griend_id,
-                dissname: userName,
-                imgurl: item.head_portrait
-              });
-              }
-            }
-          });
-           this.personnelList = personnelList;
+    let userFriendList = this.userFriendList;
+    let personnelList = {};
+    for(let key in userFriendList){
+      let userName =
+        typeof userFriendList[key].remark_name != "undefined"
+          ? userFriendList[key].remark_name
+          : userFriendList[key].nick_name;
+          var isChinese = /^[\u4e00-\u9fa5]+$/;
+      let subVal = userName.substring(0, 1);
+      if (isChinese.test(subVal)) {
+        let keyV = chineseTurn(subVal).substring(0, 1);
+        if (!personnelList[keyV]) {
+          personnelList[keyV] = [];
         }
-      })
-      .catch(err => {
-        console.log(JSON.stringify(err));
-      });
+        personnelList[keyV].push({
+          id: userFriendList[key].griend_id,
+          dissname: userName,
+          imgurl: userFriendList[key].head_portrait
+        });
+      } else {
+        // 判读是否是英文字母
+        isChinese = /^[A-Za-z]/;
+        if (isChinese.test(subVal)) {
+          let keyV = subVal.toUpperCase();
+          if (!personnelList[keyV]) {
+            personnelList[keyV] = [];
+          }
+          personnelList[keyV].push({
+            id: userFriendList[key].griend_id,
+            dissname: userName,
+            imgurl: userFriendList[key].head_portrait
+          });
+        } else {
+          if (!personnelList["#"]) {
+            personnelList["#"] = [];
+          }
+          personnelList["#"].push({
+            id: userFriendList[key].griend_id,
+            dissname: userName,
+            imgurl: userFriendList[key].head_portrait
+          });
+        }
+      }
+    }
+    this.personnelList = personnelList;
   },
   methods: {
     gotoDetail(info) {
       this.$router.push({
         path: `/address/${info.id}`
       });
-      this.setAddress(info);
+      this.setAddress(this.userFriendList[info.id]);
     },
     ...mapMutations({
       setAddress: "SET_INFO"
@@ -129,8 +121,7 @@ export default {
   },
   data() {
     return {
-      personnelList: {
-      }
+      personnelList: {}
     };
   }
 };

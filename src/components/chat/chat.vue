@@ -7,7 +7,11 @@
             <div class="item-cell" @click="gotoChatroom(info)">
               <div class="img-unread">
                 <img class="item-img" :src="info.head_portrait">
-                <yd-badge slot="badge" type="danger" v-if="info.news_number != 0">{{info.news_number}}</yd-badge>
+                <yd-badge
+                  slot="badge"
+                  type="danger"
+                  v-if="info.news_number != 0"
+                >{{info.news_number}}</yd-badge>
               </div>
               <h2 class="dissname" v-html="info.remark_name ? info.remark_name : info.nick_name"></h2>
               <p class="summary" v-html="info.latest_news"></p>
@@ -37,59 +41,15 @@ export default {
     ...mapGetters([
       // 拿到info的状态
       "info",
-      "addList"    
-      ])
+      "addList"
+    ])
   },
   mounted() {
     // webSocket 初始化
     let userinfo = JSON.parse(localStorage.getItem("access_token"));
-    // 聊天列表初始化，刷新
-    api
-      .findSysChatList(this, {
-        params: {
-          id: userinfo.id
-        }
-      })
-      .then(res => {
-        let val = res.body;
-        if (val.code == "200") {
-          // 需要判断是否为添加朋友后的生成列表
-          let userChatList = JSON.parse(val.userChatList);
-          // 聊天列表缓存
-          let chatList = JSON.parse(localStorage.getItem("chatListCache"))
-            ? JSON.parse(localStorage.getItem("chatListCache"))
-            : {};
-            let num = 0; // 共计显示的消息数量
-          if (userChatList) {
-            let i = 0;
-            for (i; i < userChatList.length; i++) {
-              num += userChatList[i].news_number;
-              chatList[userChatList[i].chat_bject] = userChatList[i];
-            }
-            localStorage.setItem("chatListCache", JSON.stringify(chatList));
-          }
-          this.chatList = chatList;
-          this.setShowNun(num);
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
-    // 新朋友消息
-    api
-      .findNewFriend(this, {
-        id: userinfo.id
-      })
-      .then(res => {
-        let val = res.body;
-        if (val.code == "200") {
-          // 缓存10条最新的朋友消息，
-          localStorage.setItem("addFriendList", JSON.stringify(val.list));
-        }
-      })
-      .catch(err => {
-        console.log(JSON.stringify(err));
-      });
+    this.findChatList(userinfo);
+    this.findNewFriendList(userinfo);
+    this.findFriendList(userinfo);
   },
   methods: {
     enterMessage() {
@@ -104,6 +64,9 @@ export default {
     }),
     ...mapMutations({
       setShowNun: "SET_NUM"
+    }),
+    ...mapMutations({
+      setUserFriendListCache: "SET_USER_FRIEND_LIST_CACHE"
     }),
     formatDate(time) {
       let dateTimeStamp = time * 1000;
@@ -150,6 +113,82 @@ export default {
           year + "-" + month + "-" + day + " " + hour + ":" + minute + "";
       }
       return result;
+    },
+    findFriendList(userinfo) {
+      // 好友列表
+      api
+        .findSysUserFriendList(this, {
+          id: userinfo.id
+        })
+        .then(res => {
+          let _val = res.body;
+          if (_val.code == "200") {
+            let userFriendListCache = {};
+            let friendList = JSON.parse(_val.friendList);
+            friendList.forEach(function(item, index) {
+              userFriendListCache[item.griend_id] = item;
+            });
+            this.setUserFriendListCache(userFriendListCache);
+            // localStorage.setItem(
+            //   "userFriendListCache",
+            //   JSON.stringify(userFriendListCache)
+            // );
+          }
+        })
+        .catch(err => {
+          console.log(JSON.stringify(err));
+        });
+    },
+    findNewFriendList(userinfo) {
+      // 新朋友消息
+      api
+        .findNewFriend(this, {
+          id: userinfo.id
+        })
+        .then(res => {
+          let val = res.body;
+          if (val.code == "200") {
+            // 缓存10条最新的朋友消息，
+            localStorage.setItem("addFriendList", JSON.stringify(val.list));
+          }
+        })
+        .catch(err => {
+          console.log(JSON.stringify(err));
+        });
+    },
+    findChatList(userinfo) {
+      // 聊天列表初始化，刷新
+      api
+        .findSysChatList(this, {
+          params: {
+            id: userinfo.id
+          }
+        })
+        .then(res => {
+          let val = res.body;
+          if (val.code == "200") {
+            // 需要判断是否为添加朋友后的生成列表
+            let userChatList = JSON.parse(val.userChatList);
+            // 聊天列表缓存
+            let chatList = JSON.parse(localStorage.getItem("chatListCache"))
+              ? JSON.parse(localStorage.getItem("chatListCache"))
+              : {};
+            let num = 0; // 共计显示的消息数量
+            if (userChatList) {
+              let i = 0;
+              for (i; i < userChatList.length; i++) {
+                num += userChatList[i].news_number;
+                chatList[userChatList[i].chat_bject] = userChatList[i];
+              }
+              localStorage.setItem("chatListCache", JSON.stringify(chatList));
+            }
+            this.chatList = chatList;
+            this.setShowNun(num);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   watch: {
