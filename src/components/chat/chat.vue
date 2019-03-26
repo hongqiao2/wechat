@@ -3,13 +3,7 @@
     <scroll class="chat-wrapper">
       <div>
         <ul>
-          <router-link
-            to="/chatroom"
-            tag="li"
-            v-for="info in chatList"
-            :key="info.id"
-            class="item"
-          >
+          <router-link to="/chatroom" tag="li" v-for="info in chatList" :key="info.id" class="item">
             <div class="item-cell" @click="gotoChatroom(info)">
               <div class="img-unread">
                 <img class="item-img" :src="info.head_portrait">
@@ -56,6 +50,12 @@ export default {
       // 点击后使未读消息的提示消失
       this.setAddress(info);
     },
+    ...mapMutations({
+      setChatListCache: "SET_CHAT_LIST_CACHE"
+    }),
+    ...mapMutations({
+      setShowNun: "SET_NUM"
+    }),
     ...mapMutations({
       setAddress: "SET_INFO"
     }),
@@ -149,58 +149,108 @@ export default {
     },
     findChatList(userinfo) {
       // 聊天列表初始化，刷新
-        api
-          .findSysChatList(this, {
-            params: {
-              id: userinfo.id
-            }
-          })
-          .then(res => {
-            let val = res.body;
-            if (val.code == "200") {
-              // 需要判断是否为添加朋友后的生成列表
-              let userChatList = JSON.parse(val.userChatList);
-              // 聊天列表缓存
-              let chatList = JSON.parse(localStorage.getItem("chatListCache"))
-                ? JSON.parse(localStorage.getItem("chatListCache"))
-                : {};
-              let num = 0; // 共计显示的消息数量
-              if (userChatList) {
-                let i = 0;
-                for (i; i < userChatList.length; i++) {
-                  num += userChatList[i].news_number;
-                  chatList[userChatList[i].chat_bject] = userChatList[i];
-                }
-                localStorage.setItem("chatListCache", JSON.stringify(chatList));
+      api
+        .findSysChatList(this, {
+          params: {
+            id: userinfo.id
+          }
+        })
+        .then(res => {
+          let val = res.body;
+          if (val.code == "200") {
+            // 需要判断是否为添加朋友后的生成列表
+            let userChatList = JSON.parse(val.userChatList);
+            // 聊天列表缓存
+            let chatList = JSON.parse(localStorage.getItem("chatListCache"))
+              ? JSON.parse(localStorage.getItem("chatListCache"))
+              : {};
+            let num = 0; // 共计显示的消息数量
+            if (userChatList) {
+              let i = 0;
+              for (i; i < userChatList.length; i++) {
+                num += userChatList[i].news_number;
+                chatList[userChatList[i].chat_bject] = userChatList[i];
               }
-              this.chatList = chatList;
-              this.setShowNun(num);
+              localStorage.setItem("chatListCache", JSON.stringify(chatList));
             }
-          })
-          .catch(err => {
-            console.log(err);
-          });
+            this.chatList = chatList;
+            this.setShowNun(num);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   watch: {
     $route(to, from) {
       // 监听路由变化刷新页面
     },
-    chatListCache(val){
-      let chatListCache = JSON.parse(JSON.stringify(val))
+    chatListCache(val) {
+      let chatListCache = JSON.parse(JSON.stringify(val));
       let userChatListCache = localStorage.getItem("userChatListCache");
-      userChatListCache = userChatListCache ? JSON.parse( userChatListCache) : {};
+      userChatListCache = userChatListCache
+        ? JSON.parse(userChatListCache)
+        : {};
       Object.assign(chatListCache, userChatListCache);
       this.chatList = chatListCache;
     }
   },
-  mounted(){
-    if(this.chatList){
-      let chatListCache = JSON.parse(JSON.stringify(this.chatListCache))
-      let userChatListCache = localStorage.getItem("userChatListCache");
-      userChatListCache = userChatListCache ? JSON.parse( userChatListCache) : {};
-      Object.assign(chatListCache, userChatListCache);
-      this.chatList = chatListCache;
+  mounted() {
+    let chatListCache = JSON.parse(JSON.stringify(this.chatListCache));
+    let userChatListCache = localStorage.getItem("userChatListCache");
+    userChatListCache = userChatListCache ? JSON.parse(userChatListCache) : {};
+    if (JSON.stringify(this.$route.params) != "{}") {
+      let info = this.$route.params;
+      if (info.news_number > 0) {
+        // 1.如果未读消息数大于0, 修改未读消息数为0
+        // 2.显示
+        // 3.调用接口修改数据
+        let infoId = info.griend_id || info.chat_bject;
+        if (chatListCache[infoId]) {
+          // 如果临时缓存里面有数据
+          chatListCache[infoId].news_number = 0;
+          if (info.latest_news !== "") {
+            // 如果有最新消息，就修改为最新消息
+            chatListCache[infoId].latest_news = info.latest_news;
+          }
+          // 设置缓存
+          let newChatListCache = {};
+          newChatListCache[infoId] = chatListCache[infoId];
+          // 删除临时缓存
+          delete chatListCache[infoId];
+          Object.assign(newChatListCache, chatListCache, userChatListCache);
+          let newNum = this.num;
+          newNum = newNum - info.news_number; // 修改消息总数
+          this.chatList = newChatListCache;
+          this.setShowNun(newNum); // 设置消息总数
+          this.setChatListCache(chatListCache); // 设置消息列表
+          // 设置列表缓存
+          localStorage.setItem(
+            "userChatListCache",
+            JSON.stringify(newChatListCache)
+          );
+          // 开始调用接口 修改消息列表状态
+          api
+            .updateMsgState(this, {
+              id: info.subordinate_user || info.user_id,
+              chat_bject: infoId
+            })
+            .then(res => {
+              let _val = res.body;
+              if (_val.code == "200") {
+                console.log(_val);
+              }
+            })
+            .catch(err => {
+              console.log(JSON.stringify(err));
+            });
+        }
+      } else {
+        // 直接显示
+        Object.assign(chatListCache, userChatListCache);
+        this.chatList = chatListCache;
+      }
     }
   },
   data() {
