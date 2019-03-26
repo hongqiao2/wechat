@@ -24,10 +24,8 @@ import { Popup } from 'vue-ydui/dist/lib.rem/popup'
 import { CitySelect } from 'vue-ydui/dist/lib.rem/cityselect'
 import { ActionSheet } from 'vue-ydui/dist/lib.rem/actionsheet'
 import { InfiniteScroll } from 'vue-ydui/dist/lib.rem/infinitescroll'
-import chineseTurn from "@/api/chineseTurnEnglish.js"
 import VueScroller from "vue-scroller"
-import chineseTurn from "@/api/chineseTurnEnglish.js";
-import api from "@/api/resource.js";
+import chineseTurn from "@/api/chineseTurnEnglish.js"
 // import {Upload} from 'element-ui'
 import router from './router'
 // /* eslint-disable no-unused-vars */  // 这一句必须写，用来规避ES6的语法检测
