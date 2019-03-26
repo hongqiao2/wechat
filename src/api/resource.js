@@ -62,6 +62,10 @@ const api = {
   findSysChatList(that, params){
     return that.$http.get(baseURL + '/findSysChatList', params);
   },
+  // 查询一个用户的聊天列表
+  findSysChatById(that, params){
+    return that.$http.get(baseURL + '/findSysChatById', params);
+  },
   // 根据手机联系人电话，获取联系人列表
   findUsersByIphones(that, params){
     return that.$http.get(baseURL + '/user/findUsersByIphones', params);

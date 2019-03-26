@@ -17,6 +17,9 @@ const mutations = {
   },
   [types.SET_USER_FRIEND_LIST_CACHE] (state, user_friend_list_cache){
     state.userFriendList = user_friend_list_cache;
+  },
+  [types.SET_CHAT_LIST_CACHE] (state, chatListCache){
+    state.chatListCache = chatListCache;
   }
 }
 

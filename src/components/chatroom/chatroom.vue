@@ -17,13 +17,13 @@
           <div class="content-body" ref="body">
             <ul class="inHtml" v-for="item in content" :key="item.sendMsg">
               <span v-if="item.isAddFriend == 1" class="chatroom-hint">我们已经成为好友啦</span>
-              <li class="ask" v-if="item.isSend == 0 && item.isAddFriend == 0" >
+              <li class="ask" v-if="item.isSend == 0 && item.isAddFriend == 0">
                 <img :src="item.userImg">
                 <p>{{item.sendMsg}}</p>
                 <div class="loading" v-if="loading"></div>
                 <div class="failure iconfont icon-tixingtishi" v-if="fail"></div>
               </li>
-              <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0" >
+              <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0">
                 <img :src="item.userImg">
                 <p>{{item.sendMsg}}</p>
               </li>
@@ -71,7 +71,8 @@
           @input="sendInput"
         >
       </div>
-      <div class="speak" v-if="showText">按住 说话
+      <div class="speak" v-if="showText">
+        按住 说话
         <!-- <input type="text" placeholder="请输入聊天内容" class="sText" ref="sTest"/> -->
       </div>
       <yd-button
@@ -107,33 +108,12 @@ export default {
       showPop: false, // 更多显示
       sendShow: false, // 发送按钮
       loading: false,
-      fail: true,
+      fail: false,
       value: "",
-      randomReply: [
-        "你谁啊？",
-        "请你再说一遍！",
-        "想和我聊天？得先夸我！",
-        "我不知道你在讲什么。。。",
-        "不好意思，我不想和你说话。",
-        "先告诉我你是谁。",
-        "竖子不足以谋也！",
-        "我选择沉默",
-        "来吧，一起吹牛逼。。",
-        "我很困，不想聊天",
-        "别废话，先给我讲个笑话",
-        "你从哪里来",
-        "心情不好，最好别搭理我",
-        "等我忙完再回复你",
-        "敢问尊姓大名",
-        "近来可好？",
-        "看来你是想和我聊天",
-        "你是要请我吃饭吗？",
-        "先给我一个让我回复你的理由",
-        "哈哈哈"
-      ],
       content: [], // 聊天内容[{userImg: "用户头像", sendMsg: "内容", isSend: "是否发送者", isAddFriend: "是否是好友通知"]
       userinfo: {},
-      updateStateType: false // 如果有新消息，或者发送了消息，就需要在返回时运行findSysUserNewLogList方法
+      updateStateType: false, // 如果有新消息，或者发送了消息，就需要在返回时运行findSysUserNewLogList方法
+      _infoId: ""
     };
   },
   mounted() {
@@ -142,82 +122,151 @@ export default {
         click: true
       });
     });
-
     // 获取最新信息
+    let _infoId = this.info.griend_id
+      ? this.info.griend_id
+      : this.info.chat_bject;
+    this._infoId = _infoId;
+    let chatList = JSON.parse(JSON.stringify(this.chatListCache));
+    let _userinfo = chatList[_infoId];
     let userinfo = JSON.parse(localStorage.getItem("access_token"));
     this.userinfo = userinfo;
-    api
-      .findSysUserNewLogList(this, {
-        id: userinfo.id,
-        chat_bject: this.info.griend_id
-          ? this.info.griend_id
-          : this.info.chat_bject,
-        pageNo: 0,
-        pageSize: 10
-      })
-      .then(res => {
-        let _val = res.body;
-        if (_val.code == "200") {
-          let _list = _val.listPageInfo.list;
-          let _content = [];
-          for (let index in _list) {
-            if (_list[index].sendType == 0) {
-              _content.push({
-                userImg: userinfo.headPortrait,
-                sendMsg: _list[index].sendMsg,
-                isSend: _list[index].sendType,
-                isAddFriend: _list[index].isAddFriend
-              });
-            } else {
-              _content.push({
-                userImg: this.info.head_portrait,
-                sendMsg: _list[index].sendMsg,
-                isSend: _list[index].sendType,
-                isAddFriend: _list[index].isAddFriend
-              });
+    if (_userinfo && _userinfo.news_number > 0) {
+      api
+        .findSysUserNewLogList(this, {
+          id: userinfo.id,
+          chat_bject: _infoId,
+          pageNo: 0,
+          pageSize: 10
+        })
+        .then(res => {
+          let _val = res.body;
+          if (_val.code == "200") {
+            let _list = _val.listPageInfo.list;
+            let _content = [];
+            for (let index in _list) {
+              if (_list[index].sendType == 0) {
+                _content.push({
+                  userImg: userinfo.headPortrait,
+                  sendMsg: _list[index].sendMsg,
+                  isSend: _list[index].sendType,
+                  isAddFriend: _list[index].isAddFriend
+                });
+              } else {
+                _content.push({
+                  userImg: this.info.head_portrait,
+                  sendMsg: _list[index].sendMsg,
+                  isSend: _list[index].sendType,
+                  isAddFriend: _list[index].isAddFriend
+                });
+              }
             }
+            this.content = _content;
+            let userChatRecordCaching = {};
+            userChatRecordCaching[_infoId] = _content;
+            localStorage.setItem(
+              "userChatRecordCaching",
+              JSON.stringify(userChatRecordCaching)
+            );
           }
-          this.content = _content;
-        }
-      })
-      .catch(err => {
-        console.log(JSON.stringify(err));
-      });
+        })
+        .catch(err => {
+          console.log(JSON.stringify(err));
+        });
+    } else {
+      let userChatRecordCaching = JSON.parse(
+        localStorage.getItem("userChatRecordCaching")
+      );
+      let recordCach = userChatRecordCaching
+        ? userChatRecordCaching[_infoId]
+        : "";
+      if (recordCach) {
+        recordCach.forEach((item, index) => {
+          this.content.push(item);
+        });
+      }
+    }
   },
   methods: {
     back(event) {
-      if (this.updateStateType) {
+      let _infoId = this._infoId;
+      let chatList = JSON.parse(JSON.stringify(this.chatListCache));
+      // 缓存历史信息
+      let userChatListCache = JSON.parse(
+        localStorage.getItem("userChatListCache")
+      );
+      let _userinfo = JSON.parse(JSON.stringify(this.info));
+      if (this.updateStateType || (_userinfo && _userinfo.news_number > 0)) {
         // 修改消息状态为已读
         api
           .updateMsgState(this, {
             id: this.userinfo.id,
-            chat_bject: this.info.griend_id
-              ? this.info.griend_id
-              : this.info.chat_bject
+            chat_bject: _infoId
           })
           .then(res => {
             let _val = res.body;
             if (_val.code == "200") {
-              let _infoId = this.info.griend_id
-                ? this.info.griend_id
-                : this.info.chat_bject;
-              let chatList = JSON.parse(localStorage.getItem("chatListCache"));
-              let _userinfo = chatList[_infoId];
               if (this.text !== "") {
+                console.log(this.text);
                 _userinfo.latest_news = this.text;
               }
-              this.num = this.num - _userinfo.news_number;
-              this.setShowNun(this.num);
+              var num = this.num;
+              num -= _userinfo.news_number;
               _userinfo.news_number = 0;
-              chatList[_infoId] = _userinfo;
-              localStorage.setItem("chatListCache", JSON.stringify(chatList));
+              userChatListCache[_infoId] = _userinfo;
+              localStorage.setItem("userChatListCache", JSON.stringify(newObj));
+              this.setShowNun(num);
+              delete chatList[_infoId];
+              // 返回上一级
+              this.$router.back();
             }
           })
           .catch(err => {
             console.log(JSON.stringify(err));
           });
+      } else {
+        if (this.content) {
+          // 处理聊天列表
+          if (!userChatListCache) {
+            // 查询聊天列表
+            api
+              .findSysChatById(this, {
+                params: {
+                  id: this.userinfo.id,
+                  chat_bject: this._infoId
+                }
+              })
+              .then(res => {
+                let _val = res.body;
+                if (_val.code == "200") {
+                  userChatListCache = {};
+                  userChatListCache[_val.userChatList.chat_bject] =
+                    _val.userChatList;
+                  localStorage.setItem(
+                    "userChatListCache",
+                    JSON.stringify(userChatListCache)
+                  );
+                  // 返回上一级
+                  this.$router.back();
+                }
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          } else {
+            // 更新聊天列表
+            let content = JSON.parse(JSON.stringify(this.content));
+            let length = content.length - 1;
+            userChatListCache[_infoId].latest_news = content[length].sendMsg;
+            localStorage.setItem(
+              "userChatListCache",
+              JSON.stringify(userChatListCache)
+            );
+            // 返回上一级
+            this.$router.back();
+          }
+        }
       }
-      this.$router.back(); // 返回上一级
     },
     ...mapMutations({
       setShowNun: "SET_NUM"
@@ -256,27 +305,67 @@ export default {
       this.text = this.$refs.sTest.value;
       if (this.text !== "") {
         // 发送消息到服务器
-        this.content.push({
+        this.loading = true;
+        let _content = {
           userImg: this.userinfo.headPortrait,
           sendMsg: this.text,
           isSend: 0,
           isAddFriend: 0
-        });
+        };
+        this.content.push(_content);
         api
           .saveSendMsg(this, {
             id: this.userinfo.id,
-            chat_bject: this.info.griend_id
-              ? this.info.griend_id
-              : this.info.chat_bject,
+            chat_bject: this._infoId,
             sendMsg: this.text,
             is_group: 0
           })
           .then(res => {
             let _val = res.body;
             if (_val.code == "200") {
+              this.updateStateType = true; // 要修改消息状态
+              this.loading = false;
+              // 加入聊天缓存
+              let userChatRecordCaching = _content;
+              var userChatRecordCachings = localStorage.getItem(
+                "userChatRecordCaching"
+              );
+              if (
+                userChatRecordCachings != null &&
+                userChatRecordCachings.length > 0
+              ) {
+                userChatRecordCachings = JSON.parse(userChatRecordCachings);
+                if (userChatRecordCachings[this._infoId]) {
+                  // 若果聊天信息缓存有
+                  userChatRecordCachings[this._infoId].push(
+                    userChatRecordCaching
+                  );
+                } else {
+                  userChatRecordCachings[this._infoId] = [];
+                  userChatRecordCachings[this._infoId].push(
+                    userChatRecordCaching
+                  );
+                  //Object.assign(userChatRecordCachings, newVal);
+                }
+              } else {
+                // 如果聊天缓存没有
+                //userChatRecordCachings.push()
+                userChatRecordCachings = {};
+                userChatRecordCachings[this._infoId] = [];
+                userChatRecordCachings[this._infoId].push(
+                  userChatRecordCaching
+                );
+                //userChatRecordCachings = userChatRecordCaching;
+              }
+              localStorage.setItem(
+                "userChatRecordCaching",
+                JSON.stringify(userChatRecordCachings)
+              );
             }
           })
           .catch(err => {
+            this.loading = false;
+            this.fail = true;
             console.log(JSON.stringify(err));
           });
       }
@@ -297,13 +386,13 @@ export default {
       } else {
         this.sendShow = false;
       }
-    }
+    },
+    ...mapMutations({
+      setChatListCache: "SET_CHAT_LIST_CACHE"
+    })
   },
   computed: {
-    ...mapGetters({
-      info: "info",
-      num: "num"
-    })
+    ...mapGetters(["info", "num", "chatListCache"])
   },
   watch: {
     info: function(val) {
@@ -523,59 +612,59 @@ export default {
   line-height: 0.56rem;
 }
 [class*="loading"] {
-    display: inline-block;
-    width: 1.5em;
-    height: 1.5em;
-    color: #bbb;
-    vertical-align: middle;
-    pointer-events: none;
-} 
+  display: inline-block;
+  width: 1.5em;
+  height: 1.5em;
+  color: #bbb;
+  vertical-align: middle;
+  pointer-events: none;
+}
 
 .loading {
-    border: .2em solid transparent;
-    border-top-color: currentcolor;
-    border-radius: 50%;
-    -webkit-animation: 1s loading linear infinite;
-    animation: 1s loading linear infinite;
-    position: relative;
-    margin: 0.2rem 0.1rem;
+  border: 0.2em solid transparent;
+  border-top-color: currentcolor;
+  border-radius: 50%;
+  -webkit-animation: 1s loading linear infinite;
+  animation: 1s loading linear infinite;
+  position: relative;
+  margin: 0.2rem 0.1rem;
 }
 .loading:before {
-    content: '';
-    display: block;
-    width: inherit;
-    height: inherit;
-    position: absolute;
-    top: -.2em;
-    left: -.2em;
-    border: .2em solid currentcolor;
-    border-radius: 50%;
-    opacity: .5;
+  content: "";
+  display: block;
+  width: inherit;
+  height: inherit;
+  position: absolute;
+  top: -0.2em;
+  left: -0.2em;
+  border: 0.2em solid currentcolor;
+  border-radius: 50%;
+  opacity: 0.5;
 }
-@-webkit-keyframes loading{
-    0% {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
-    }
-    100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
+@-webkit-keyframes loading {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }
 @keyframes loading {
-    0% {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
-    }
-    100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }
-.chatroom .failure{
-    color: red;
-    font-size: 0.5rem;
-    margin: 0.1rem;
-    display: inline-block;
+.chatroom .failure {
+  color: red;
+  font-size: 0.5rem;
+  margin: 0.1rem;
+  display: inline-block;
 }
 </style>

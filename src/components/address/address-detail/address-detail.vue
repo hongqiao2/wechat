@@ -159,7 +159,7 @@ export default {
       }
     },
     ...mapMutations({
-      setaddList: "SET_ADDLIST"
+      setaddList: "SET_INFO"
     })
   }
 };
