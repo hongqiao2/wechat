@@ -3,3 +3,5 @@ export const SET_ADDLIST = 'SET_ADDLIST'
 export const SET_NUM = 'SET_NUM'
 
 export const SET_USER_FRIEND_LIST_CACHE = 'SET_USER_FRIEND_LIST_CACHE'
+
+export const SET_CHAT_LIST_CACHE = 'SET_CHAT_LIST_CACHE'

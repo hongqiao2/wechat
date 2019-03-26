@@ -3,7 +3,13 @@
     <scroll class="chat-wrapper">
       <div>
         <ul>
-          <router-link to="/chatroom" tag="li" v-for="info in chatList" :key="info.id" class="item">
+          <router-link
+            to="/chatroom"
+            tag="li"
+            v-for="info in chatList"
+            :key="info.id"
+            class="item"
+          >
             <div class="item-cell" @click="gotoChatroom(info)">
               <div class="img-unread">
                 <img class="item-img" :src="info.head_portrait">
@@ -37,14 +43,10 @@ export default {
     ...mapGetters([
       // 拿到info的状态
       "info",
-      "addList"
+      "addList",
+      "chatListCache",
+      "num"
     ])
-  },
-  mounted() {
-    let userinfo = JSON.parse(localStorage.getItem("access_token"));
-    this.findChatList(userinfo);
-    this.findNewFriendList(userinfo);
-    this.findFriendList(userinfo);
   },
   methods: {
     enterMessage() {
@@ -56,12 +58,6 @@ export default {
     },
     ...mapMutations({
       setAddress: "SET_INFO"
-    }),
-    ...mapMutations({
-      setShowNun: "SET_NUM"
-    }),
-    ...mapMutations({
-      setUserFriendListCache: "SET_USER_FRIEND_LIST_CACHE"
     }),
     formatDate(time) {
       let dateTimeStamp = time * 1000;
@@ -153,42 +149,58 @@ export default {
     },
     findChatList(userinfo) {
       // 聊天列表初始化，刷新
-      api
-        .findSysChatList(this, {
-          params: {
-            id: userinfo.id
-          }
-        })
-        .then(res => {
-          let val = res.body;
-          if (val.code == "200") {
-            // 需要判断是否为添加朋友后的生成列表
-            let userChatList = JSON.parse(val.userChatList);
-            // 聊天列表缓存
-            let chatList = JSON.parse(localStorage.getItem("chatListCache"))
-              ? JSON.parse(localStorage.getItem("chatListCache"))
-              : {};
-            let num = 0; // 共计显示的消息数量
-            if (userChatList) {
-              let i = 0;
-              for (i; i < userChatList.length; i++) {
-                num += userChatList[i].news_number;
-                chatList[userChatList[i].chat_bject] = userChatList[i];
-              }
-              localStorage.setItem("chatListCache", JSON.stringify(chatList));
+        api
+          .findSysChatList(this, {
+            params: {
+              id: userinfo.id
             }
-            this.chatList = chatList;
-            this.setShowNun(num);
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
+          })
+          .then(res => {
+            let val = res.body;
+            if (val.code == "200") {
+              // 需要判断是否为添加朋友后的生成列表
+              let userChatList = JSON.parse(val.userChatList);
+              // 聊天列表缓存
+              let chatList = JSON.parse(localStorage.getItem("chatListCache"))
+                ? JSON.parse(localStorage.getItem("chatListCache"))
+                : {};
+              let num = 0; // 共计显示的消息数量
+              if (userChatList) {
+                let i = 0;
+                for (i; i < userChatList.length; i++) {
+                  num += userChatList[i].news_number;
+                  chatList[userChatList[i].chat_bject] = userChatList[i];
+                }
+                localStorage.setItem("chatListCache", JSON.stringify(chatList));
+              }
+              this.chatList = chatList;
+              this.setShowNun(num);
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
     }
   },
   watch: {
     $route(to, from) {
       // 监听路由变化刷新页面
+    },
+    chatListCache(val){
+      let chatListCache = JSON.parse(JSON.stringify(val))
+      let userChatListCache = localStorage.getItem("userChatListCache");
+      userChatListCache = userChatListCache ? JSON.parse( userChatListCache) : {};
+      Object.assign(chatListCache, userChatListCache);
+      this.chatList = chatListCache;
+    }
+  },
+  mounted(){
+    if(this.chatList){
+      let chatListCache = JSON.parse(JSON.stringify(this.chatListCache))
+      let userChatListCache = localStorage.getItem("userChatListCache");
+      userChatListCache = userChatListCache ? JSON.parse( userChatListCache) : {};
+      Object.assign(chatListCache, userChatListCache);
+      this.chatList = chatListCache;
     }
   },
   data() {
