@@ -214,7 +214,10 @@ export default {
               num -= _userinfo.news_number;
               _userinfo.news_number = 0;
               userChatListCache[_infoId] = _userinfo;
-              localStorage.setItem("userChatListCache", JSON.stringify(newObj));
+              localStorage.setItem(
+                "userChatListCache",
+                JSON.stringify(userChatListCache)
+              );
               this.setShowNun(num);
               delete chatList[_infoId];
               // 返回上一级
@@ -345,17 +348,14 @@ export default {
                   userChatRecordCachings[this._infoId].push(
                     userChatRecordCaching
                   );
-                  //Object.assign(userChatRecordCachings, newVal);
                 }
               } else {
                 // 如果聊天缓存没有
-                //userChatRecordCachings.push()
                 userChatRecordCachings = {};
                 userChatRecordCachings[this._infoId] = [];
                 userChatRecordCachings[this._infoId].push(
                   userChatRecordCaching
                 );
-                //userChatRecordCachings = userChatRecordCaching;
               }
               localStorage.setItem(
                 "userChatRecordCaching",
@@ -396,7 +396,19 @@ export default {
   },
   watch: {
     info: function(val) {
-      console.log(JSON.stringify(val));
+      let _val = JSON.parse(JSON.stringify(val));
+      let _content = {
+        userImg: _val.head_portrait,
+        sendMsg: _val.latest_news,
+        isSend: 1,
+        isAddFriend: 0
+      };
+      this.content.push(_content);
+      this.text = _val.latest_news;
+      var userChatRecordCachings = JSON.parse(localStorage.getItem(
+        "userChatRecordCaching"
+      ));
+      userChatRecordCachings[_val.chat_bject].push(_content);
     }
   }
 };

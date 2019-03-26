@@ -195,6 +195,7 @@ export default {
           let _infoId = _info.griend_id ? _info.griend_id : _info.chat_bject;
           if (_data.sender == _infoId) {
             _info.latest_news = _data.msg;
+            _info.news_number += 1;
             this.setAddress(_info);
           }
         }
