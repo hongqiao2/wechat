@@ -13,11 +13,11 @@
                 <img src="../../assets/plus/addfri.png" />
                 <span>添加朋友</span>
               </li>
-              <li>
+              <li @click="goScan">
                 <img src="../../assets/plus/sweep1.png" />
                 <span>扫一扫</span>
               </li>
-              <li>
+              <li @click="goHelp">
                 <img src="../../assets/plus/help1.png" />
                 <span>帮助与反馈</span>
               </li>
@@ -61,6 +61,18 @@ export default {
     goAdd () {
       this.$router.push({
         path: `/add`
+      })
+      this.$emit('on-close')
+    },
+    goScan () {
+      this.$router.push({
+        path: `/find/scan`
+      })
+      this.$emit('on-close')
+    },
+    goHelp () {
+      this.$router.push({
+        path: `/me/help`
       })
       this.$emit('on-close')
     }

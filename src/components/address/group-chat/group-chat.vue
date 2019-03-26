@@ -9,7 +9,7 @@
         </yd-navbar>
        <template>
           <yd-cell-group>
-              <yd-cell-item>
+              <yd-cell-item @click.native="goGroupdetail">
                 <ul class="group-photo" slot="left">
                   <li v-for="item in arr" :style="{backgroundImage: 'url(' + item.imgurl + ')'}"></li>
                 </ul>
@@ -47,6 +47,11 @@
     methods: {
       back (event) {
         this.$router.back()   // 返回上一级
+      },
+      goGroupdetail () {
+        this.$router.push({
+          path: `/address/group/groupdetail`
+        });
       }
     }
   }
@@ -63,10 +68,6 @@
     bottom: 0;
     z-index: 203;
     background-color:#F9F9F9;
-}
-
-.friend .yd-cell-item{
-  padding: 0.2rem 0 0.2rem 0.2rem;
 }
 .group-photo{
     width: 1.1rem;

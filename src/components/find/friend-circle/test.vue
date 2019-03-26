@@ -8,19 +8,19 @@
       <i class="iconfont icon-paizhao"></i>
       </router-link>
     </yd-navbar>
-    <div class="content-top">
+    <div class="content-top" >
       <img class="circle-bg" src="../../../assets/find/bg.png" />
       <div class="user">
         <span>minion</span>
         <img src="../../../assets/me/minion.png" @click="goAlbum" />
       </div>
     </div>
-     <div class="content-body">
-      <ul v-for="(item, index) in info">
-        <li>
+     <div class="content-body"> 
+      <ul v-for="(item, index) in info" >
+        <li  @click="MoreHide(item)">
           <div class="everyuser">
             <img class="userphoto" :src="item.imgurl" />
-            <div>
+            <div class="circle-right">
               <div class="username">
                 <h2 v-html="item.dissname"></h2>
                 <p v-html="item.sign"></p>
@@ -32,10 +32,21 @@
               <div class="usertime">
                 <p v-html="item.time"></p>
                 <div class="circle-more"  @click.stop="showHide(item)">
-                  <div class="son" :class="{ sonactive: item.show}">
-                  <div class="circle-zan" @click.stop="goZan(item.praise)">{{zan}}</div>
-                  <div class="circle-pinlun" @click.stop="goPinlun">评论</div>
+                  <div class="son" :class="{sonactive: item.show}">
+                    <div class="circle-zan" @click.stop="goZan(item)" v-if="item.praise">取消</div>
+                    <div class="circle-zan" @click.stop="goZan(item)" v-else>赞</div>
+                    <div class="circle-pinlun" @click.stop="goPinlun">评论</div>
+                  </div>
                 </div>
+              </div>
+              <div class="Assist-box" v-if="item.assistList || item.praise">
+                <span v-for="items in item.assistList">{{items.aname}}</span>
+                <span v-if="item.praise">minion</span>
+                <div class="assist-comments" v-for="comm in item.comments" v-if="item.comments">
+                  <div>
+                    <a class="assist-name">{{comm.aname}}:</a>
+                    <i>{{comm.contant}}</i>
+                  </div>
                 </div>
               </div>
             </div>
@@ -49,9 +60,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-  // import BScroll from 'better-scroll'
-// import {Toast} from 'mint-ui'
-
   export default {
     components: {
       // BScroll
@@ -67,7 +75,21 @@
             time: '20分钟前',
             num: 45,
             show: false,
-            praise: true
+            praise: true,
+            assistList: [
+              {
+                aname: '三弟'
+              },
+              {
+                aname: 'ABCDF'
+              }
+            ],
+            comments: [
+              {
+                aname: '乔乔',
+                contant: '好'
+              }
+            ]
           },
           {
             dissname: '关羽',
@@ -130,16 +152,10 @@
             praise: false
           }
 
-        ],
-        zan: '赞'
+        ]
       }
     },
     mounted () {
-      // this.$nextTick(() => {
-      //   this.scroll = new BScroll(this.$refs.wrapper, {
-      //     click: true
-      //   })
-      // })
     },
     methods: {
       back (event) {
@@ -155,20 +171,14 @@
         });
       },
       showHide (item) {
-        console.log(item.show);
          item.show = !item.show
-         console.log(item.praise)
-         item.praise ? this.zan='取消' : this.zan='赞'
+      },
+      MoreHide (item) {
+        item.show = false
       },
       goZan (item) {
-        console.log(item.praise)
-        if(praise){
-          this.zan='赞';
-          item.praise =false
-        }else{
-          this.zan = "取消"
-          item.praise =true
-        }
+        item.show = false
+        item.praise = !item.praise
       },
       goPinlun () {
         console.log('评论')
@@ -255,6 +265,7 @@
     font-size: 0.26rem;
     margin-top: 0.2rem;
     color: #B7B7B7;
+    position: relative;
   }
   .friend-circle .usertime span{
     position: absolute;
@@ -275,8 +286,8 @@
     height: 0.36rem;
     background-size: cover;
     position: absolute;
-    right: 0.24rem;
-    bottom: 0.24rem;
+    right: 0;
+    bottom: 0;
   }
   .friend-circle .circle-more .son {
     height: 0.72rem;
@@ -307,8 +318,8 @@
     margin-bottom: 0.1rem;
   }
   .friend-circle .username p{
-    font-size:  0.32rem;
-    line-height: 0.6rem;
+    font-size: 0.3rem;
+    line-height: 0.4rem;
     color: #383838;
   }
   .friend-circle .usertime{
@@ -333,5 +344,44 @@
     color: #fff;
     padding-left: 0.6rem;
     width: 1.2rem;
+  }
+  .assist-comments{
+    border-top: 1px solid #eee;
+    margin-top: 0.1rem;
+    padding-top: 0.1rem;
+  }
+  .assist-name{
+    color: #5b6894;
+    font-weight: bold;
+  }
+  .circle-right{
+    width: 86%;
+  }
+  .Assist-box{
+    width: 5.9rem;
+    padding: 0.1rem;
+    background: #f3f3f5;
+    position: relative;
+    top: 0.3rem;
+    margin-bottom: 0.2rem;
+  }
+  .Assist-box:after{
+    content: "";
+    position: absolute;
+    border-style: solid;
+    /* border-color: lightgreen transparent transparent; */
+    border-color: transparent transparent #f3f3f5 transparent;
+    border-width: 0.2rem;
+    top: -0.4rem;
+    left: 0.4rem;
+  }
+  .Assist-box span{
+   background: url("../../../assets/find/dot1.png") no-repeat;
+    color: #5b6894;
+    background-size: contain;
+    padding-left: 0.3rem;
+    font-weight: bold;
+    margin-right: 0.1rem;
+    margin-bottom: 0.1rem;
   }
 </style>

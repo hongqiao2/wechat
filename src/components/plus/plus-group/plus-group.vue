@@ -383,7 +383,6 @@
     width: 0.8rem;
     height: 0.8rem;
     border-radius: 5px;
-    margin-left: 0.6rem;
 }
 .group .mint-cell-wrapper{
     background-image: -webkit-linear-gradient(top, #eee, #eee 50%, transparent 50%);

@@ -42,7 +42,7 @@
           shape="circle"
           @click="doAddList(info)"
         >
-          <router-link to="/chatroom">发消息</router-link>
+          <router-link to="" @click.native="goMsg">发消息</router-link>
         </yd-button>
       </div>
       <div class="content-message" v-if="addFriendShow">
@@ -131,6 +131,11 @@ export default {
     goAddfriend(dissid) {
       this.$router.push({
         path: `/address/${dissid}/addfriend`
+      });
+    },
+    goMsg () {
+      this.$router.push({
+        path: `/chatroom`
       });
     },
     goDset(dissid) {

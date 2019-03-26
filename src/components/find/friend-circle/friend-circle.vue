@@ -8,6 +8,7 @@
       <i class="iconfont icon-paizhao"></i>
       </router-link>
     </yd-navbar>
+    <scroller>
     <div class="content-top" >
       <img class="circle-bg" src="../../../assets/find/bg.png" />
       <div class="user">
@@ -55,6 +56,7 @@
       </ul>
       <div style="text-align: center;opacity: 0.6;margin-top: 20px;">----没有更多动态了----</div>
     </div>
+    </scroller>
     <router-view></router-view>
   </yd-layout>
 </template>

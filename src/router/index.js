@@ -13,6 +13,7 @@ import AddressFriend from '../components/address/address-friend/address-friend'
 import AddressLabel from '../components/address/address-label/address-label'
 import LabelEdit from '../components/address/label-edit/label-edit'
 import GroupChat from '../components/address/group-chat/group-chat'
+import GroupDetail from '../components/address/group-chat/group-detail/group-detail'
 import FriendCircle from '../components/find/friend-circle/friend-circle'
 import FriendAlbum from '../components/find/friend-circle/album/album'
 import MsgList from '../components/find/friend-circle/msg-list/msg-list'
@@ -180,7 +181,13 @@ export default new Router({
         },
         {
           path: 'group',
-          component: GroupChat
+          component: GroupChat,
+          children: [
+            {
+              path: 'groupdetail',
+              component: GroupDetail
+            }
+          ]
         },
         {
           path: 'label',

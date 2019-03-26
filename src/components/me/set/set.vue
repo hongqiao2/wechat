@@ -25,6 +25,7 @@
               </yd-cell-item>
           </yd-cell-group>
         </div>
+        <div class="Logout">退出登录</div>
       </div>
       <router-view></router-view>
     </div>
@@ -97,33 +98,6 @@
     z-index: 203;
     background-color: #f9f9f9;
   }
-  .back{
-    background: #1e2b39;
-    height: 50px;
-    color: #fff;
-    position: fixed;
-    width: 100%;
-    z-index: 99;
-  }
-  .back div{
-    height: 50px;
-    width: 50px;
-  }
-  .back img{
-    position: absolute;
-    top: 25px;
-    margin-top: -8px;
-    left: 14px;
-  }
-  .back span{
-    position: absolute;
-    font-size: 20px;
-    top: 25px;
-    margin-top: -10px;
-    left: 50px;
-    padding-left: 10px;
-    border-left: 1px solid #000;
-  }
   .content{
     position: fixed;
     top: 50px;
@@ -183,13 +157,13 @@
     top: 5px;
     right: 10px;
   }
-  
-
-  .slide-enter-active,.slide-leave-active{
-    transition: all 0.3s;
-  }
-  .slide-enter,.slide-leave-to{
-    transform: translate3d(100%, 0, 0);
+  .Logout{
+    background: #fff;
+    color: #FF000F;
+    height: 0.9rem;
+    line-height: 0.9rem;
+    text-align: center;
+    font-size: 0.32rem;
   }
 
 </style>
