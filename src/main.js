@@ -28,6 +28,8 @@ import VueScroller from "vue-scroller"
 import chineseTurn from "@/api/chineseTurnEnglish.js"
 // import {Upload} from 'element-ui'
 import router from './router'
+import {LightBox, LightBoxImg, LightBoxTxt} from 'vue-ydui/dist/lib.rem/lightbox'
+import vueTouch from 'kim-vue-touch'
 // /* eslint-disable no-unused-vars */  // 这一句必须写，用来规避ES6的语法检测
 // import vConsole from 'vconsole'  // 针对手机网页的前端 console 调试面板
 // console.log('test')
@@ -59,6 +61,10 @@ Vue.component(CitySelect.name, CitySelect)
 Vue.component(ActionSheet.name, ActionSheet)
 Vue.component(InfiniteScroll.name, InfiniteScroll)
 Vue.use(VueScroller)
+Vue.component(LightBox.name, LightBox)
+Vue.component(LightBoxImg.name, LightBoxImg)
+Vue.component(LightBoxTxt.name, LightBoxTxt)
+Vue.use(vueTouch)
 // Vue.use(Upload)
 /* eslint-disable no-new */
 

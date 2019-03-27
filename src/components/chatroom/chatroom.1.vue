@@ -11,12 +11,12 @@
         src="../../assets/chatroom/person.png"
       >
     </yd-navbar>
-    <scroller ref="contents" >
-    <div class="content" @scroll="onTap">
-      <div class="content-wrapper" ref="wrapper" >
-        <div class="content-text" >
-          <div class="content-body" ref="body" >
-            <ul class="inHtml" v-for="item in content" :key="item.sendMsg" >
+    <scroller>
+    <div class="content">
+      <div class="content-wrapper" ref="wrapper">
+        <div class="content-text">
+          <div class="content-body" ref="body">
+            <ul class="inHtml" v-for="item in content" :key="item.sendMsg">
               <span v-if="item.isAddFriend == 1" class="chatroom-hint">我们已经成为好友啦</span>
               <li class="ask" v-if="item.isSend == 0 && item.isAddFriend == 0">
                 <img :src="item.userImg">
@@ -119,13 +119,11 @@ export default {
     };
   },
   mounted() {
-  setTimeout(() => {
-    let div = this.$refs.body;
-    let scrollTop =  div.scrollTop;
-    let scrollHeight =  div.scrollHeight;
-    scrollTop= scrollHeight;
-    console.log(scrollTop)
-  }, 100)
+    this.$nextTick(() => {
+      this.scroll = new BScroll(this.$refs.wrapper, {
+        click: true
+      });
+    });
     // 获取最新信息
     let _infoId = this.info.griend_id
       ? this.info.griend_id
@@ -193,10 +191,6 @@ export default {
     }
   },
   methods: {
-    onTap (e){
-      console.log(e)
-      console.log(window.scrollTop)
-    },
     back(event) {
       // let _infoId = this._infoId;
       // let chatList = JSON.parse(JSON.stringify(this.chatListCache));
@@ -289,7 +283,6 @@ export default {
       info.latest_news = this.text !== "" ? this.text : "";
       this.$router.push({name: 'chat', params: info})
     },
-    
     gotoUser(info) {
       this.$router.push({
         path: `/address/${info.chat_bject}`

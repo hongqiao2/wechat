@@ -1,5 +1,5 @@
 <template>
-    <div class="circle">
+    <div class="msg-list">
       <div class="content-wrapper" ref="wrapper">
         <div class="content-text">
           <yd-navbar  slot="navbar" title="消息">
@@ -98,7 +98,7 @@
 </script>
 
 <style>
-  .circle{
+  .msg-list{
     position: fixed;
     width:100%;
     height:100%;
@@ -109,7 +109,7 @@
     z-index: 203;
     background-color: #f9f9f9;
   }
-  .circle .msg-profile{
+  .msg-list .msg-profile{
       width: 0.88rem;
       height: 0.88rem;
       border-radius: 5px;
@@ -118,10 +118,10 @@
       width: 1.1rem;
       height: 1.1rem;
   }
-  .circle a{
+  .msg-list a{
       color: #383838;
   }
-  .circle .yd-cell-item{
+  .msg-list .yd-cell-item{
       padding: 0.2rem 0 0.2rem 0.2rem;
   }
   .msg-name{
@@ -134,7 +134,7 @@
       font-size: 0.24rem;
       color: #808080;
   }
-  .circle .yd-cell-left{
+  .msg-list .yd-cell-left{
       align-items: end;
   }
 </style>

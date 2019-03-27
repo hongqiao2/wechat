@@ -260,10 +260,18 @@ export default new Router({
           children: [
             {
               path: 'falbum',
+              meta: {
+                navShow: false,
+                menuShow: false
+              },
               component: FriendAlbum
             },
             {
               path: 'msglist',
+              meta: {
+                navShow: false,
+                menuShow: false
+              },
               component: MsgList
             }
           ]

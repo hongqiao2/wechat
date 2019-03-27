@@ -3,8 +3,8 @@
     <scroll class="chat-wrapper">
       <div>
         <ul>
-          <router-link to="/chatroom" tag="li" v-for="info in chatList" :key="info.id" class="item">
-            <div class="item-cell" @click="gotoChatroom(info)">
+          <router-link to="/chatroom" tag="li" v-for="info in chatList" class="item" :key="info.id" v-swipeleft="(e)=>vueTouch('左滑',e)" v-swiperight="(e)=>vueTouch('右滑',e)">
+            <div class="item-cell" @click="gotoChatroom(info)" :class="{Delright:del}">
               <div class="img-unread">
                 <img class="item-img" :src="info.head_portrait">
                 <yd-badge
@@ -17,6 +17,7 @@
               <p class="summary" v-html="info.latest_news"></p>
               <span class="item-time" v-html="formatDate(info.utime)"></span>
             </div>
+            <div class="delete" v-if="delbtn"  @click.stop="deleteBtn">删除</div>
           </router-link>
         </ul>
       </div>
@@ -43,6 +44,15 @@ export default {
     ])
   },
   methods: {
+    vueTouch (txt,e){
+      if(txt=='左滑'){
+        this.del = true;
+        this.delbtn =true
+      }else if(txt=='右滑'){
+        this.del = false;
+        this.delbtn =false
+      }
+    },
     enterMessage() {
       console.log(12);
     },
@@ -184,6 +194,10 @@ export default {
     getDateTime(){
       let time = new Date().getTime() / 1000;
       return time;
+    },
+    //删除
+    deleteBtn (){
+      console.log('删除了')
     }
   },
   watch: {
@@ -315,7 +329,10 @@ export default {
   data() {
     return {
       chatList: {},
-      moreList: []
+      moreList: [],
+      name:'touch',
+      del:false,
+      delbtn: false
     };
   }
 };
@@ -326,6 +343,10 @@ export default {
   background: #fff;
   width: 100%;
   height: 1.4rem;
+  position: relative;
+}
+.Delright{
+  right: 1.5rem;
 }
 .item-cell {
   position: relative;
@@ -368,5 +389,17 @@ export default {
   right: 10px;
   font-size: 12px;
   color: rgba(153, 153, 153, 0.8);
+}
+.delete{
+      width: 1.5rem;
+    height: 1.4rem;
+    background: red;
+    position: absolute;
+    right: 0;
+    top: 0;
+    text-align: center;
+    color: #fff;
+    line-height: 1.4rem;
+    font-size: 0.28rem;
 }
 </style>

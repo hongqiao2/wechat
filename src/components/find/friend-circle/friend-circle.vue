@@ -5,7 +5,7 @@
           <yd-navbar-back-icon></yd-navbar-back-icon>
       </router-link>
       <router-link slot="right" to=""  @click.native="show1 = true">
-      <i class="iconfont icon-paizhao"></i>
+        <i class="iconfont icon-paizhao"></i>
       </router-link>
     </yd-navbar>
     <scroller>
@@ -58,6 +58,7 @@
     </div>
     </scroller>
     <router-view></router-view>
+    <yd-actionsheet :items="myItems1" v-model="show1" cancel="取消"></yd-actionsheet>
   </yd-layout>
 </template>
 
@@ -154,6 +155,22 @@
             praise: false
           }
 
+        ],
+        show1: false,
+        myItems1: [
+          {
+            label: '拍照',
+            callback: () => {
+                this.$dialog.toast({mes: '咔擦，此人太帅！'});
+                /* 注意： callback: function() {} 和 callback() {}  这样是无法正常使用当前this的 */
+            }
+          },
+          {
+            label: '从相册中偷取',
+            callback: () => {
+                this.$dialog.toast({mes: '看到了不该看到的东西！'});
+            }
+          }
         ]
       }
     },

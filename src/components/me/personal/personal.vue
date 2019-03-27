@@ -7,22 +7,14 @@
                   <yd-navbar-back-icon></yd-navbar-back-icon>
               </router-link>
           </yd-navbar>
-
-          <div class="item_bock head_p">
-            <div class="head_img">
-              <img :src="avatar"/>
-            </div>
-            <div class="setting_right" @click.stop="uploadHeadImg">
-              <div class="caption">更改头像</div>
-            </div>
-            <input type="file" accept="image/*" @change="handleFile" class="hiddenInput"/>
-          </div>
-
           <yd-cell-group>
-              <yd-cell-item arrow>
-                  <span slot="left">头像</span>
-                  <img slot="right" class="user-photo" :src="userInfo.headPortrait"/>
-              </yd-cell-item>
+            <div class="item_bock" @click.stop="uploadHeadImg">
+              <div>头像</div>
+              <div class="fr">
+                <img :src="userInfo.headPortrait" class="user-photo" />
+              </div>
+              <input type="file" accept="image/*" @change="handleFile" class="hiddenInput"/>
+            </div>
               <yd-cell-item arrow @click.native="goPname">
                   <span slot="left">昵称</span>
                   <span slot="right">{{userInfo.nickName}}</span>
@@ -166,7 +158,7 @@
       width: 0.8rem;
       height: 0.8rem;
       border-radius: 5px;
-      margin: 0.3rem 0;
+      margin: 0.3rem;
   }
   .slide-enter-active,.slide-leave-active{
     transition: all 0.3s;
@@ -184,25 +176,14 @@
     font-size: 0.32rem;
   }
   .item_bock {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height:94px;
-  width: 300px;
-  padding:0px 24px 0px 38px;
-  border-bottom: 1px solid #f7f7f7;
-  background: #fff;
-}
-.head_p {
-  height:132px;
-}
-.head_img{
-  height: 90px;
-}
-.head_img img{
-  width:90px;
-  height:90px;
-  border-radius:50px
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 1.4rem;
+    width: 100%;
+    border-bottom: 1px solid #f7f7f7;
+    background: #fff;
+    padding: 0 0.3rem;
 }
 .setting_right{
   display: flex;
@@ -217,5 +198,18 @@
   color: #8F8F8F;
   font-size: 26px;
   height: 37px;
+}
+.fr{
+  float: right;
+}
+.clearFix::after{
+  clear: both;
+  overflow: hidden;
+  height: 0;
+  content: "";
+  display: block;
+}
+.personal .yd-cell-item{
+  width: 100%;
 }
 </style>

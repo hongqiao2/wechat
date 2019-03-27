@@ -1,52 +1,52 @@
 <template>
-  <transition name="slide">
-    <div class="album">
-      <div class="circle-wrap">
-        <yd-navbar   slot="navbar" title="我的相册">
-            <router-link to="" @click.native="back" slot="left">
-                <yd-navbar-back-icon></yd-navbar-back-icon>
-            </router-link>
-            <router-link class="record-more" to="" slot="right"  @click.native="show1 = true">
-                <i class="iconfont icon-xiazai9"></i>
-            </router-link>
-        </yd-navbar>
-        <div class="content">
-          <div class="content-wrapper" ref="wrapper">
-            <div class="content-text">
-              <div class="content-top">
-                <img class="circle-bg" src="../../../../assets/find/bg-1.png" />
-                <div class="user">
-                  <span>minion</span>
-                  <img src="../../../../assets/me/minion.png" height="80" width="80" />
-                </div>
+<yd-layout class="falbum">
+      <yd-navbar slot="navbar" title="我的相册">
+          <router-link to="" @click.native="back" slot="left">
+              <yd-navbar-back-icon></yd-navbar-back-icon>
+          </router-link>
+          <router-link class="record-more" to="" slot="right"  @click.native="show1 = true">
+              <i class="iconfont icon-xiazai9"></i>
+          </router-link>
+      </yd-navbar>
+      <scroller>
+        <div class="content-wrapper" ref="wrapper">
+          <div class="content-text">
+            <div class="content-top">
+              <img class="circle-bg" src="../../../../assets/find/bg-1.png" />
+              <div class="user">
+                <span>minion</span>
+                <img src="../../../../assets/me/minion.png" height="80" width="80" />
               </div>
-              <div class="content-body">
-                <div class="album-add">
-                  <span>今天</span>
-                  <img src="../../../../assets/me/addphtoto.png" height="80" width="80" />
-                </div>
-
-                 <div class="album-list" v-for="item in album">
-                  <span>{{item.day}}<i>{{item.month}}月</i></span>
-                  <ul class="album-photo" slot="left">
-                    
-                    <li v-for="items in item.arr" :style="{backgroundImage: 'url(' + items.imgurl + ')'}"></li>
-                  </ul>
-                  <p style="max-width: 63%;">{{item.title}}</p>
-                  <!-- <img src="../../../assets/me/addphtoto.png" height="80" width="80" /> -->
-                </div>
-                <div style="text-align: center;opacity: 0.6;margin-top: 20px;">----没有更多动态了----</div>
-              </div>
-                
             </div>
+            <div class="content-body">
+              <div class="album-add">
+                <span>今天</span>
+                <img src="../../../../assets/me/addphtoto.png" height="80" width="80" />
+              </div>
+            <!-- <yd-lightbox>
+                <yd-lightbox-img v-for="item, key in list" :key="key" :src="item.src"></yd-lightbox-img>
+            </yd-lightbox> -->
+                <div class="album-list" v-for="item in album">
+                <span>{{item.day}}<i>{{item.month}}月</i></span>
+                <ul class="album-photo" slot="left">
+                  <yd-lightbox>
+                      <yd-lightbox-img v-for="items, key in item.arr" :key="key" :src="items.imgurl"></yd-lightbox-img>
+                  </yd-lightbox>
+                  <!-- <li v-for="items in item.arr" :style="{backgroundImage: 'url(' + items.imgurl + ')'}"></li> -->
+                </ul>
+                <p style="max-width: 63%;">{{item.title}}</p>
+                <!-- <img src="../../../assets/me/addphtoto.png" height="80" width="80" /> -->
+              </div>
+              <div style="text-align: center;opacity: 0.6;margin-top: 20px;">----没有更多动态了----</div>
+            </div>
+              
           </div>
         </div>
         <router-view></router-view>
-        <yd-actionsheet :items="myItems1" v-model="show1" cancel="取消"></yd-actionsheet>
-         
-      </div>
-    </div>
-  </transition>
+      
+      </scroller>
+    <yd-actionsheet :items="myItems1" v-model="show1" cancel="取消"></yd-actionsheet>
+  </yd-layout>
 </template>
 
 <script type="text/ecmascript-6">
@@ -81,6 +81,14 @@
           }
 
         ],
+        list: [
+          {src: 'http://static.ydcss.com/uploads/lightbox/meizu_s1.jpg'},
+          {src: 'http://static.ydcss.com/uploads/lightbox/meizu_s2.jpg'},
+          {src: 'http://static.ydcss.com/uploads/lightbox/meizu_s3.jpg'},
+          {src: 'http://static.ydcss.com/uploads/lightbox/meizu_s4.jpg'},
+          {src: 'http://static.ydcss.com/uploads/lightbox/meizu_s5.jpg'},
+          {src: 'http://static.ydcss.com/uploads/lightbox/meizu_s6.jpg'}
+        ],
         show1: false,
         myItems1: [
           {
@@ -103,10 +111,6 @@
     },
     methods: {
       back (event) {
-        // 为防止PC端时,点击事件会被执行两次,须作如下判断，但是这里暂时不需要，参考http://blog.csdn.net/alsnei/article/details/54375957
-        // if (!event._constructed) {
-        //   return
-        // }
         this.$router.back()   // 返回上一级
       },
       admire (item) {
@@ -118,7 +122,7 @@
 </script>
 
 <style scoped>
-  .album{
+  .falbum{
     position: fixed;
     width:100%;
     height:100%;
@@ -126,28 +130,28 @@
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 203;
+    z-index: 1000;
     background-color:#fff;
   }
-  .album .content{
+  .falbum .content{
     position: fixed;
     top: 50px;
     left: 0;
     right: 0;
     bottom: 0;
   }
-  .album .content-wrapper{
+  .falbum .content-wrapper{
     height: 100%;
     overflow: hidden;
   }
-  .album .content-top{
+  .falbum .content-top{
     position: relative;
   }
-  .album .circle-bg{
+  .falbum .circle-bg{
     width: 100%;
     margin-bottom: 20px;
   }
-  .album .user{
+  .falbum .user{
     position: absolute;
     bottom: 0px;
     right: 10px;
@@ -155,18 +159,18 @@
     align-items: center;
     color: #fff;
   }
-  .album .user span{
+  .falbum .user span{
     font-size: 20px;
     font-weight: bold;
     padding-bottom: 20px;
     margin-right: 10px;
   }
-  .album .user img{
+  .falbum .user img{
     width: 1.4rem;
     height: 1.4rem;
     border-radius: 5px;
   }
-  .album .username h2{
+  .falbum .username h2{
     color: blue;
     font-family: '楷体';
     font-size: 16px;
@@ -174,22 +178,22 @@
     line-height: 16px;
     margin-bottom: 10px;
   }
-  .album .username p{
+  .falbum .username p{
     font-size: 16px;
     line-height: 30px;
   }
-  .album .usertime{
+  .falbum .usertime{
     font-size: 14px;
     margin-top: 15px;
   }
-  .album .usertime span{
+  .falbum .usertime span{
     position: absolute;
     right: 20px;
     bottom: 20px;
     font-size: 14px;
     line-height: 14px;
   }
-  .album .usertime img{
+  .falbum .usertime img{
     position: absolute;
     right: 30px;
     bottom: 20px;
@@ -232,41 +236,48 @@
     margin-right: 0.2rem;
     margin-top: 0.3rem;
 }
-.album-photo li {
+/* .album-photo li {
     background: url(https://image.zhangxinxu.com/image/study/head/s180/14.jpeg) no-repeat;
     background-size: cover;
+} */
+.album-photo div img{
+  width: 1.1rem;
+  height: 1.1rem;
 }
 /* 1个 */
-.album-photo li:only-child {
-  height: 100%;
+
+.album-photo div img:only-child {
+  width: 1.1rem;
+  height: 1.1rem;
+  /* height: 100%; */
 }
 /* 2个 */
-.album-photo li:first-child:nth-last-child(2),
-.album-photo li:first-child:nth-last-child(2) + li {
+.album-photo div img:first-child:nth-last-child(2),
+.album-photo div img:first-child:nth-last-child(2) + img {
   width: 50%;
   height: 100%;
   float: left;
 }
-.album-photo li:first-child:nth-last-child(2) + li {
+.album-photo div img:first-child:nth-last-child(2) + img {
   margin-left: auto;
 }
 /* 3个 */
-.album-photo li:first-child:nth-last-child(3),
-.album-photo li:first-child:nth-last-child(3) ~ li {
+.album-photo div img:first-child:nth-last-child(3),
+.album-photo div img:first-child:nth-last-child(3) ~ img {
   width: 50%; height: 50%;
 }
-.album-photo li:first-child:nth-last-child(3) {
+.album-photo div img:first-child:nth-last-child(3) {
   margin: auto;
   width: 50%;
   height: 100%;
   float: left;
 }
-.album-photo li:first-child:nth-last-child(3) ~ li {
+.album-photo div img:first-child:nth-last-child(3) ~ img {
   float: left;
 }
 /* 4个 */
-.album-photo li:first-child:nth-last-child(4),
-.album-photo li:first-child:nth-last-child(4) ~ li {
+.album-photo div img:first-child:nth-last-child(4),
+.album-photo div img:first-child:nth-last-child(4) ~ img {
   width: 50%; height: 50%;
   float: left;
 }
