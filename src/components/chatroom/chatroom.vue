@@ -221,7 +221,7 @@ export default {
               this.setShowNun(num);
               delete chatList[_infoId];
               // 返回上一级
-              this.$router.back();
+              //this.$router.back();
             }
           })
           .catch(err => {
@@ -266,10 +266,11 @@ export default {
               JSON.stringify(userChatListCache)
             );
             // 返回上一级
-            this.$router.back();
+            //this.$router.back();
           }
         }
       }
+      this.$router.back();
     },
     ...mapMutations({
       setShowNun: "SET_NUM"
