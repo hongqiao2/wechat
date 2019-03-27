@@ -15,7 +15,7 @@
               </div>
               <h2 class="dissname" v-html="info.remark_name || info.nick_name"></h2>
               <p class="summary" v-html="info.latest_news"></p>
-              <span class="item-time" v-html="formatDate(info.rtime)"></span>
+              <span class="item-time" v-html="formatDate(info.utime)"></span>
             </div>
           </router-link>
         </ul>
@@ -180,6 +180,10 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    getDateTime(){
+      let time = new Date().getTime() / 1000;
+      return time;
     }
   },
   watch: {
@@ -213,6 +217,7 @@ export default {
           // 聊天列表中有数据
           // 如果临时缓存里面有数据
           chatListCache[infoId].news_number = 0;
+          chatListCache[infoId].utime = this.getDateTime();
           if (info.latest_news !== "") {
             // 修改为最新消息
             chatListCache[infoId].latest_news = info.latest_news;
@@ -257,6 +262,7 @@ export default {
               let newInfo = JSON.parse(JSON.stringify(oldInfo));
               let newChatListCache = {};
               newInfo.latest_news = info.latest_news;
+              newInfo.utime = this.getDateTime();
               newChatListCache[infoId] = newInfo;
               // 删除缓存中的数据
               delete userChatListCache[infoId];
@@ -284,7 +290,8 @@ export default {
             nick_name: info.nick_name,
             remark_name: info.remark_name,
             rtime: info.rtime,
-            subordinate_user: info.subordinate_user
+            subordinate_user: info.subordinate_user,
+            utime: this.getDateTime()
           };
           Object.assign(newChatListCache, chatListCache, userChatListCache);
           this.chatList = newChatListCache;

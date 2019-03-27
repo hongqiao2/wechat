@@ -46,6 +46,7 @@
 <script type="text/ecmascript-6">
 import api from "@/api/resource.js";
 //  import mui from '../static/mui/js/mui.js'
+import { mapMutations, mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -87,14 +88,19 @@ export default {
     // 跳转到好友的展示详情页面
     detailsJump() {
       // 好友查询缓存
-      let friend = this.friend;
+      let friend = JSON.parse(JSON.stringify(this.friend));
       friend["source"] = 1;
-      localStorage.setItem("jumpFriendCache", JSON.stringify(friend));
-      this.$router
+      friend["head_portrait"] = friend.headPortrait;
+      friend["remark_name"] = friend.remarkName;
+      friend["nick_name"] = friend.nickName;
+      this.setAddress(friend);
       this.$router.push({
         path: `/address/${this.friend.nickName}`
       });
-    }
+    },
+    ...mapMutations({
+      setAddress: "SET_INFO"
+    }),
   },
   computed: {}
 };
