@@ -16,9 +16,9 @@
         </div>
         <yd-cell-group title="联系人" v-if="friendShow">
           <yd-cell-item @click.native="detailsJump">
-            <img slot="icon" :src="friend.headPortrait">
+            <img slot="icon" :src="friend.head_portrait">
             <div slot="left" class="search-list-name">
-              <p>{{friend.remarkName ? friend.remarkName : friend.nickName}}</p>
+              <p>{{friend.remark_name || friend.nick_name}}</p>
             </div>
           </yd-cell-item>
         </yd-cell-group>
@@ -90,9 +90,6 @@ export default {
       // 好友查询缓存
       let friend = JSON.parse(JSON.stringify(this.friend));
       friend["source"] = 1;
-      friend["head_portrait"] = friend.headPortrait;
-      friend["remark_name"] = friend.remarkName;
-      friend["nick_name"] = friend.nickName;
       this.setAddress(friend);
       this.$router.push({
         path: `/address/${this.friend.nickName}`

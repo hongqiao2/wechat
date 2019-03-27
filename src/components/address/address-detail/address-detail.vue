@@ -107,7 +107,8 @@ export default {
   computed: {
     ...mapGetters([
       // 拿到info的状态
-      "info"
+      "info",
+      "userFriendList"
       ])
   },
   created() {
@@ -121,7 +122,8 @@ export default {
       this.currentUserId = false;
       this.msgShow = false;
     } else {
-      if (!this.info.chat_bject) {
+      let userFriendList = this.userFriendList;
+      if (!userFriendList[id]) {
         this.msgShow = false;
         this.addFriendShow = true;
         this.currentUserId = false;
