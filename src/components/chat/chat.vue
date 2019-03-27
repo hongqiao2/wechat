@@ -13,7 +13,7 @@
                   v-if="info.news_number != 0"
                 >{{info.news_number}}</yd-badge>
               </div>
-              <h2 class="dissname" v-html="info.remark_name ? info.remark_name : info.nick_name"></h2>
+              <h2 class="dissname" v-html="info.remark_name || info.nick_name"></h2>
               <p class="summary" v-html="info.latest_news"></p>
               <span class="item-time" v-html="formatDate(info.rtime)"></span>
             </div>
@@ -202,16 +202,19 @@ export default {
     userChatListCache = userChatListCache ? JSON.parse(userChatListCache) : {};
     if (JSON.stringify(this.$route.params) != "{}") {
       let info = this.$route.params;
-      if (info.news_number > 0) {
-        // 1.如果未读消息数大于0, 修改未读消息数为0
-        // 2.显示
-        // 3.调用接口修改数据
-        let infoId = info.griend_id || info.chat_bject;
+      // 先判断是否 info.latest_news 是否发送或者接收新消息
+      // 1.如果未读消息数大于0, 修改未读消息数为0
+      // 2.显示
+      // 3.调用接口修改数据
+      let infoId = info.griend_id || info.chat_bject;
+      if (info.latest_news !== "" || info.news_number > 0) {
+        // 如果不为空，则需要修改聊天列表的显示内容，如果聊天列表不存在，就创建
         if (chatListCache[infoId]) {
+          // 聊天列表中有数据
           // 如果临时缓存里面有数据
           chatListCache[infoId].news_number = 0;
           if (info.latest_news !== "") {
-            // 如果有最新消息，就修改为最新消息
+            // 修改为最新消息
             chatListCache[infoId].latest_news = info.latest_news;
           }
           // 设置缓存
@@ -245,12 +248,61 @@ export default {
             .catch(err => {
               console.log(JSON.stringify(err));
             });
+        } else {
+          // 发起新的聊天列表，修改缓存中的聊天列表信息
+          if (userChatListCache) {
+            let oldInfo = userChatListCache[infoId];
+            if (oldInfo) {
+              // 设置缓存
+              let newInfo = JSON.parse(JSON.stringify(oldInfo));
+              let newChatListCache = {};
+              newInfo.latest_news = info.latest_news;
+              newChatListCache[infoId] = newInfo;
+              // 删除缓存中的数据
+              delete userChatListCache[infoId];
+              Object.assign(newChatListCache, chatListCache, userChatListCache);
+              this.chatList = newChatListCache;
+              localStorage.setItem(
+                "userChatListCache",
+                JSON.stringify(newChatListCache)
+              );
+              return;
+            }
+          }
+          // 设置缓存
+          let newChatListCache = {};
+          newChatListCache[infoId] = {
+            chat_bject: infoId,
+            chat_state: 0,
+            do_not_disturb: 0,
+            head_portrait: info.head_portrait,
+            id: info.id,
+            is_add_friend: 0,
+            is_top: 0,
+            latest_news: info.latest_news,
+            news_number: 0,
+            nick_name: info.nick_name,
+            remark_name: info.remark_name,
+            rtime: info.rtime,
+            subordinate_user: info.subordinate_user
+          };
+          Object.assign(newChatListCache, chatListCache, userChatListCache);
+          this.chatList = newChatListCache;
+          this.setShowNun(0); // 设置消息总数
+          localStorage.setItem(
+            "userChatListCache",
+            JSON.stringify(newChatListCache)
+          );
         }
       } else {
         // 直接显示
         Object.assign(chatListCache, userChatListCache);
         this.chatList = chatListCache;
       }
+    } else {
+      // 直接显示
+      Object.assign(chatListCache, userChatListCache);
+      this.chatList = chatListCache;
     }
   },
   data() {

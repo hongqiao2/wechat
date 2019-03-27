@@ -52,17 +52,14 @@ export default {
       "userFriendList"
     ])
   },
-  created() {
-  },
+  created() {},
   mounted() {
     let userFriendList = this.userFriendList;
     let personnelList = {};
-    for(let key in userFriendList){
+    for (let key in userFriendList) {
       let userName =
-        typeof userFriendList[key].remark_name != "undefined"
-          ? userFriendList[key].remark_name
-          : userFriendList[key].nick_name;
-          var isChinese = /^[\u4e00-\u9fa5]+$/;
+        userFriendList[key].remark_name || userFriendList[key].nick_name;
+      var isChinese = /^[\u4e00-\u9fa5]+$/;
       let subVal = userName.substring(0, 1);
       if (isChinese.test(subVal)) {
         let keyV = chineseTurn(subVal).substring(0, 1);
@@ -70,7 +67,7 @@ export default {
           personnelList[keyV] = [];
         }
         personnelList[keyV].push({
-          id: userFriendList[key].griend_id,
+          id: userFriendList[key].chat_bject,
           dissname: userName,
           imgurl: userFriendList[key].head_portrait
         });
@@ -83,7 +80,7 @@ export default {
             personnelList[keyV] = [];
           }
           personnelList[keyV].push({
-            id: userFriendList[key].griend_id,
+            id: userFriendList[key].chat_bject,
             dissname: userName,
             imgurl: userFriendList[key].head_portrait
           });
@@ -92,7 +89,7 @@ export default {
             personnelList["#"] = [];
           }
           personnelList["#"].push({
-            id: userFriendList[key].griend_id,
+            id: userFriendList[key].chat_bject,
             dissname: userName,
             imgurl: userFriendList[key].head_portrait
           });

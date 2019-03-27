@@ -16,7 +16,7 @@
           <h2 class v-html="info.remark_name ? info.remark_name : info.nick_name"></h2>
         </div>
       </div>
-      <div class="content-note" v-if="currentUserId" @click="goRemark(info.griend_id)">设置备注和描述</div>
+      <div class="content-note" v-if="currentUserId" @click="goRemark(info)">设置备注和描述</div>
       <div class="content-intro">
         <span class="content-label">地区</span>
         {{info.country ? info.region ? info.country + " " +info.region : "这个人很懒...还没有设置地址" : "这个人很懒...还没有设置地址"}}
@@ -143,9 +143,10 @@ export default {
         path: `/address/${dissid}/dset`
       });
     },
-    goRemark(dissid) {
+    goRemark(info) {
+      this.setaddList(info);
       this.$router.push({
-        path: `/address/${dissid}/remark`
+        path: `/address/${info.griend_id}/remark`
       });
     },
     changBig() {

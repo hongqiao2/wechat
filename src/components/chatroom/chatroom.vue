@@ -282,9 +282,13 @@ export default {
       this.$router.push({name: 'chat', params: info})
     },
     gotoUser(info) {
+      // this.$router.push({
+      //   path: `/chatroom/user`
+      // });
       this.$router.push({
-        path: `/chatroom/user`
+        path: `/address/${info.chat_bject}`
       });
+      this.setAddress(this.userFriendList[info.chat_bject]);
     },
     goPacket(info) {
       this.$router.push({
