@@ -113,7 +113,20 @@ export default {
   created() {
   },
   mounted() {
-    
+    let access_token = JSON.parse(localStorage.getItem("access_token"));
+    let info = this.info;
+    let id = this.info.chat_bject || this.info.id;
+    if (id == access_token.id) {
+      // 如果是自己
+      this.currentUserId = false;
+      this.msgShow = false;
+    } else {
+      if (!this.info.chat_bject) {
+        this.msgShow = false;
+        this.addFriendShow = true;
+        this.currentUserId = false;
+      }
+    }
   },
   watch: {
     $route(to, from) {

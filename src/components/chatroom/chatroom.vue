@@ -282,9 +282,6 @@ export default {
       this.$router.push({name: 'chat', params: info})
     },
     gotoUser(info) {
-      // this.$router.push({
-      //   path: `/chatroom/user`
-      // });
       this.$router.push({
         path: `/address/${info.chat_bject}`
       });
@@ -409,7 +406,7 @@ export default {
     }),
   },
   computed: {
-    ...mapGetters(["info", "num", "chatListCache"])
+    ...mapGetters(["info", "num", "chatListCache", "userFriendList"])
   },
   watch: {
     info: function(val) {
