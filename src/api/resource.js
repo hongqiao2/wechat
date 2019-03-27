@@ -102,6 +102,10 @@ const api = {
   updateMsgState(that, params){
     return that.$http.post(baseURL + '/newsLog/updateMsgState', params);
   },
+  // 修改好友信息
+  updateSysUserFriend(that, params){
+    return that.$http.post(baseURL + '/userFriend/updateSysUserFriend', params);
+  },
 };
 
 export default api

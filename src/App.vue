@@ -86,7 +86,7 @@ export default {
             let userFriendListCache = {};
             let friendList = JSON.parse(_val.friendList);
             friendList.forEach(function(item, index) {
-              userFriendListCache[item.griend_id] = item;
+              userFriendListCache[item.chat_bject] = item;
             });
             this.setUserFriendListCache(userFriendListCache);
           }
@@ -234,7 +234,6 @@ export default {
             console.log(err);
           });
       }
-      //console.log(JSON.stringify(store.state));
     }
   },
   mounted() {
