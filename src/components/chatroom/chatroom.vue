@@ -132,6 +132,7 @@ export default {
     let userinfo = JSON.parse(localStorage.getItem("access_token"));
     this.userinfo = userinfo;
     if (_userinfo && _userinfo.news_number > 0) {
+      // TODO 需要修改成查询未读消息
       api
         .findSysUserNewLogList(this, {
           id: userinfo.id,
@@ -189,92 +190,97 @@ export default {
   },
   methods: {
     back(event) {
-      let _infoId = this._infoId;
-      let chatList = JSON.parse(JSON.stringify(this.chatListCache));
-      // 缓存历史信息
-      let userChatListCache = JSON.parse(
-        localStorage.getItem("userChatListCache")
-      );
-      let _userinfo = JSON.parse(JSON.stringify(this.info));
-      if (this.updateStateType || (_userinfo && _userinfo.news_number > 0)) {
-        // 修改消息状态为已读
-        api
-          .updateMsgState(this, {
-            id: this.userinfo.id,
-            chat_bject: _infoId
-          })
-          .then(res => {
-            let _val = res.body;
-            if (_val.code == "200") {
-              if (this.text !== "") {
-                console.log(this.text);
-                _userinfo.latest_news = this.text;
-              }
-              var num = this.num;
-              num -= _userinfo.news_number;
-              _userinfo.news_number = 0;
-              userChatListCache[_infoId] = _userinfo;
-              localStorage.setItem(
-                "userChatListCache",
-                JSON.stringify(userChatListCache)
-              );
-              this.setShowNun(num);
-              delete chatList[_infoId];
-              // 返回上一级
-              //this.$router.back();
-            }
-          })
-          .catch(err => {
-            console.log(JSON.stringify(err));
-          });
-      } else {
-        if (this.content) {
-          // 处理聊天列表
-          if (!userChatListCache) {
-            // 查询聊天列表
-            api
-              .findSysChatById(this, {
-                params: {
-                  id: this.userinfo.id,
-                  chat_bject: this._infoId
-                }
-              })
-              .then(res => {
-                let _val = res.body;
-                if (_val.code == "200") {
-                  userChatListCache = {};
-                  userChatListCache[_val.userChatList.chat_bject] =
-                    _val.userChatList;
-                  localStorage.setItem(
-                    "userChatListCache",
-                    JSON.stringify(userChatListCache)
-                  );
-                  // 返回上一级
-                  this.$router.back();
-                }
-              })
-              .catch(err => {
-                console.log(err);
-              });
-          } else {
-            // 更新聊天列表
-            let content = JSON.parse(JSON.stringify(this.content));
-            let length = content.length - 1;
-            userChatListCache[_infoId].latest_news = content[length].sendMsg;
-            localStorage.setItem(
-              "userChatListCache",
-              JSON.stringify(userChatListCache)
-            );
-            // 返回上一级
-            //this.$router.back();
-          }
-        }
-      }
-      this.$router.back();
+      // let _infoId = this._infoId;
+      // let chatList = JSON.parse(JSON.stringify(this.chatListCache));
+      // // 缓存历史信息
+      // let userChatListCache = JSON.parse(
+      //   localStorage.getItem("userChatListCache")
+      // );
+      // let infoStr = JSON.stringify(this.info);
+      // let newInfo = JSON.parse(infoStr); // 马上返回的数据
+      // let _userinfo = JSON.parse(infoStr);
+      // if (this.updateStateType || (_userinfo && _userinfo.news_number > 0)) {
+      //   // 修改消息状态为已读
+      //   api
+      //     .updateMsgState(this, {
+      //       id: this.userinfo.id,
+      //       chat_bject: _infoId
+      //     })
+      //     .then(res => {
+      //       let _val = res.body;
+      //       if (_val.code == "200") {
+      //         if (this.text !== "") {
+      //           _userinfo.latest_news = this.text;
+      //         }
+      //         var num = this.num;
+      //         num -= _userinfo.news_number;
+      //         _userinfo.news_number = 0;
+      //         userChatListCache[_infoId] = _userinfo;
+      //         localStorage.setItem(
+      //           "userChatListCache",
+      //           JSON.stringify(userChatListCache)
+      //         );
+      //         this.setShowNun(num);
+      //         delete chatList[_infoId];
+      //         // 返回上一级
+      //         //this.$router.back();
+      //       }
+      //     })
+      //     .catch(err => {
+      //       console.log(JSON.stringify(err));
+      //     });
+      // } else {
+      //   if (this.content) {
+      //     // 处理聊天列表
+      //     if (!userChatListCache) {
+      //       // 查询聊天列表
+      //       api
+      //         .findSysChatById(this, {
+      //           params: {
+      //             id: this.userinfo.id,
+      //             chat_bject: this._infoId
+      //           }
+      //         })
+      //         .then(res => {
+      //           let _val = res.body;
+      //           if (_val.code == "200") {
+      //             userChatListCache = {};
+      //             userChatListCache[_val.userChatList.chat_bject] =
+      //               _val.userChatList;
+      //             localStorage.setItem(
+      //               "userChatListCache",
+      //               JSON.stringify(userChatListCache)
+      //             );
+      //             // 返回上一级
+      //             //this.$router.back();
+      //           }
+      //         })
+      //         .catch(err => {
+      //           console.log(err);
+      //         });
+      //     } else {
+      //       // 更新聊天列表
+      //       let content = JSON.parse(JSON.stringify(this.content));
+      //       let length = content.length - 1;
+      //       userChatListCache[_infoId].latest_news = content[length].sendMsg;
+      //       localStorage.setItem(
+      //         "userChatListCache",
+      //         JSON.stringify(userChatListCache)
+      //       );
+      //     }
+      //   }
+      // }
+      // // 返回上一级
+      // if (this.text !== "") {
+      //   newInfo.latest_news = this.text;
+      // }
+      // newInfo.news_number = 0;
+      // this.setAddress(newInfo);
+      let info = JSON.parse(JSON.stringify(this.info));
+      info.news_number = typeof info.news_number != "undefined" ? info.news_number : 0;
+      info.latest_news = this.text !== "" ? this.text : "";
+      this.$router.push({name: 'chat', params: info})
     },
-    ...mapMutations({
-      setShowNun: "SET_NUM"
-    }),
     gotoUser(info) {
       this.$router.push({
         path: `/chatroom/user`
@@ -390,7 +396,13 @@ export default {
     },
     ...mapMutations({
       setChatListCache: "SET_CHAT_LIST_CACHE"
-    })
+    }),
+    ...mapMutations({
+      setShowNun: "SET_NUM"
+    }),
+    ...mapMutations({
+      setAddress: "SET_INFO"
+    }),
   },
   computed: {
     ...mapGetters(["info", "num", "chatListCache"])
@@ -406,9 +418,9 @@ export default {
       };
       this.content.push(_content);
       this.text = _val.latest_news;
-      var userChatRecordCachings = JSON.parse(localStorage.getItem(
-        "userChatRecordCaching"
-      ));
+      var userChatRecordCachings = JSON.parse(
+        localStorage.getItem("userChatRecordCaching")
+      );
       userChatRecordCachings[_val.chat_bject].push(_content);
     }
   }

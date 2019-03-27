@@ -160,6 +160,7 @@ export default new Router({
       ]
     },
     {
+      name: 'chat',
       path: '/chat',  // 第一栏：微信
       meta: {
         navShow: true,

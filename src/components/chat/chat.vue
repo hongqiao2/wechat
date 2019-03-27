@@ -51,6 +51,12 @@ export default {
       this.setAddress(info);
     },
     ...mapMutations({
+      setChatListCache: "SET_CHAT_LIST_CACHE"
+    }),
+    ...mapMutations({
+      setShowNun: "SET_NUM"
+    }),
+    ...mapMutations({
       setAddress: "SET_INFO"
     }),
     formatDate(time) {
@@ -191,16 +197,60 @@ export default {
     }
   },
   mounted() {
-    if (this.chatList) {
-      setTimeout(() => {
-        let chatListCache = JSON.parse(JSON.stringify(this.chatListCache));
-        let userChatListCache = localStorage.getItem("userChatListCache");
-        userChatListCache = userChatListCache
-          ? JSON.parse(userChatListCache)
-          : {};
+    let chatListCache = JSON.parse(JSON.stringify(this.chatListCache));
+    let userChatListCache = localStorage.getItem("userChatListCache");
+    userChatListCache = userChatListCache ? JSON.parse(userChatListCache) : {};
+    if (JSON.stringify(this.$route.params) != "{}") {
+      let info = this.$route.params;
+      if (info.news_number > 0) {
+        // 1.如果未读消息数大于0, 修改未读消息数为0
+        // 2.显示
+        // 3.调用接口修改数据
+        let infoId = info.griend_id || info.chat_bject;
+        if (chatListCache[infoId]) {
+          // 如果临时缓存里面有数据
+          chatListCache[infoId].news_number = 0;
+          if (info.latest_news !== "") {
+            // 如果有最新消息，就修改为最新消息
+            chatListCache[infoId].latest_news = info.latest_news;
+          }
+          // 设置缓存
+          let newChatListCache = {};
+          newChatListCache[infoId] = chatListCache[infoId];
+          // 删除临时缓存
+          delete chatListCache[infoId];
+          Object.assign(newChatListCache, chatListCache, userChatListCache);
+          let newNum = this.num;
+          newNum = newNum - info.news_number; // 修改消息总数
+          this.chatList = newChatListCache;
+          this.setShowNun(newNum); // 设置消息总数
+          this.setChatListCache(chatListCache); // 设置消息列表
+          // 设置列表缓存
+          localStorage.setItem(
+            "userChatListCache",
+            JSON.stringify(newChatListCache)
+          );
+          // 开始调用接口 修改消息列表状态
+          api
+            .updateMsgState(this, {
+              id: info.subordinate_user || info.user_id,
+              chat_bject: infoId
+            })
+            .then(res => {
+              let _val = res.body;
+              if (_val.code == "200") {
+                console.log(_val);
+              }
+            })
+            .catch(err => {
+              console.log(JSON.stringify(err));
+            });
+        }
+      } else {
+        // 直接显示
         Object.assign(chatListCache, userChatListCache);
         this.chatList = chatListCache;
-      }, 1000);
+      }
     }
   },
   data() {
