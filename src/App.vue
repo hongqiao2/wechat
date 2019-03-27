@@ -190,12 +190,15 @@ export default {
       if (_data.isGroup == 0) {
         // 好友消息通知，以及添加好友成功通知
         let _info = JSON.parse(JSON.stringify(this.info));
-        if (_info) {
+        if (typeof _info !== "{}") {
           // 如果当前聊天界面不为空，判断是否是同一个好友发送的信息
-          let _infoId = _info.griend_id ? _info.griend_id : _info.chat_bject;
-          if (_data.sender == _infoId) {
+          let _infoId = _info.griend_id || _info.chat_bject;
+          if (_infoId && _data.sender == _infoId) {
             _info.latest_news = _data.msg;
-            _info.news_number = typeof info.news_number != "undefined" ? _info.news_number + 1 : 1;
+            _info.news_number = typeof _info.news_number != "undefined" ? _info.news_number + 1 : 1;
+            let newNum = this.num;
+            newNum += 1;
+            this.setShowNun(newNum);
             this.setAddress(_info);
           }
         }

@@ -311,6 +311,7 @@ export default {
       Object.assign(chatListCache, userChatListCache);
       this.chatList = chatListCache;
     }
+    this.setAddress({});
   },
   data() {
     return {
