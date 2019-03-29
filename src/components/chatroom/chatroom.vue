@@ -8,8 +8,6 @@
     </yd-navbar>
     <div class="content">
       <ul class="inHtml" v-for="item in content" :key="item.sendMsg">
-        
-        
         <span v-if="item.isAddFriend == 1" class="chatroom-hint">我们已经成为好友啦</span>
         <li class="ask" v-if="item.isSend == 0 && item.isAddFriend == 0">
           <img :src="item.userImg">
@@ -261,9 +259,10 @@ export default {
       // newInfo.news_number = 0;
       // this.setAddress(newInfo);
       let info = JSON.parse(JSON.stringify(this.info));
-      info.news_number = typeof info.news_number != "undefined" ? info.news_number : 0;
+      info.news_number =
+        typeof info.news_number != "undefined" ? info.news_number : 0;
       info.latest_news = this.text !== "" ? this.text : "";
-      this.$router.push({name: 'chat', params: info})
+      this.$router.push({ name: "chat", params: info });
     },
     gotoUser(info) {
       this.$router.push({
@@ -306,7 +305,8 @@ export default {
           userImg: this.userinfo.headPortrait,
           sendMsg: this.text,
           isSend: 0,
-          isAddFriend: 0
+          isAddFriend: 0,
+          loadding: true // loadding
         };
         this.content.push(_content);
         api
@@ -319,6 +319,11 @@ export default {
           .then(res => {
             let _val = res.body;
             if (_val.code == "200") {
+              // 修改状态开始
+              let len = this.content.length;
+              this.content[len - 1].loadding = false;
+              // 修改状态结束
+
               this.updateStateType = true; // 要修改消息状态
               this.loading = false;
               // 加入聊天缓存
@@ -388,7 +393,7 @@ export default {
     }),
     ...mapMutations({
       setAddress: "SET_INFO"
-    }),
+    })
   },
   computed: {
     ...mapGetters(["info", "num", "chatListCache", "userFriendList"])
