@@ -195,9 +195,20 @@ export default {
           let _infoId = _info.griend_id || _info.chat_bject;
           if (_infoId && _data.sender == _infoId) {
             _info.latest_news = _data.msg;
-            _info.news_number = typeof _info.news_number != "undefined" ? _info.news_number + 1 : 1;
             let newNum = this.num;
-            newNum += 1;
+            if(_data.msg_type == 1){
+              // 如果是图片
+              let msgNum = JSON.parse(_data.msg).length;
+              _info.news_number = typeof _info.news_number != "undefined" ? _info.news_number + msgNum : msgNum;
+              newNum += msgNum;
+              _info["msg_type"] = _data.msg_type;
+            }else{
+              if(_data.msg_type == 2){
+                _info["msg_type"] = _data.msg_type;
+              }
+              _info.news_number = typeof _info.news_number != "undefined" ? _info.news_number + 1 : 1;
+              newNum += 1;
+            }
             this.setShowNun(newNum);
             this.setAddress(_info);
           }

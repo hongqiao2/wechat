@@ -16,24 +16,42 @@
         <div class="content-text">
           <div class="content-body" ref="body">
             <ul class="inHtml" v-for="item in content" :key="item.sendMsg">
-              <span v-if="item.isAddFriend == 1" class="chatroom-hint">我们已经成为好友啦</span>
-              <li class="ask" v-if="item.isSend == 0 && item.isAddFriend == 0">
-                <img :src="item.userImg">
-                <p>{{item.sendMsg}}</p>
-                <div class="loading" v-if="loading"></div>
-                <div class="failure iconfont icon-tixingtishi" v-if="fail"></div>
-              </li>
-              <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0">
-                <img :src="item.userImg">
-                <p>{{item.sendMsg}}</p>
-              </li>
+              <div v-if="item.msgType == 0">
+                <span v-if="item.isAddFriend == 1" class="chatroom-hint">我们已经成为好友啦</span>
+                <li class="ask" v-if="item.isSend == 0 && item.isAddFriend == 0">
+                  <img :src="item.userImg">
+                  <p>{{item.sendMsg}}</p>
+                  <div class="loading" v-if="loading"></div>
+                  <div class="failure iconfont icon-tixingtishi" v-if="fail"></div>
+                </li>
+                <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0">
+                  <img :src="item.userImg">
+                  <p>{{item.sendMsg}}</p>
+                </li>
+              </div>
+              <div v-else-if="item.msgType == 1">
+                <!-- 图片 -->
+                <li class="ask" v-if="item.isSend == 0 && item.isAddFriend == 0">
+                  <img :src="item.userImg">
+                  <img :src="item.sendMsg">
+                  <div class="loading" v-if="loading"></div>
+                  <div class="failure iconfont icon-tixingtishi" v-if="fail"></div>
+                </li>
+                <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0">
+                  <img :src="item.userImg">
+                  <img :src="item.sendMsg">
+                </li>
+              </div>
+              <div v-else>
+                <!-- 语音 -->
+              </div>
             </ul>
           </div>
         </div>
       </div>
     </div>
     <div class="chat-more" v-if="showPop">
-      <div>
+      <div @click="goAlbum">
         <img src="../../assets/chatroom/album.png">
         <p>相册</p>
       </div>
@@ -151,14 +169,16 @@ export default {
                   userImg: userinfo.headPortrait,
                   sendMsg: _list[index].sendMsg,
                   isSend: _list[index].sendType,
-                  isAddFriend: _list[index].isAddFriend
+                  isAddFriend: _list[index].isAddFriend,
+                  msgType: _list[index].msgType
                 });
               } else {
                 _content.push({
                   userImg: this.info.head_portrait,
                   sendMsg: _list[index].sendMsg,
                   isSend: _list[index].sendType,
-                  isAddFriend: _list[index].isAddFriend
+                  isAddFriend: _list[index].isAddFriend,
+                  msgType: _list[index].msgType
                 });
               }
             }
@@ -187,100 +207,144 @@ export default {
         });
       }
     }
+    console.log(JSON.stringify(this.content));
   },
   methods: {
     back(event) {
-      // let _infoId = this._infoId;
-      // let chatList = JSON.parse(JSON.stringify(this.chatListCache));
-      // // 缓存历史信息
-      // let userChatListCache = JSON.parse(
-      //   localStorage.getItem("userChatListCache")
-      // );
-      // let infoStr = JSON.stringify(this.info);
-      // let newInfo = JSON.parse(infoStr); // 马上返回的数据
-      // let _userinfo = JSON.parse(infoStr);
-      // if (this.updateStateType || (_userinfo && _userinfo.news_number > 0)) {
-      //   // 修改消息状态为已读
-      //   api
-      //     .updateMsgState(this, {
-      //       id: this.userinfo.id,
-      //       chat_bject: _infoId
-      //     })
-      //     .then(res => {
-      //       let _val = res.body;
-      //       if (_val.code == "200") {
-      //         if (this.text !== "") {
-      //           _userinfo.latest_news = this.text;
-      //         }
-      //         var num = this.num;
-      //         num -= _userinfo.news_number;
-      //         _userinfo.news_number = 0;
-      //         userChatListCache[_infoId] = _userinfo;
-      //         localStorage.setItem(
-      //           "userChatListCache",
-      //           JSON.stringify(userChatListCache)
-      //         );
-      //         this.setShowNun(num);
-      //         delete chatList[_infoId];
-      //         // 返回上一级
-      //         //this.$router.back();
-      //       }
-      //     })
-      //     .catch(err => {
-      //       console.log(JSON.stringify(err));
-      //     });
-      // } else {
-      //   if (this.content) {
-      //     // 处理聊天列表
-      //     if (!userChatListCache) {
-      //       // 查询聊天列表
-      //       api
-      //         .findSysChatById(this, {
-      //           params: {
-      //             id: this.userinfo.id,
-      //             chat_bject: this._infoId
-      //           }
-      //         })
-      //         .then(res => {
-      //           let _val = res.body;
-      //           if (_val.code == "200") {
-      //             userChatListCache = {};
-      //             userChatListCache[_val.userChatList.chat_bject] =
-      //               _val.userChatList;
-      //             localStorage.setItem(
-      //               "userChatListCache",
-      //               JSON.stringify(userChatListCache)
-      //             );
-      //             // 返回上一级
-      //             //this.$router.back();
-      //           }
-      //         })
-      //         .catch(err => {
-      //           console.log(err);
-      //         });
-      //     } else {
-      //       // 更新聊天列表
-      //       let content = JSON.parse(JSON.stringify(this.content));
-      //       let length = content.length - 1;
-      //       userChatListCache[_infoId].latest_news = content[length].sendMsg;
-      //       localStorage.setItem(
-      //         "userChatListCache",
-      //         JSON.stringify(userChatListCache)
-      //       );
-      //     }
-      //   }
-      // }
-      // // 返回上一级
-      // if (this.text !== "") {
-      //   newInfo.latest_news = this.text;
-      // }
-      // newInfo.news_number = 0;
-      // this.setAddress(newInfo);
       let info = JSON.parse(JSON.stringify(this.info));
       info.news_number =
         typeof info.news_number != "undefined" ? info.news_number : 0;
       info.latest_news = this.text !== "" ? this.text : "";
       this.$router.push({ name: "chat", params: info });
+    },
+    goAlbum() {
+      // 相册图片操作
+      let that = this;
+      plus.gallery.pick(
+        function(path) {
+          let files = path.files;
+          // 显示后的content
+          let upList = new Array();
+          // 上传的信息
+          let upContList = new Array();
+          let i = 0;
+          let judge = 0;
+          // 需要优化
+          for (i; i < files.length; i++) {
+            let file = files[i];
+            plus.io.resolveLocalFileSystemURL(
+              file,
+              function(entry) {
+                let reader = new plus.io.FileReader();
+                reader.onloadend = function(e) {
+                  judge += 1;
+                  that.text = "[图片]";
+                  let _content = {
+                    userImg: that.userinfo.headPortrait,
+                    sendMsg: e.target.result,
+                    isSend: 0,
+                    isAddFriend: 0,
+                    loadding: true, // loadding
+                    msgType: 1,
+                    imgName: entry.name
+                  };
+                  that.content.push(_content);
+                  // 存入要修改状态的content
+                  upList.push(that.content.length);
+                  upContList.push(_content);
+                  // 在这里调用API
+                  if (judge == files.length) {
+                    that.imgUpload(that, upContList, upList);
+                  }
+                };
+                reader.readAsDataURL(entry.toLocalURL());
+              },
+              function(e) {
+                plus.nativeUI.toast("文件读取错误：" + e.message);
+              }
+            );
+          }
+        },
+        function(e) {},
+        {
+          filter: "image",
+          multiple: true,
+          maximum: 9,
+          system: false,
+          onmaxed: function() {
+            plus.nativeUI.alert("最多只能选择9张图片");
+          }
+        }
+      );
+    },
+    imgUpload(that, upContList, upList) {
+      // 上传到服务器， 然后替换_content中的图片信息
+
+      api
+        .saveSendMsg(that, {
+          id: that.userinfo.id,
+          chat_bject: that._infoId,
+          sendMsg: "",
+          is_group: 0,
+          msg_type: 1,
+          imgBase64: JSON.stringify(upContList)
+        })
+        .then(res => {
+          let _val = res.body;
+          if (_val.code == "200") {
+            // 修改状态开始
+            let listUrl = _val.listUrl;
+            let i = 0;
+            let newContent = [];
+            for (i; i < listUrl.length; i++) {
+              (function(index) {
+                let newIndex = upList[index] - 1;
+                that.content[newIndex].loadding = false;
+                that.content[newIndex].sendMsg = listUrl[i];
+                newContent.push(
+                  JSON.parse(JSON.stringify(that.content[newIndex]))
+                );
+              })(i);
+            }
+            that.updateStateType = true; // 要修改消息状态
+            // 修改状态结束
+
+            // 加入聊天缓存
+            let userChatRecordCaching = newContent;
+            var userChatRecordCachings = localStorage.getItem(
+              "userChatRecordCaching"
+            );
+            if (
+              userChatRecordCachings != null &&
+              userChatRecordCachings.length > 0
+            ) {
+              userChatRecordCachings = JSON.parse(userChatRecordCachings);
+              if (userChatRecordCachings[that._infoId]) {
+                // 若果聊天信息缓存有
+                // 数组合并
+                let newChatRecord = userChatRecordCachings[that._infoId].concat(
+                  userChatRecordCaching
+                );
+                userChatRecordCachings[that._infoId] = newChatRecord;
+              } else {
+                userChatRecordCachings[that._infoId] = userChatRecordCaching;
+              }
+            } else {
+              // 如果聊天缓存没有
+              userChatRecordCachings = {};
+              userChatRecordCachings[that._infoId] = userChatRecordCaching;
+            }
+            console.info(JSON.stringify(userChatRecordCachings));
+            localStorage.setItem(
+              "userChatRecordCaching",
+              JSON.stringify(userChatRecordCachings)
+            );
+          }
+        })
+        .catch(err => {
+          console.log("err");
+          console.log(JSON.stringify(err));
+        });
     },
     gotoUser(info) {
       this.$router.push({
@@ -323,7 +387,8 @@ export default {
           sendMsg: this.text,
           isSend: 0,
           isAddFriend: 0,
-          loadding: true // loadding
+          loadding: true, // loadding
+          msgType: 0
         };
         this.content.push(_content);
         api
@@ -331,7 +396,8 @@ export default {
             id: this.userinfo.id,
             chat_bject: this._infoId,
             sendMsg: this.text,
-            is_group: 0
+            is_group: 0,
+            msg_type: 0
           })
           .then(res => {
             let _val = res.body;
@@ -342,7 +408,6 @@ export default {
               // 修改状态结束
 
               this.updateStateType = true; // 要修改消息状态
-              this.loading = false;
               // 加入聊天缓存
               let userChatRecordCaching = _content;
               var userChatRecordCachings = localStorage.getItem(
@@ -418,18 +483,43 @@ export default {
   watch: {
     info: function(val) {
       let _val = JSON.parse(JSON.stringify(val));
-      let _content = {
-        userImg: _val.head_portrait,
-        sendMsg: _val.latest_news,
-        isSend: 1,
-        isAddFriend: 0
-      };
-      this.content.push(_content);
-      this.text = _val.latest_news;
       var userChatRecordCachings = JSON.parse(
         localStorage.getItem("userChatRecordCaching")
       );
-      userChatRecordCachings[_val.chat_bject].push(_content);
+      if (_val.msg_type == 1) {
+        let msgList = JSON.parse(_val.latest_news);
+        let i = 0;
+        var that = this;
+        for (i; i < msgList.length; i++) {
+          (function(index) {
+            let _content = {
+              userImg: _val.head_portrait,
+              sendMsg: msgList[i],
+              isSend: 1,
+              isAddFriend: 0,
+              msgType: _val.msg_type
+            };
+            that.content.push(_content);
+            that.text = "[图片]";
+            userChatRecordCachings[_val.chat_bject].push(_content);
+          })(i);
+        }
+      } else {
+        let _content = {
+          userImg: _val.head_portrait,
+          sendMsg: _val.latest_news,
+          isSend: 1,
+          isAddFriend: 0,
+          msgType: _val.msg_type
+        };
+        this.content.push(_content);
+         if(_val.msg_type == 2){
+          this.text = "[语音]";
+        }else{
+          this.text = _val.latest_news;
+        }
+        userChatRecordCachings[_val.chat_bject].push(_content);
+      }
     }
   }
 };
