@@ -1,6 +1,6 @@
 <template>
   <yd-layout class="chatroom">
-    <yd-navbar slot="navbar" :title="info.remark_name ? info.remark_name : info.nick_name">
+    <yd-navbar slot="navbar" :title="info.remark_name || info.nick_name">
       <router-link to @click.native="back" slot="left">
         <yd-navbar-back-icon></yd-navbar-back-icon>
       </router-link>
@@ -41,7 +41,7 @@
             </ul>
           </div>
         </div>
-
+      </div>
       <!-- <ul class="inHtml" v-for="item in content" :key="item.sendMsg">
         <span v-if="item.isAddFriend == 1" class="chatroom-hint">我们已经成为好友啦</span>
         <li class="ask" v-if="item.isSend == 0 && item.isAddFriend == 0">
