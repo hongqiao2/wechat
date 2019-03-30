@@ -102,7 +102,7 @@ Vue.http.options.xhr = { withCredentials: true }
 Vue.http.options.crossOrigin = true
 Vue.http.options.emulateHTTP = true
 
-Vue.prototype.webSocketUrl = 'ws://192.168.1.168:8080/boot/socketServer/'// webSocket 请求地址
+Vue.prototype.webSocketUrl = 'ws://47.99.247.104:8080/boot/socketServer/'// webSocket 请求地址
 
 
 // 连接异常

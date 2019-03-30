@@ -12,15 +12,18 @@
         <li class="ask" v-if="item.isSend == 0 && item.isAddFriend == 0">
           <img :src="item.userImg">
           <p>{{item.sendMsg}}</p>
-          <div class="loading" v-if="loading"></div>
+          <div class="loading" v-if="item.loadding"></div>
+          <!-- <img class="contont-img" slot="right" src="../../assets/find/bg.png"> 
+          <img class="contont-img" slot="right" src="../../assets/find/test.png">  -->
           <div class="failure iconfont icon-tixingtishi" v-if="fail"></div>
         </li>
         <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0">
           <img :src="item.userImg">
+          <!-- <img class="contont-img" slot="right" src="../../assets/find/bg.png">  -->
           <p>{{item.sendMsg}}</p>
         </li>
       </ul>
-       <a id="bottom" class="Backbottom">回到底部</a>
+       <!-- <a id="bottom" class="Backbottom">回到底部</a> -->
     </div>
     <div class="chatroom-bottom"  v-bind:class="{ popHeight:popHeight}">
       <button class="voice-btn" v-if="showVoice" @click="changeStatus">语音</button>
@@ -42,7 +45,8 @@
         class="btn"
         v-if="sendShow"
         @click.native="sendContent"
-      ><a href="#bottom">发送</a></yd-button>
+      >发送</yd-button>
+      <!-- <a href="#bottom">发送</a> -->
       <button class="express-btn">表情</button>
       <button class="more-btn" @click="moreBtn">更多</button>
     </div>
@@ -102,7 +106,7 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      location.href ="#bottom";//页面加载完后，跳到底部
+      // location.href ="#bottom";//页面加载完后，跳到底部
     });
     // 获取最新信息
     let _infoId = this.info.griend_id
@@ -297,9 +301,9 @@ export default {
       this.value = "";
       this.sendShow = false;
       this.text = this.$refs.sTest.value;
-      this.loading = true;
-      return false;
       if (this.text !== "") {
+       
+
         // 发送消息到服务器
         let _content = {
           userImg: this.userinfo.headPortrait,
@@ -668,6 +672,11 @@ export default {
 }
 .Backbottom{
   opacity: 0;
+}
+.inHtml .contont-img{
+    width: 1.8rem;
+    height: auto;
+    border-radius: 4px;
 }
 @-webkit-keyframes loading {
   0% {
