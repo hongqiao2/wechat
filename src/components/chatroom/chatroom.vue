@@ -4,12 +4,7 @@
       <router-link to @click.native="back" slot="left">
         <yd-navbar-back-icon></yd-navbar-back-icon>
       </router-link>
-      <img
-        class="person-icon"
-        @click="gotoUser(info)"
-        slot="right"
-        src="../../assets/chatroom/person.png"
-      >
+      <img class="person-icon" @click="gotoUser(info)" slot="right" src="../../assets/chatroom/person.png">
     </yd-navbar>
     <div class="content">
       <div class="content-wrapper" ref="wrapper">
@@ -21,7 +16,6 @@
                 <li class="ask" v-if="item.isSend == 0 && item.isAddFriend == 0">
                   <img :src="item.userImg">
                   <p>{{item.sendMsg}}</p>
-                  <div class="loading" v-if="loading"></div>
                   <div class="failure iconfont icon-tixingtishi" v-if="fail"></div>
                 </li>
                 <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0">
@@ -34,7 +28,6 @@
                 <li class="ask" v-if="item.isSend == 0 && item.isAddFriend == 0">
                   <img :src="item.userImg">
                   <img :src="item.sendMsg">
-                  <div class="loading" v-if="loading"></div>
                   <div class="failure iconfont icon-tixingtishi" v-if="fail"></div>
                 </li>
                 <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0">
@@ -48,7 +41,46 @@
             </ul>
           </div>
         </div>
+
+      <!-- <ul class="inHtml" v-for="item in content" :key="item.sendMsg">
+        <span v-if="item.isAddFriend == 1" class="chatroom-hint">我们已经成为好友啦</span>
+        <li class="ask" v-if="item.isSend == 0 && item.isAddFriend == 0">
+          <img :src="item.userImg">
+          <p>{{item.sendMsg}}</p>
+          <div class="loading" v-if="loading"></div>
+          <div class="failure iconfont icon-tixingtishi" v-if="fail"></div>
+        </li>
+        <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0">
+          <img :src="item.userImg">
+          <p>{{item.sendMsg}}</p>
+        </li>
+      </ul> -->
+
+       <a id="bottom" class="Backbottom">回到底部</a>
+    </div>
+    <div class="chatroom-bottom"  v-bind:class="{ popHeight:popHeight}">
+      <button class="voice-btn" v-if="showVoice" @click="changeStatus">语音</button>
+      <button class="text-btn" v-if="showText" @click="changeStatus">键盘</button>
+      <div class="send" v-if="showVoice">
+        <input
+          type="text"
+          placeholder="请输入聊天内容"
+          v-model="value"
+          class="sText"
+          ref="sTest"
+          @input="sendInput"
+        >
       </div>
+      <div class="speak" v-if="showText">按住 说话 </div>
+      <yd-button
+        bgcolor="#8D66FA"
+        color="#FFF"
+        class="btn"
+        v-if="sendShow"
+        @click.native="sendContent"
+      ><a href="#bottom">发送</a></yd-button>
+      <button class="express-btn">表情</button>
+      <button class="more-btn" @click="moreBtn">更多</button>
     </div>
     <div class="chat-more" v-if="showPop">
       <div @click="goAlbum">
@@ -76,46 +108,15 @@
         <p>收藏</p>
       </div>
     </div>
-    <yd-tabbar slot="tabbar" class="chatroom-bottom" v-bind:class="{ popHeight:popHeight}">
-      <button class="voice-btn" v-if="showVoice" @click="changeStatus">语音</button>
-      <button class="text-btn" v-if="showText" @click="changeStatus">键盘</button>
-      <div class="send" v-if="showVoice">
-        <input
-          type="text"
-          placeholder="请输入聊天内容"
-          v-model="value"
-          class="sText"
-          ref="sTest"
-          @input="sendInput"
-        >
-      </div>
-      <div class="speak" v-if="showText">
-        按住 说话
-        <!-- <input type="text" placeholder="请输入聊天内容" class="sText" ref="sTest"/> -->
-      </div>
-      <yd-button
-        bgcolor="#8D66FA"
-        color="#FFF"
-        class="btn"
-        v-if="sendShow"
-        @click.native="sendContent"
-      >发送</yd-button>
-      <!-- <input type="button" class="btn" value="发送" v-if="sendShow" @click="sendContent" /> -->
-      <button class="express-btn">表情</button>
-      <!-- <p class="more-btn" @click.native="moreBtn">更多</p> -->
-      <button class="more-btn" @click="moreBtn">更多</button>
-    </yd-tabbar>
-    <router-view></router-view>
   </yd-layout>
 </template>
-
 <script type="text/ecmascript-6">
-import BScroll from "better-scroll";
+// import BScroll from "better-scroll";
 import { mapMutations, mapGetters } from "vuex";
 import api from "@/api/resource.js";
 export default {
   components: {
-    BScroll
+    // BScroll
   },
   data() {
     return {
@@ -131,14 +132,13 @@ export default {
       content: [], // 聊天内容[{userImg: "用户头像", sendMsg: "内容", isSend: "是否发送者", isAddFriend: "是否是好友通知"]
       userinfo: {},
       updateStateType: false, // 如果有新消息，或者发送了消息，就需要在返回时运行findSysUserNewLogList方法
-      _infoId: ""
+      _infoId: "",
+      screenHeight: document.body.clientHeight
     };
   },
   mounted() {
     this.$nextTick(() => {
-      this.scroll = new BScroll(this.$refs.wrapper, {
-        click: true
-      });
+      location.href ="#bottom";//页面加载完后，跳到底部
     });
     // 获取最新信息
     let _infoId = this.info.griend_id
@@ -379,9 +379,10 @@ export default {
       this.value = "";
       this.sendShow = false;
       this.text = this.$refs.sTest.value;
+      this.loading = true;
+      return false;
       if (this.text !== "") {
         // 发送消息到服务器
-        this.loading = true;
         let _content = {
           userImg: this.userinfo.headPortrait,
           sendMsg: this.text,
@@ -524,26 +525,23 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.chatroom {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 500;
-  background-color: #f9f9f9;
-}
-.chatroom .content {
-  position: relative;
+<style>
+.chatroom .content{
   padding: 0.4rem 0.2rem;
+      margin-bottom: 0.6rem;
+}
+
+.yd-scrollview:after{
+  height:0;
 }
 .person-icon {
   width: 0.55rem;
   height: 0.55rem;
+}
+ .inHtml li {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0.3rem;
 }
 .voice-btn {
   background: url("../../assets/chatroom/voice.png");
@@ -673,15 +671,12 @@ export default {
   word-break: break-all;
 }
 .reply p {
-  left: 2pc;
-  float: left;
-  padding: 3px 10px;
-  max-width: 190px;
-  background: #fff;
-}
-.chatroom-bottom {
-  height: 50px;
-  background-color: #fff;
+    left: 9px;
+    float: left;
+    padding: 0.09rem 0.2rem;
+    max-width: 4rem;
+    min-height: 0.8rem;
+    background: #fff;
 }
 .send {
   display: flex;
@@ -764,6 +759,24 @@ export default {
   border-radius: 50%;
   opacity: 0.5;
 }
+.chatroom-bottom {
+    height: 50px;
+    background-color: #fff;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+.Backbottom{
+  opacity: 0;
+}
 @-webkit-keyframes loading {
   0% {
     -webkit-transform: rotate(0deg);
@@ -783,11 +796,5 @@ export default {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
-}
-.chatroom .failure {
-  color: red;
-  font-size: 0.5rem;
-  margin: 0.1rem;
-  display: inline-block;
 }
 </style>
