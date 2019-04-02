@@ -59,16 +59,16 @@
           <img :src="item.userImg">
           <p>{{item.sendMsg}}</p>
           <div class="loading" v-if="item.loadding"></div>
-          <!-- <img class="contont-img" slot="right" src="../../assets/find/bg.png"> 
-          <img class="contont-img" slot="right" src="../../assets/find/test.png">  -->
+          <img class="contont-img" slot="right" src="../../assets/find/bg.png"> 
+          <img class="contont-img" slot="right" src="../../assets/find/test.png"> 
           <div class="failure iconfont icon-tixingtishi" v-if="fail"></div>
         </li>
         <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0">
           <img :src="item.userImg">
-          <!-- <img class="contont-img" slot="right" src="../../assets/find/bg.png">  -->
+          <img class="contont-img" slot="right" src="../../assets/find/bg.png"> 
           <p>{{item.sendMsg}}</p>
         </li>
-      </ul>
+      </ul> -->
        <a id="bottom" class="Backbottom">回到底部</a>
     </div>
     <div class="chatroom-bottom"  v-bind:class="{ popHeight:popHeight}">
