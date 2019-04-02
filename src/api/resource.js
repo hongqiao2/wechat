@@ -1,5 +1,5 @@
-//const baseURL = 'http://192.168.1.168:8080/boot/app';
-const baseURL = 'http://47.99.247.104:8080/boot/app';
+const baseURL = 'http://192.168.1.168:8080/boot/app';
+//const baseURL = 'http://47.99.247.104:8080/boot/app';
 const fileHeader = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "PUT,POST,GET,DELETE,OPTIONS",

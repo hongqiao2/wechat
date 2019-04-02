@@ -14,8 +14,8 @@
             <div class="content-top">
               <img class="circle-bg" src="../../../../assets/find/bg-1.png" />
               <div class="user">
-                <span>minion</span>
-                <img src="../../../../assets/me/minion.png" height="80" width="80" />
+                <span>{{accessToken.nickName}}</span>
+                <img :src="accessToken.headPortrait" height="80" width="80" />
               </div>
             </div>
             <div class="content-body">
@@ -99,7 +99,8 @@
               })
             }
           }
-        ]
+        ],
+        accessToken: {}
       }
     },
     mounted () {
@@ -108,6 +109,9 @@
           click: true
         })
       })
+      // 用户信息
+      let accessToken = JSON.parse(localStorage.getItem("access_token"));
+      this.accessToken = accessToken;
     },
     methods: {
       back (event) {

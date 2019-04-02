@@ -12,8 +12,8 @@
     <div class="content-top" >
       <img class="circle-bg" src="../../../assets/find/bg.png" />
       <div class="user">
-        <span>minion</span>
-        <img src="../../../assets/me/minion.png" @click="goAlbum" />
+        <span>{{accessToken.nickName}}</span>
+        <img :src="accessToken.headPortrait" @click="goAlbum" />
       </div>
     </div>
      <div class="content-body"> 
@@ -171,10 +171,14 @@
                 this.$dialog.toast({mes: '看到了不该看到的东西！'});
             }
           }
-        ]
+        ],
+        accessToken: {}
       }
     },
     mounted () {
+      // 用户信息
+      let accessToken = JSON.parse(localStorage.getItem("access_token"));
+      this.accessToken = accessToken;
     },
     methods: {
       back (event) {
