@@ -23,7 +23,7 @@
           <p>{{item.sendMsg}}</p>
         </li>
       </ul>
-       <!-- <a id="bottom" class="Backbottom">回到底部</a> -->
+       <a id="bottom" class="Backbottom">回到底部</a>
     </div>
     <div class="chatroom-bottom"  v-bind:class="{ popHeight:popHeight}">
       <button class="voice-btn" v-if="showVoice" @click="changeStatus">语音</button>
@@ -45,8 +45,8 @@
         class="btn"
         v-if="sendShow"
         @click.native="sendContent"
-      >发送</yd-button>
-      <!-- <a href="#bottom">发送</a> -->
+      ><a href="#bottom">发送</a></yd-button>
+      
       <button class="express-btn">表情</button>
       <button class="more-btn" @click="moreBtn">更多</button>
     </div>
@@ -106,7 +106,7 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      // location.href ="#bottom";//页面加载完后，跳到底部
+      location.href ="#bottom";//页面加载完后，跳到底部
     });
     // 获取最新信息
     let _infoId = this.info.griend_id
@@ -669,6 +669,7 @@ export default {
     position: fixed;
     width: 100%;
     bottom: 0;
+    z-index: 111;
 }
 .Backbottom{
   opacity: 0;
