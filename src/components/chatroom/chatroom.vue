@@ -115,7 +115,7 @@
       <button class="express-btn">表情</button>
       <button class="more-btn" @click="moreBtn">更多</button>
     </div>
-    <div class="chat-more" v-if="showPop">
+    <div class="chat-more" v-if="showPop" @click="goAlbum">
       <div>
         <img src="../../assets/chatroom/album.png">
         <p>相册</p>
