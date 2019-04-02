@@ -4,7 +4,12 @@
       <router-link to @click.native="back" slot="left">
         <yd-navbar-back-icon></yd-navbar-back-icon>
       </router-link>
-      <img class="person-icon" @click="gotoUser(info)" slot="right" src="../../assets/chatroom/person.png">
+      <img
+        class="person-icon"
+        @click="gotoUser(info)"
+        slot="right"
+        src="../../assets/chatroom/person.png"
+      >
     </yd-navbar>
     <div class="content">
       <div class="content-wrapper" ref="wrapper">
@@ -45,7 +50,7 @@
                 </li>
                 <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0">
                   <img :src="item.userImg">
-                   <!-- item.audioTime //录音时长 -->
+                  <!-- item.audioTime //录音时长 -->
                   <audio :src="item.sendMsg"></audio>
                 </li>
               </div>
@@ -68,11 +73,18 @@
           <img class="contont-img" slot="right" src="../../assets/find/bg.png"> 
           <p>{{item.sendMsg}}</p>
         </li>
-      </ul> -->
-       <a id="bottom" class="Backbottom">回到底部</a>
+      </ul>-->
+      <a id="bottom" class="Backbottom">回到底部</a>
     </div>
-    <div class="chatroom-bottom"  v-bind:class="{ popHeight:popHeight}">
-      <button class="voice-btn" v-if="showVoice" @click="changeStatus" @touchstart="startSoundRecording" @touchmove="moveSoundRecording" @touchend="gtouchend">语音</button>
+    <div class="chatroom-bottom" v-bind:class="{ popHeight:popHeight}">
+      <button
+        class="voice-btn"
+        v-if="showVoice"
+        @click="changeStatus"
+        @touchstart="startSoundRecording"
+        @touchmove="moveSoundRecording"
+        @touchend="gtouchend"
+      >语音</button>
       <button class="text-btn" v-if="showText" @click="changeStatus">键盘</button>
       <div class="send" v-if="showVoice">
         <input
@@ -84,7 +96,13 @@
           @input="sendInput"
         >
       </div>
-      <div class="speak" v-if="showText" @touchstart="startSoundRecording" @touchmove="moveSoundRecording" @touchend="gtouchend">按住 说话 </div>
+      <div
+        class="speak"
+        v-if="showText"
+        @touchstart="startSoundRecording"
+        @touchmove="moveSoundRecording"
+        @touchend="gtouchend"
+      >按住 说话</div>
       <yd-button
         bgcolor="#8D66FA"
         color="#FFF"
@@ -92,7 +110,7 @@
         v-if="sendShow"
         @click.native="sendContent"
       >
-      <!-- <a href="#bottom">发送</a> -->
+        <!-- <a href="#bottom">发送</a> -->
       </yd-button>
       <button class="express-btn">表情</button>
       <button class="more-btn" @click="moreBtn">更多</button>
@@ -245,10 +263,10 @@ export default {
       this.recorder.record(
         { format: "amr" },
         function(recordFile) {
-          if(that.recordingControl){
-          // 获取当前时间，
+          if (that.recordingControl) {
+            // 获取当前时间，
             let endTime = new Date().getTime();
-            if(endTime - startTime < 1100){
+            if (endTime - startTime < 1100) {
               // 录音时间太小，不进行请求， 需要提示TODO
               return;
             }
@@ -260,7 +278,7 @@ export default {
                 let reader = new plus.io.FileReader();
                 reader.onloadend = function(e) {
                   that.text = "[语音]";
-                  let audioTime = parseInt((endTime - startTime) / 1000)
+                  let audioTime = parseInt((endTime - startTime) / 1000);
                   let _content = {
                     userImg: that.userinfo.headPortrait,
                     sendMsg: e.target.result,
@@ -276,67 +294,69 @@ export default {
                   //that.imgUpload(that, upContList, upList);
                   let upLength = that.content.length;
                   api
-                  .saveSendMsg(that, {
-                    id: that.userinfo.id,
-                    chat_bject: that._infoId,
-                    sendMsg: e.target.result,
-                    is_group: 0,
-                    msg_type: 2,
-                    msg_time: audioTime,
-                    imgBase64: ""
-                  })
-                  .then(res => {
-                    console.log(JSON.stringify(res))
-                    let _val = res.body;
-                    if (_val.code == "200") {
-                      // 修改状态开始
-                      that.content[upLength - 1].loadding = false;
-                      that.content[upLength - 1].sendMsg = _val.sendMsg;
-                      _content.loadding = false;
-                      _content.sendMsg = _val.sendMsg;
-                      // 修改状态结束
+                    .saveSendMsg(that, {
+                      id: that.userinfo.id,
+                      chat_bject: that._infoId,
+                      sendMsg: e.target.result,
+                      is_group: 0,
+                      msg_type: 2,
+                      msg_time: audioTime,
+                      imgBase64: ""
+                    })
+                    .then(res => {
+                      console.log(JSON.stringify(res));
+                      let _val = res.body;
+                      if (_val.code == "200") {
+                        // 修改状态开始
+                        that.content[upLength - 1].loadding = false;
+                        that.content[upLength - 1].sendMsg = _val.sendMsg;
+                        _content.loadding = false;
+                        _content.sendMsg = _val.sendMsg;
+                        // 修改状态结束
 
-                      that.updateStateType = true; // 要修改消息状态
-                      // 加入聊天缓存
-                      let userChatRecordCaching = _content;
-                      var userChatRecordCachings = localStorage.getItem(
-                        "userChatRecordCaching"
-                      );
-                      if (
-                        userChatRecordCachings != null &&
-                        userChatRecordCachings.length > 0
-                      ) {
-                        userChatRecordCachings = JSON.parse(userChatRecordCachings);
-                        if (userChatRecordCachings[that._infoId]) {
-                          // 若果聊天信息缓存有
-                          userChatRecordCachings[that._infoId].push(
-                            userChatRecordCaching
+                        that.updateStateType = true; // 要修改消息状态
+                        // 加入聊天缓存
+                        let userChatRecordCaching = _content;
+                        var userChatRecordCachings = localStorage.getItem(
+                          "userChatRecordCaching"
+                        );
+                        if (
+                          userChatRecordCachings != null &&
+                          userChatRecordCachings.length > 0
+                        ) {
+                          userChatRecordCachings = JSON.parse(
+                            userChatRecordCachings
                           );
+                          if (userChatRecordCachings[that._infoId]) {
+                            // 若果聊天信息缓存有
+                            userChatRecordCachings[that._infoId].push(
+                              userChatRecordCaching
+                            );
+                          } else {
+                            userChatRecordCachings[that._infoId] = [];
+                            userChatRecordCachings[that._infoId].push(
+                              userChatRecordCaching
+                            );
+                          }
                         } else {
+                          // 如果聊天缓存没有
+                          userChatRecordCachings = {};
                           userChatRecordCachings[that._infoId] = [];
                           userChatRecordCachings[that._infoId].push(
                             userChatRecordCaching
                           );
                         }
-                      } else {
-                        // 如果聊天缓存没有
-                        userChatRecordCachings = {};
-                        userChatRecordCachings[that._infoId] = [];
-                        userChatRecordCachings[that._infoId].push(
-                          userChatRecordCaching
+                        localStorage.setItem(
+                          "userChatRecordCaching",
+                          JSON.stringify(userChatRecordCachings)
                         );
                       }
-                      localStorage.setItem(
-                        "userChatRecordCaching",
-                        JSON.stringify(userChatRecordCachings)
-                      );
-                    }
-                  })
-                  .catch(err => {
-                    that.loading = false;
-                    that.fail = true;
-                    console.log(JSON.stringify(err));
-                  });
+                    })
+                    .catch(err => {
+                      that.loading = false;
+                      that.fail = true;
+                      console.log(JSON.stringify(err));
+                    });
                 };
                 reader.readAsDataURL(entry.toLocalURL());
               },
@@ -347,27 +367,27 @@ export default {
           }
           // var p = plus.audio.createPlayer( recordFile );
           // p.play( function () {
-          //   console.log( "Audio play success!" ); 
+          //   console.log( "Audio play success!" );
           // }, function ( e ) {
           //   // 录音时间过短
-          //   console.log( "Audio play error: " + e.message ); 
-          // } ); 
+          //   console.log( "Audio play error: " + e.message );
+          // } );
         },
         function(e) {
           console.log("Audio record failed: " + JSON.stringify(e));
         }
       );
     },
-    moveSoundRecording(){
+    moveSoundRecording() {
       // 取消录音
       this.recordingControl = false;
       this.recorder.stop();
     },
-    gtouchend(){
+    gtouchend() {
       this.recorder.stop();
     },
     // 拍照
-    goPhotograph(){
+    goPhotograph() {
       let cmr = plus.camera.getCamera();
       let that = this;
       cmr.captureImage(
@@ -377,40 +397,39 @@ export default {
           // 上传的信息
           let upContList = new Array();
           plus.io.resolveLocalFileSystemURL(
-              path,
-              function(entry) {
-                let reader = new plus.io.FileReader();
-                reader.readAsDataURL(entry.toLocalURL());
-                reader.onload = function(e) {
-                  that.text = "[图片]";
-                  let _content = {
-                    userImg: that.userinfo.headPortrait,
-                    sendMsg: e.target.result,
-                    isSend: 0,
-                    isAddFriend: 0,
-                    loadding: true, // loadding
-                    msgType: 1,
-                    imgName: entry.name
-                  };
-                  that.content.push(_content);
-                  // 存入要修改状态的content
-                  upList.push(that.content.length);
-                  upContList.push(_content);
-                  // 在这里调用API
-                  that.imgUpload(that, upContList, upList);
+            path,
+            function(entry) {
+              let reader = new plus.io.FileReader();
+              reader.readAsDataURL(entry.toLocalURL());
+              reader.onload = function(e) {
+                that.text = "[图片]";
+                let _content = {
+                  userImg: that.userinfo.headPortrait,
+                  sendMsg: e.target.result,
+                  isSend: 0,
+                  isAddFriend: 0,
+                  loadding: true, // loadding
+                  msgType: 1,
+                  imgName: entry.name
                 };
-                
-              },
-              function(e) {
-                plus.nativeUI.toast("文件读取错误：" + e.message);
-              }
-            );
+                that.content.push(_content);
+                // 存入要修改状态的content
+                upList.push(that.content.length);
+                upContList.push(_content);
+                // 在这里调用API
+                that.imgUpload(that, upContList, upList);
+              };
+            },
+            function(e) {
+              plus.nativeUI.toast("文件读取错误：" + e.message);
+            }
+          );
           //alert("Capture image success: " + path);
         },
         function(error) {
           console.log("Capture image failed: " + error.message);
         },
-        {  }
+        {}
       );
     },
     // 相册图片操作
@@ -518,9 +537,9 @@ export default {
               if (userChatRecordCachings[_that._infoId]) {
                 // 若果聊天信息缓存有
                 // 数组合并
-                let newChatRecord = userChatRecordCachings[_that._infoId].concat(
-                  userChatRecordCaching
-                );
+                let newChatRecord = userChatRecordCachings[
+                  _that._infoId
+                ].concat(userChatRecordCaching);
                 userChatRecordCachings[_that._infoId] = newChatRecord;
               } else {
                 userChatRecordCachings[_that._infoId] = userChatRecordCaching;
@@ -576,15 +595,14 @@ export default {
       this.sendShow = false;
       this.text = this.$refs.sTest.value;
       if (this.text !== "") {
-       
-
         // 发送消息到服务器
         let _content = {
           userImg: this.userinfo.headPortrait,
           sendMsg: this.text,
           isSend: 0,
           isAddFriend: 0,
-          loadding: true // loadding
+          loadding: true, // loadding
+          msgType: 0
         };
         this.content.push(_content);
         api
@@ -719,10 +737,10 @@ export default {
           isAddFriend: 0,
           msgType: _val.msg_type
         };
-        if(_val.msg_type == 2){
+        if (_val.msg_type == 2) {
           _content["msg_time"] = _val.msg_time;
           this.text = "[语音]";
-        }else{
+        } else {
           this.text = _val.latest_news;
         }
         this.content.push(_content);
@@ -733,19 +751,19 @@ export default {
 };
 </script>
 <style>
-.chatroom .content{
+.chatroom .content {
   padding: 0.4rem 0.2rem;
-      margin-bottom: 0.6rem;
+  margin-bottom: 0.6rem;
 }
 
-.yd-scrollview:after{
-  height:0;
+.yd-scrollview:after {
+  height: 0;
 }
 .person-icon {
   width: 0.55rem;
   height: 0.55rem;
 }
- .inHtml li {
+.inHtml li {
   position: relative;
   overflow: hidden;
   margin-bottom: 0.3rem;
@@ -878,12 +896,12 @@ export default {
   word-break: break-all;
 }
 .reply p {
-    left: 9px;
-    float: left;
-    padding: 0.09rem 0.2rem;
-    max-width: 4rem;
-    min-height: 0.8rem;
-    background: #fff;
+  left: 9px;
+  float: left;
+  padding: 0.09rem 0.2rem;
+  max-width: 4rem;
+  min-height: 0.8rem;
+  background: #fff;
 }
 .send {
   display: flex;
@@ -967,28 +985,28 @@ export default {
   opacity: 0.5;
 }
 .chatroom-bottom {
-    height: 50px;
-    background-color: #fff;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    -ms-flex-align: center;
-    align-items: center;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    z-index: 111;
+  height: 50px;
+  background-color: #fff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  z-index: 111;
 }
-.Backbottom{
+.Backbottom {
   opacity: 0;
 }
-.inHtml .contont-img{
-    width: 1.8rem;
-    height: auto;
-    border-radius: 4px;
+.inHtml .contont-img {
+  width: 1.8rem;
+  height: auto;
+  border-radius: 4px;
 }
 @-webkit-keyframes loading {
   0% {
