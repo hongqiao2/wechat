@@ -68,7 +68,7 @@ import LoginPwd from '../components/login/login-pwd/login-pwd'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
+  //mode: 'history',
   routes: [
     {
       path: '/',

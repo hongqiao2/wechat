@@ -1,4 +1,5 @@
 const baseURL = 'http://192.168.1.168:8080/boot/app';
+//const baseURL = 'http://47.99.247.104/boot/app';
 const fileHeader = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "PUT,POST,GET,DELETE,OPTIONS",
@@ -96,6 +97,7 @@ const api = {
   },
   // 给好友发送信息
   saveSendMsg(that, params){
+    console.log(params)
     return that.$http.post(baseURL + '/newsLog/saveSendMsg', params);
   },
   // 修改消息，以及消息列表的状态
