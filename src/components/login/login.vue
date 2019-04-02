@@ -219,7 +219,7 @@ export default {
             });
           } else {
             this.$router.push({
-              path: `/chat`
+              path: `/`
             });
           }
         })

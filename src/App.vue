@@ -196,15 +196,18 @@ export default {
           if (_infoId && _data.sender == _infoId) {
             _info.latest_news = _data.msg;
             let newNum = this.num;
+            _info["msg_type"] = _data.msg_type;
             if(_data.msg_type == 1){
               // 如果是图片
               let msgNum = JSON.parse(_data.msg).length;
+              console.log(JSON.stringify(msgNum))
               _info.news_number = typeof _info.news_number != "undefined" ? _info.news_number + msgNum : msgNum;
               newNum += msgNum;
-              _info["msg_type"] = _data.msg_type;
             }else{
+              _info["msg_type"] = _data.msg_type;
               if(_data.msg_type == 2){
-                _info["msg_type"] = _data.msg_type;
+                console.log(_data.msg_time)
+                _info["msg_time"] = _data.msg_time;
               }
               _info.news_number = typeof _info.news_number != "undefined" ? _info.news_number + 1 : 1;
               newNum += 1;
