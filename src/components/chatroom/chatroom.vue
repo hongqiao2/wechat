@@ -32,12 +32,17 @@
                 <!-- 图片 -->
                 <li class="ask" v-if="item.isSend == 0 && item.isAddFriend == 0">
                   <img :src="item.userImg">
-                  <img :src="item.sendMsg">
+                  <yd-lightbox>
+                    <img class="contont-img" slot="right" :src="item.sendMsg">
+                  </yd-lightbox>
+                  <img class="contont-img" slot="right" src="../../assets/find/test.png">
                   <div class="failure iconfont icon-tixingtishi" v-if="fail"></div>
                 </li>
                 <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0">
                   <img :src="item.userImg">
-                  <img :src="item.sendMsg">
+                  <yd-lightbox>
+                    <yd-lightbox-img class="contont-img" :src="item.sendMsg"></yd-lightbox-img>
+                  </yd-lightbox>
                 </li>
               </div>
               <div v-else>
@@ -51,7 +56,19 @@
                 <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0">
                   <img :src="item.userImg">
                   <!-- item.audioTime //录音时长 -->
-                  <audio :src="item.sendMsg"></audio>
+                  <p class="audioBox" style="width: 25%;" @click="goPlay(item.sendMsg)">
+                    <audio preload="auto" hidden="true">
+                      <source :src="item.sendMsg" type="audio/mpeg">
+                    </audio>
+                    <span :class="{animation:isShow}" class="voiceIcon"></span>
+                    <span>{{item.audioTime }}''</span>
+                  </p>
+                  <!-- <div class="audioBox">
+                    <audio preload="auto" hidden="true"><source :src="item.sendMsg" type="audio/mpeg"></audio>
+                    <div class="animation"></div>
+                  </div>-->
+                  <!-- <div class="loader">Loading...</div> -->
+                  <!-- <div><audio :src="item.sendMsg"></audio></div> -->
                 </li>
               </div>
             </ul>
@@ -109,7 +126,7 @@
         class="btn"
         v-if="sendShow"
         @click.native="sendContent"
-      >
+      >发送
         <!-- <a href="#bottom">发送</a> -->
       </yd-button>
       <button class="express-btn">表情</button>
@@ -168,7 +185,8 @@ export default {
       _infoId: "",
       screenHeight: document.body.clientHeight,
       recordingControl: true, // 录音控制
-      recorder: {}
+      recorder: {},
+      isShow: false
     };
   },
   mounted() {
@@ -206,7 +224,9 @@ export default {
                   isSend: _list[index].sendType,
                   isAddFriend: _list[index].isAddFriend,
                   msgType: _list[index].msgType,
-                  audioTime: _list[index].msgTime // 录音时间
+                  audioTime: _list[index].msgTime, // 录音时间
+                  loadding: true, // 圈圈
+                  isShow: false // 语音播放
                 });
               } else {
                 _content.push({
@@ -215,7 +235,9 @@ export default {
                   isSend: _list[index].sendType,
                   isAddFriend: _list[index].isAddFriend,
                   msgType: _list[index].msgType,
-                  audioTime: _list[index].msgTime // 录音时间
+                  audioTime: _list[index].msgTime, // 录音时间
+                  loadding: true, // 圈圈
+                  isShow: false // 语音播放
                 });
               }
             }
@@ -284,7 +306,8 @@ export default {
                     sendMsg: e.target.result,
                     isSend: 0,
                     isAddFriend: 0,
-                    loadding: true, // loadding
+                    loadding: true, // 圈圈
+                    isShow: false, // 语音播放
                     msgType: 2,
                     imgName: entry.name,
                     audioTime: audioTime // 录音时间
@@ -365,16 +388,25 @@ export default {
               }
             );
           }
-          // var p = plus.audio.createPlayer( recordFile );
-          // p.play( function () {
-          //   console.log( "Audio play success!" );
-          // }, function ( e ) {
-          //   // 录音时间过短
-          //   console.log( "Audio play error: " + e.message );
-          // } );
         },
         function(e) {
           console.log("Audio record failed: " + JSON.stringify(e));
+        }
+      );
+    },
+    goPlay(recordFile) {
+      // 需要传length, 修改content
+      let that = (this.isShow = true);
+      var p = plus.audio.createPlayer(recordFile);
+      p.play(
+        function() {
+          //语音播放完
+          this.isShow = false;
+          console.log("Audio play success!");
+        },
+        function(e) {
+          // 录音时间过短
+          console.log("Audio play error: " + e.message);
         }
       );
     },
@@ -408,7 +440,8 @@ export default {
                   sendMsg: e.target.result,
                   isSend: 0,
                   isAddFriend: 0,
-                  loadding: true, // loadding
+                  loadding: true, // 圈圈
+                  isShow: false, // 语音播放
                   msgType: 1,
                   imgName: entry.name
                 };
@@ -459,7 +492,8 @@ export default {
                     sendMsg: e.target.result,
                     isSend: 0,
                     isAddFriend: 0,
-                    loadding: true, // loadding
+                    loadding: true, // 圈圈
+                    isShow: false, // 语音播放
                     msgType: 1,
                     imgName: entry.name
                   };
@@ -601,7 +635,8 @@ export default {
           sendMsg: this.text,
           isSend: 0,
           isAddFriend: 0,
-          loadding: true, // loadding
+          loadding: true, // 圈圈
+          isShow: false, // 语音播放
           msgType: 0
         };
         this.content.push(_content);
@@ -704,7 +739,9 @@ export default {
         userImg: _val.head_portrait,
         sendMsg: _val.latest_news,
         isSend: 1,
-        isAddFriend: 0
+        isAddFriend: 0,
+        loadding: true, // 圈圈
+        isShow: false // 语音播放
       };
       this.content.push(_content);
       this.text = _val.latest_news;
@@ -722,7 +759,9 @@ export default {
               sendMsg: msgList[i],
               isSend: 1,
               isAddFriend: 0,
-              msgType: _val.msg_type
+              msgType: _val.msg_type,
+              loadding: true, // 圈圈
+              isShow: false // 语音播放
             };
             that.content.push(_content);
             that.text = "[图片]";
@@ -735,7 +774,9 @@ export default {
           sendMsg: _val.latest_news,
           isSend: 1,
           isAddFriend: 0,
-          msgType: _val.msg_type
+          msgType: _val.msg_type,
+          loadding: true, // 圈圈
+          isShow: false // 语音播放
         };
         if (_val.msg_type == 2) {
           _content["msg_time"] = _val.msg_time;
@@ -896,12 +937,13 @@ export default {
   word-break: break-all;
 }
 .reply p {
-  left: 9px;
   float: left;
   padding: 0.09rem 0.2rem;
   max-width: 4rem;
   min-height: 0.8rem;
   background: #fff;
+  position: relative;
+  left: 0;
 }
 .send {
   display: flex;
@@ -1026,6 +1068,64 @@ export default {
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
+  }
+}
+.audioBox {
+  background: #fff;
+}
+.voiceIcon {
+  width: 0.5rem;
+  height: 0.5rem;
+  display: block;
+  background: url(../../assets/chatroom/yuyin.png) no-repeat;
+  background-size: cover;
+  background-position: 0;
+  float: left;
+  margin-right: 0.1rem;
+}
+.animation {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: url(../../assets/chatroom/yuyin.png) no-repeat;
+  animation: run 1s steps(1, start) infinite;
+  -webkit-animation: run 2s steps(1, start) infinite;
+  background-size: cover;
+  background-position: 0;
+  float: left;
+  margin-right: 0.1rem;
+}
+@keyframes run {
+  0% {
+    background-position: 0 0;
+  }
+  25% {
+    background-position: 0px 0;
+  }
+  50% {
+    background-position: -0.5rem -0.5px;
+  }
+  75% {
+    background-position: -0.95rem 0;
+  }
+  100% {
+    background-position: -1.4rem 0;
+  }
+}
+@-webkit-keyframes run {
+  0% {
+    background-position: 0 0;
+  }
+  25% {
+    background-position: 0px 0;
+  }
+  50% {
+    background-position: -0.5rem -0.5px;
+  }
+  75% {
+    background-position: -0.95rem 0;
+  }
+  100% {
+    background-position: -1.4rem 0;
   }
 }
 </style>
