@@ -109,8 +109,9 @@ export default {
           }
         })
         .then(res => {
+          console.log(res)
           let cookie = res.body.cookie;
-          localStorage.setItem("KAPTCHA_SESSION_KEY", cookie.value)
+          localStorage.setItem("KAPTCHA_SESSION_KEY", cookie)
           setTimeout(() => {
             this.start1 = true;
             this.$dialog.loading.close();

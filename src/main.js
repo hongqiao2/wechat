@@ -101,6 +101,8 @@ Vue.http.options.emulateJSON = true
 Vue.http.options.xhr = { withCredentials: true }
 Vue.http.options.crossOrigin = true
 Vue.http.options.emulateHTTP = true
+// 实现跨域写到cookie
+Vue.http.options.credentials = true
 
 Vue.prototype.webSocketUrl = 'ws://47.99.247.104:8080/boot/socketServer/'// webSocket 请求地址
 
