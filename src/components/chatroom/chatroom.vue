@@ -50,8 +50,16 @@
                 <li class="ask" v-if="item.isSend == 0 && item.isAddFriend == 0">
                   <img :src="item.userImg">
                   <!-- item.audioTime //录音时长 -->
-                  <audio :src="item.sendMsg"></audio>
-                  <div class="failure iconfont icon-tixingtishi" v-if="fail"></div>
+                  <p class="audioBox" style="width: 25%;" @click="goPlay(item.sendMsg)">
+                    <audio preload="auto" hidden="true">
+                      <source :src="item.sendMsg" type="audio/mpeg">
+                    </audio>
+                    <span>{{item.audioTime }}''</span>
+                    <span :class="{animation1:isShow1}" class="voiceIcon1"></span>
+                    
+                  </p>
+                  <!-- <audio :src="item.sendMsg"></audio>
+                  <div class="failure iconfont icon-tixingtishi" v-if="fail"></div> -->
                 </li>
                 <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0">
                   <img :src="item.userImg">
@@ -186,7 +194,8 @@ export default {
       screenHeight: document.body.clientHeight,
       recordingControl: true, // 录音控制
       recorder: {},
-      isShow: false
+      isShow: false,
+      isShow1: false
     };
   },
   mounted() {
@@ -226,7 +235,8 @@ export default {
                   msgType: _list[index].msgType,
                   audioTime: _list[index].msgTime, // 录音时间
                   loadding: true, // 圈圈
-                  isShow: false // 语音播放
+                  isShow: false, // 语音播放
+                  isShow1: false // 语音播放
                 });
               } else {
                 _content.push({
@@ -237,7 +247,8 @@ export default {
                   msgType: _list[index].msgType,
                   audioTime: _list[index].msgTime, // 录音时间
                   loadding: true, // 圈圈
-                  isShow: false // 语音播放
+                  isShow: false,// 语音播放
+                  isShow1: false,
                 });
               }
             }
@@ -308,6 +319,7 @@ export default {
                     isAddFriend: 0,
                     loadding: true, // 圈圈
                     isShow: false, // 语音播放
+                    isShow1: false,
                     msgType: 2,
                     imgName: entry.name,
                     audioTime: audioTime // 录音时间
@@ -397,11 +409,13 @@ export default {
     goPlay(recordFile) {
       // 需要传length, 修改content
       let that = (this.isShow = true);
+      this.isShow1 =true;
       var p = plus.audio.createPlayer(recordFile);
       p.play(
         function() {
           //语音播放完
           this.isShow = false;
+          this.isShow1 =false;
           console.log("Audio play success!");
         },
         function(e) {
@@ -1083,12 +1097,32 @@ export default {
   float: left;
   margin-right: 0.1rem;
 }
+.voiceIcon1 {
+  width: 0.5rem;
+  height: 0.5rem;
+  display: block;
+  background: url(../../assets/chatroom/yuyin2.png) no-repeat;
+  background-size: cover;
+  background-position: 0;
+  float: left;
+}
 .animation {
   width: 0.5rem;
   height: 0.5rem;
   background: url(../../assets/chatroom/yuyin.png) no-repeat;
   animation: run 1s steps(1, start) infinite;
   -webkit-animation: run 2s steps(1, start) infinite;
+  background-size: cover;
+  background-position: 0;
+  float: left;
+  margin-right: 0.1rem;
+}
+.animation1 {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: url(../../assets/chatroom/yuyin2.png) no-repeat;
+  animation: run 1s steps(1, start) infinite;
+  -webkit-animation: run1 2s steps(1, start) infinite;
   background-size: cover;
   background-position: 0;
   float: left;
@@ -1126,6 +1160,44 @@ export default {
   }
   100% {
     background-position: -1.4rem 0;
+  }
+}
+@keyframes run1 {
+  0% {
+    background-position: 0 0;
+  }
+  25% {
+     background-position: -1.4rem 0;
+    
+  }
+  50% {
+    background-position: -0.95rem 0;
+    
+  }
+  75% {
+    background-position: -0.5rem 0;
+  }
+  100% {
+    background-position: 0px 0;
+  }
+}
+@-webkit-keyframes run1 {
+  0% {
+    background-position: 0 0;
+  }
+  25% {
+     background-position: -1.4rem 0;
+    
+  }
+  50% {
+    background-position: -0.95rem 0;
+    
+  }
+  75% {
+    background-position: -0.5rem 0;
+  }
+  100% {
+    background-position: 0px 0;
   }
 }
 </style>
