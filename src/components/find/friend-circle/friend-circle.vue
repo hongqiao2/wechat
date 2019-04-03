@@ -168,6 +168,9 @@
           {
             label: '从相册中偷取',
             callback: () => {
+              this.$router.push({
+                path: `/find/release`
+              });
                 this.$dialog.toast({mes: '看到了不该看到的东西！'});
             }
           }

@@ -15,6 +15,7 @@ import LabelEdit from '../components/address/label-edit/label-edit'
 import GroupChat from '../components/address/group-chat/group-chat'
 import GroupDetail from '../components/address/group-chat/group-detail/group-detail'
 import FriendCircle from '../components/find/friend-circle/friend-circle'
+import Release from '../components/find/release/release'
 import FriendAlbum from '../components/find/friend-circle/album/album'
 import MsgList from '../components/find/friend-circle/msg-list/msg-list'
 import Scan from '../components/find/scan/scan'
@@ -276,6 +277,14 @@ export default new Router({
               component: MsgList
             }
           ]
+        },
+        {
+          path: 'release',
+          meta: {
+            navShow: false,
+            menuShow: false
+          },
+          component: Release
         },
         {
           path: 'scan',
