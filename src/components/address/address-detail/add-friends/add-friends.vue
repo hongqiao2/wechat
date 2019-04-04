@@ -68,7 +68,7 @@
         let id = access_token.id;
         api.addNewFriend(this, {
           'addPeople': id,
-          'thePersonBeingAdded': friend.id,
+          'thePersonBeingAdded': this.friendId || friend.id,
           'source': friend.source,
           'remarks': this.remarks
         }).then( res => {

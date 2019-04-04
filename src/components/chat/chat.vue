@@ -127,13 +127,9 @@ export default {
             let userFriendListCache = {};
             let friendList = JSON.parse(_val.friendList);
             friendList.forEach(function(item, index) {
-              userFriendListCache[item.griend_id] = item;
+              userFriendListCache[item.chat_bject] = item;
             });
             this.setUserFriendListCache(userFriendListCache);
-            // localStorage.setItem(
-            //   "userFriendListCache",
-            //   JSON.stringify(userFriendListCache)
-            // );
           }
         })
         .catch(err => {
@@ -170,20 +166,27 @@ export default {
           if (val.code == "200") {
             // 需要判断是否为添加朋友后的生成列表
             let userChatList = JSON.parse(val.userChatList);
+            let chatList = JSON.parse(JSON.stringify(this.chatListCache));
+            // 缓存历史信息
+            let userChatListCache = JSON.parse(localStorage.getItem("userChatListCache"));
             // 聊天列表缓存
-            let chatList = JSON.parse(localStorage.getItem("chatListCache"))
-              ? JSON.parse(localStorage.getItem("chatListCache"))
-              : {};
             let num = 0; // 共计显示的消息数量
             if (userChatList) {
               let i = 0;
               for (i; i < userChatList.length; i++) {
                 num += userChatList[i].news_number;
                 chatList[userChatList[i].chat_bject] = userChatList[i];
+                if(userChatListCache){
+                  // 如果缓存里面有数据，需要把新数据和老数据综合起来
+                 let chat_bject = userChatList[i].chat_bject;
+                  userChatListCache[chat_bject] ? delete userChatListCache[chat_bject] : "";
+                  // 合并对象
+                  Object.assign(chatList, userChatListCache);
+                }
               }
-              localStorage.setItem("chatListCache", JSON.stringify(chatList));
+              localStorage.setItem("userChatListCache", JSON.stringify(userChatListCache));
+              this.setChatListCache(chatList);
             }
-            this.chatList = chatList;
             this.setShowNun(num);
           }
         })

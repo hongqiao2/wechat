@@ -5,7 +5,7 @@
       <router-link to @click.native="back" slot="left">
         <yd-navbar-back-icon></yd-navbar-back-icon>
       </router-link>
-      <router-link to="#" slot="right" @click.native="goDset(info.griend_id)">
+      <router-link to="#" slot="right" @click.native="goDset(info.griend_id || info.id)">
         <i class="iconfont icon-xiazai9" style="color:#101010;"></i>
       </router-link>
     </yd-navbar>
@@ -51,7 +51,7 @@
           bgcolor="#8D66FA"
           color="#FFF"
           shape="circle"
-          @click.native="goAddfriend(info.griend_id)"
+          @click.native="goAddfriend(info.griend_id || info.id)"
         >
           <router-link to>添加到通讯录</router-link>
         </yd-button>
@@ -144,6 +144,7 @@ export default {
     },
     // 添加好友到通讯录
     goAddfriend(dissid) {
+      localStorage.setItem("jumpFriendCache", JSON.stringify(this.info));
       this.$router.push({
         path: `/address/${dissid}/addfriend`
       });

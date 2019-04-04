@@ -251,14 +251,6 @@ export default {
             console.log(err);
           });
       }
-    },
-    // 连接异常
-    setErrorMessage(e){
-      console.log(e)
-    },
-    // 建立连接
-    setOnopenMessage(e){
-      console.info("已建立连接");
     }
   },
   mounted() {
@@ -266,6 +258,29 @@ export default {
     if(!userinfo){
       return;
     }
+    // 先登录, 
+    let loginType = 0;
+    if(userinfo.iphone){
+      loginType = 1;
+    }
+    if(userinfo.openid){
+      loginType = 2;
+    }
+    api.getLogin(this, {
+      loginType,
+      username: userinfo.username,
+      password: userinfo.password,
+      captcha: "154264",
+      iphone: userinfo.iphone
+    }).then( res => {
+      if(res.body.data == 200){
+        this.findChatList(userinfo);
+        this.findNewFriendList(userinfo);
+        this.findFriendList(userinfo);
+      }
+    }).catch( err => {
+      
+    })
     let web = this.$root.$webSocket;
     if (!web) {
       let urlPrefix = this.webSocketUrl;
@@ -276,9 +291,7 @@ export default {
       web.onopen = this.setOnopenMessage;
       web.onmessage = this.setOnMessage;
     }
-    this.findChatList(userinfo);
-    this.findNewFriendList(userinfo);
-    this.findFriendList(userinfo);
+    
   }
 };
 </script>

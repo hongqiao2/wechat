@@ -109,18 +109,23 @@ export default {
           }
         })
         .then(res => {
-          console.log(res)
-          let cookie = res.body.cookie;
-          localStorage.setItem("KAPTCHA_SESSION_KEY", cookie)
-          setTimeout(() => {
-            this.start1 = true;
-            this.$dialog.loading.close();
+          if (res.body.code == 200) {
+            setTimeout(() => {
+              this.start1 = true;
+              this.$dialog.loading.close();
+              this.$dialog.toast({
+                mes: "已发送",
+                icon: "success",
+                timeout: 1500
+              });
+            }, 1000);
+          }else{
             this.$dialog.toast({
-              mes: "已发送",
-              icon: "success",
+              mes: res.body.msg,
+              icon: "error",
               timeout: 1500
             });
-          }, 1000);
+          }
         })
         .catch(err => {
           this.$dialog.loading.close();
@@ -186,12 +191,7 @@ export default {
         });
         return false;
       }
-      let kaptcha = localStorage.getItem("KAPTCHA_SESSION_KEY");
-      if (
-        !captcha ||
-        !kaptcha ||
-        !/^\d{6}$/.test(captcha)
-      ) {
+      if (!captcha  || !/^\d{6}$/.test(captcha)) {
         this.$dialog.toast({
           mes: "短信验证码有误，请重填",
           icon: "error",
@@ -204,25 +204,33 @@ export default {
         .getLogin(this, {
           loginType: 1,
           captcha: captcha,
-          iphone: phone,
-          kaptcha
+          iphone: phone
         })
         .then(res => {
           let val = res.body;
-          //   access_token
-          localStorage.setItem("access_token", JSON.stringify(val.userInfo));
-          localStorage.setItem("user_privacy", JSON.stringify(val.sysPrivacy));
-          if (val.firstTime) {
-            // 第一次登录，跳转到设置密码的页面
-            // TODO
-            this.$router.push({
-              path: `/me/set/account/accountpwd/${1}`
-            });
-          } else {
-            this.$router.push({
-              path: `/`
+          if(val.code == 200){
+            //   access_token
+            localStorage.setItem("access_token", JSON.stringify(val.userInfo));
+            localStorage.setItem("user_privacy", JSON.stringify(val.sysPrivacy));
+            if (val.firstTime) {
+              // 第一次登录，跳转到设置密码的页面
+              // TODO
+              this.$router.push({
+                path: `/me/set/account/accountpwd/${1}`
+              });
+            } else {
+              this.$router.push({
+                path: `/chat`
+              });
+            }
+          }else{
+            this.$dialog.toast({
+              mes: val.msg,
+              icon: "error",
+              timeout: 1500
             });
           }
+          
         })
         .catch(err => {
           console.log(JSON.stringify(err));

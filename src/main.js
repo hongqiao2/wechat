@@ -28,7 +28,7 @@ import VueScroller from "vue-scroller"
 import chineseTurn from "@/api/chineseTurnEnglish.js"
 // import {Upload} from 'element-ui'
 import router from './router'
-import {LightBox, LightBoxImg, LightBoxTxt} from 'vue-ydui/dist/lib.rem/lightbox'
+import { LightBox, LightBoxImg, LightBoxTxt } from 'vue-ydui/dist/lib.rem/lightbox'
 import vueTouch from 'kim-vue-touch'
 // /* eslint-disable no-unused-vars */  // 这一句必须写，用来规避ES6的语法检测
 // import vConsole from 'vconsole'  // 针对手机网页的前端 console 调试面板
@@ -104,10 +104,18 @@ Vue.http.options.emulateHTTP = true
 // 实现跨域写到cookie
 Vue.http.options.credentials = true
 
-Vue.prototype.webSocketUrl = 'ws://47.99.247.104:8080/boot/socketServer/'// webSocket 请求地址
+Vue.prototype.webSocketUrl = 'ws://192.168.1.168:8080/boot/socketServer/'// webSocket 请求地址
+Vue.prototype.baseURL = 'http://192.168.1.168:8080/boot/app';
 
 
-
+// 连接异常
+Vue.prototype.setErrorMessage = function (e) {
+  console.log(e);
+},
+// 建立连接
+Vue.prototype.setOnopenMessage = function (e) {
+  console.info("已建立连接");
+}
 
 
 

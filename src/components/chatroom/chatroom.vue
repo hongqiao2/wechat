@@ -15,27 +15,30 @@
       <div class="content-wrapper" ref="wrapper">
         <div class="content-text">
           <div class="content-body" ref="body">
-            <ul class="inHtml" v-for="item in content" :key="item.sendMsg">
+            <ul class="inHtml" v-for="(item, index) in content" :key="item.sendMsg">
               <div v-if="item.msgType == 0">
                 <span v-if="item.isAddFriend == 1" class="chatroom-hint">我们已经成为好友啦</span>
                 <li class="ask" v-if="item.isSend == 0 && item.isAddFriend == 0">
                   <img :src="item.userImg">
                   <p>{{item.sendMsg}}</p>
-                  <div class="failure iconfont icon-tixingtishi" v-if="fail"></div>
+                  <div class="loading" v-if="item.loadding"></div>
+                  <div class="failure iconfont icon-tixingtishi" v-if="item.fail"></div>
                 </li>
                 <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0">
                   <img :src="item.userImg">
                   <p>{{item.sendMsg}}</p>
+                  <div class="loading" v-if="item.loadding"></div>
                 </li>
               </div>
               <div v-else-if="item.msgType == 1">
                 <!-- 图片 -->
                 <li class="ask" v-if="item.isSend == 0 && item.isAddFriend == 0">
                   <img :src="item.userImg">
-                  <yd-lightbox>
+                  <!-- <yd-lightbox>
                     <img class="contont-img" slot="right" :src="item.sendMsg">
-                  </yd-lightbox>
-                  <img class="contont-img" slot="right" src="../../assets/find/test.png">
+                  </yd-lightbox> -->
+                  <img class="contont-img" slot="right" :src="item.sendMsg">
+                  <!-- <img class="contont-img" slot="right" src="../../assets/find/test.png"> -->
                   <div class="failure iconfont icon-tixingtishi" v-if="fail"></div>
                 </li>
                 <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0">
@@ -50,12 +53,12 @@
                 <li class="ask" v-if="item.isSend == 0 && item.isAddFriend == 0">
                   <img :src="item.userImg">
                   <!-- item.audioTime //录音时长 -->
-                  <p class="audioBox" style="width: 25%;" @click="goPlay(item.sendMsg)">
+                  <p class="audioBox" style="width: 25%;" @click="goPlay(item.sendMsg,index)">
                     <audio preload="auto" hidden="true">
                       <source :src="item.sendMsg" type="audio/mpeg">
                     </audio>
                     <span>{{item.audioTime }}''</span>
-                    <span :class="{animation1:isShow1}" class="voiceIcon1"></span>
+                    <span :class="{animation1:item.isShow}" class="voiceIcon1"></span>
                     
                   </p>
                   <!-- <audio :src="item.sendMsg"></audio>
@@ -64,11 +67,11 @@
                 <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0">
                   <img :src="item.userImg">
                   <!-- item.audioTime //录音时长 -->
-                  <p class="audioBox" style="width: 25%;" @click="goPlay(item.sendMsg)">
+                  <p class="audioBox" style="width: 25%;" @click="goPlay(item.sendMsg, index)">
                     <audio preload="auto" hidden="true">
                       <source :src="item.sendMsg" type="audio/mpeg">
                     </audio>
-                    <span :class="{animation:isShow}" class="voiceIcon"></span>
+                    <span :class="{animation:item.isShow}" class="voiceIcon"></span>
                     <span>{{item.audioTime }}''</span>
                   </p>
                   <!-- <div class="audioBox">
@@ -234,9 +237,9 @@ export default {
                   isAddFriend: _list[index].isAddFriend,
                   msgType: _list[index].msgType,
                   audioTime: _list[index].msgTime, // 录音时间
-                  loadding: true, // 圈圈
+                  loadding: false, // 圈圈
                   isShow: false, // 语音播放
-                  isShow1: false // 语音播放
+                  fail: false, // 未发送成功标志
                 });
               } else {
                 _content.push({
@@ -246,9 +249,9 @@ export default {
                   isAddFriend: _list[index].isAddFriend,
                   msgType: _list[index].msgType,
                   audioTime: _list[index].msgTime, // 录音时间
-                  loadding: true, // 圈圈
+                  loadding: false, // 圈圈
                   isShow: false,// 语音播放
-                  isShow1: false,
+                  fail: false, // 未发送成功标志
                 });
               }
             }
@@ -319,10 +322,10 @@ export default {
                     isAddFriend: 0,
                     loadding: true, // 圈圈
                     isShow: false, // 语音播放
-                    isShow1: false,
                     msgType: 2,
                     imgName: entry.name,
-                    audioTime: audioTime // 录音时间
+                    audioTime: audioTime, // 录音时间
+                    fail: false, // 未发送成功标志
                   };
                   that.content.push(_content);
                   // 在这里调用API, 修改loadding的状态
@@ -339,7 +342,6 @@ export default {
                       imgBase64: ""
                     })
                     .then(res => {
-                      console.log(JSON.stringify(res));
                       let _val = res.body;
                       if (_val.code == "200") {
                         // 修改状态开始
@@ -388,8 +390,8 @@ export default {
                       }
                     })
                     .catch(err => {
-                      that.loading = false;
-                      that.fail = true;
+                      that.content[upLength - 1].loadding = false;
+                      that.content[upLength - 1].fail = true;
                       console.log(JSON.stringify(err));
                     });
                 };
@@ -406,17 +408,15 @@ export default {
         }
       );
     },
-    goPlay(recordFile) {
+    goPlay(recordFile,index) {
       // 需要传length, 修改content
-      let that = (this.isShow = true);
-      this.isShow1 =true;
+      let that = this;
+      that.content[index].isShow = true;
       var p = plus.audio.createPlayer(recordFile);
       p.play(
         function() {
           //语音播放完
-          this.isShow = false;
-          this.isShow1 =false;
-          console.log("Audio play success!");
+          that.content[index].isShow = false;
         },
         function(e) {
           // 录音时间过短
@@ -457,7 +457,8 @@ export default {
                   loadding: true, // 圈圈
                   isShow: false, // 语音播放
                   msgType: 1,
-                  imgName: entry.name
+                  imgName: entry.name,
+                  fail: false, // 未发送成功标志
                 };
                 that.content.push(_content);
                 // 存入要修改状态的content
@@ -509,7 +510,8 @@ export default {
                     loadding: true, // 圈圈
                     isShow: false, // 语音播放
                     msgType: 1,
-                    imgName: entry.name
+                    imgName: entry.name,
+                    fail: false, // 未发送成功标志
                   };
                   that.content.push(_content);
                   // 存入要修改状态的content
@@ -597,7 +599,6 @@ export default {
               userChatRecordCachings = {};
               userChatRecordCachings[_that._infoId] = userChatRecordCaching;
             }
-            console.info(JSON.stringify(userChatRecordCachings));
             localStorage.setItem(
               "userChatRecordCaching",
               JSON.stringify(userChatRecordCachings)
@@ -605,6 +606,13 @@ export default {
           }
         })
         .catch(err => {
+          for (i; i < listUrl.length; i++) {
+              (function(index) {
+                let newIndex = upList[index] - 1;
+                _that.content[newIndex].loadding = false;
+                _that.content[newIndex].fail = true;
+              })(i);
+            }
           console.log("err");
           console.log(JSON.stringify(err));
         });
@@ -651,9 +659,11 @@ export default {
           isAddFriend: 0,
           loadding: true, // 圈圈
           isShow: false, // 语音播放
-          msgType: 0
+          msgType: 0,
+          fail: false
         };
         this.content.push(_content);
+        let upLength = this.content.length;
         api
           .saveSendMsg(this, {
             id: this.userinfo.id,
@@ -669,7 +679,7 @@ export default {
             if (_val.code == "200") {
               // 修改状态开始
               let len = this.content.length;
-              this.content[len - 1].loadding = false;
+              this.content[upLength - 1].loadding = false;
               // 修改状态结束
 
               this.updateStateType = true; // 要修改消息状态
@@ -710,8 +720,8 @@ export default {
             }
           })
           .catch(err => {
-            this.loading = false;
-            this.fail = true;
+            this.content[upLength - 1].loading = false;
+            this.content[upLength - 1].fail = true;
             console.log(JSON.stringify(err));
           });
       }
@@ -749,15 +759,15 @@ export default {
   watch: {
     info: function(val) {
       let _val = JSON.parse(JSON.stringify(val));
-      let _content = {
-        userImg: _val.head_portrait,
-        sendMsg: _val.latest_news,
-        isSend: 1,
-        isAddFriend: 0,
-        loadding: true, // 圈圈
-        isShow: false // 语音播放
-      };
-      this.content.push(_content);
+      // let _content = {
+      //   userImg: _val.head_portrait,
+      //   sendMsg: _val.latest_news,
+      //   isSend: 1,
+      //   isAddFriend: 0,
+      //   loadding: true, // 圈圈
+      //   isShow: false // 语音播放
+      // };
+      // this.content.push(_content);
       this.text = _val.latest_news;
       var userChatRecordCachings = JSON.parse(
         localStorage.getItem("userChatRecordCaching")
@@ -775,7 +785,8 @@ export default {
               isAddFriend: 0,
               msgType: _val.msg_type,
               loadding: true, // 圈圈
-              isShow: false // 语音播放
+              isShow: false, // 语音播放
+              fail: false
             };
             that.content.push(_content);
             that.text = "[图片]";
@@ -790,16 +801,20 @@ export default {
           isAddFriend: 0,
           msgType: _val.msg_type,
           loadding: true, // 圈圈
-          isShow: false // 语音播放
+          isShow: false, // 语音播放
+          fail: false
         };
         if (_val.msg_type == 2) {
           _content["msg_time"] = _val.msg_time;
           this.text = "[语音]";
+          this.content.push(_content);
+          userChatRecordCachings[_val.chat_bject].push(_content);
         } else {
           this.text = _val.latest_news;
+          this.content.push(_content);
+          userChatRecordCachings[_val.chat_bject].push(_content);
         }
-        this.content.push(_content);
-        userChatRecordCachings[_val.chat_bject].push(_content);
+        
       }
     }
   }
