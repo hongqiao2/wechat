@@ -35,7 +35,6 @@
                   <yd-lightbox>
                     <img class="contont-img" slot="right" :src="item.sendMsg">
                   </yd-lightbox>
-                  <img class="contont-img" slot="right" src="../../assets/find/test.png">
                   <div class="failure iconfont icon-tixingtishi" v-if="fail"></div>
                 </li>
                 <li class="reply" v-if="item.isSend == 1 && item.isAddFriend == 0">
