@@ -46,11 +46,7 @@ export default {
     };
   },
   mounted() {
-    let addFriendList = JSON.parse(localStorage.getItem("addFriendList"));
-    if (addFriendList) {
-      this.friendList = addFriendList;
-    } else {
-      // 手动获取是否有新消息
+    // 手动获取是否有新消息
       // 新朋友消息
       let userinfo = JSON.parse(localStorage.getItem("access_token"));
       api
@@ -66,7 +62,7 @@ export default {
               this.friendList = friendList;
               localStorage.setItem(
                 "addFriendList",
-                JSON.stringify(vfriendList)
+                JSON.stringify(friendList)
               );
             }
           }
@@ -74,7 +70,12 @@ export default {
         .catch(err => {
           console.log("err: " + JSON.stringify(err));
         });
-    }
+    // let addFriendList = JSON.parse(localStorage.getItem("addFriendList"));
+    // if (addFriendList) {
+    //   this.friendList = addFriendList;
+    // } else {
+      
+    // }
   },
   watch: {
     $route(to, from) {
@@ -97,7 +98,6 @@ export default {
           source
         })
         .then(res => {
-          console.log(JSON.stringify(res));
           let val = res.body;
           if (val.code == "200") {
             this.$router.push({

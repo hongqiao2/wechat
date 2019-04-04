@@ -92,7 +92,7 @@ export default {
       friend["source"] = 1;
       this.setAddress(friend);
       this.$router.push({
-        path: `/address/${this.friend.nickName}`
+        path: `/address/${friend.id}`
       });
     },
     ...mapMutations({

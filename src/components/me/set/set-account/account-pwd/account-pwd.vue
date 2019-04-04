@@ -137,7 +137,10 @@ export default {
             if (val.code == "200") {
               localStorage.setItem("access_token", JSON.stringify(val.userInfo));
               this.$router.push({
-                path: `/chat`
+                name: `chat`,
+                params:{
+                  refresh: true
+                }
               });
             }else{
               this.$dialog.toast({

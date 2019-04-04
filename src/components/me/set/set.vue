@@ -25,7 +25,7 @@
               </yd-cell-item>
           </yd-cell-group>
         </div>
-        <div class="Logout">退出登录</div>
+        <div @click="goLogout" class="Logout">退出登录</div>
       </div>
       <router-view></router-view>
     </div>
@@ -34,6 +34,7 @@
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll'
   import {MessageBox} from 'mint-ui'
+  import api from '@/api/resource.js'
 
   export default {
     components: {
@@ -80,6 +81,21 @@
         this.$toast({
           message: '清理完成',
           duration: 1500
+        })
+      },
+      // 退出登录
+      goLogout(){
+        api.goLogout(this, {}).then( res => {
+          if(res.body.code == 200){
+            // 清理缓存
+            let accessToken = JSON.parse(localStorage.getItem("access_token"));
+            accessToken.password = "";
+            accessToken.salt = "";
+            localStorage.setItem("access_token", JSON.stringify(accessToken));
+            this.$router.push({
+              path: `/login`
+            })
+          }
         })
       }
     }
