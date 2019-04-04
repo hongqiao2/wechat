@@ -3,7 +3,15 @@
     <scroll class="chat-wrapper">
       <div>
         <ul>
-          <router-link to="/chatroom" tag="li" v-for="info in chatList" class="item" :key="info.id" v-swipeleft="(e)=>vueTouch('左滑',e)" v-swiperight="(e)=>vueTouch('右滑',e)">
+          <router-link
+            to="/chatroom"
+            tag="li"
+            v-for="info in chatList"
+            class="item"
+            :key="info.id"
+            v-swipeleft="(e)=>vueTouch('左滑',e)"
+            v-swiperight="(e)=>vueTouch('右滑',e)"
+          >
             <div class="item-cell" @click="gotoChatroom(info)" :class="{Delright:del}">
               <div class="img-unread">
                 <img class="item-img" :src="info.head_portrait">
@@ -17,7 +25,7 @@
               <p class="summary" v-html="info.latest_news"></p>
               <span class="item-time" v-html="formatDate(info.utime)"></span>
             </div>
-            <div class="delete" v-if="delbtn"  @click.stop="deleteBtn">删除</div>
+            <div class="delete" v-if="delbtn" @click.stop="deleteBtn">删除</div>
           </router-link>
         </ul>
       </div>
@@ -44,13 +52,13 @@ export default {
     ])
   },
   methods: {
-    vueTouch (txt,e){
-      if(txt=='左滑'){
+    vueTouch(txt, e) {
+      if (txt == "左滑") {
         this.del = true;
-        this.delbtn =true
-      }else if(txt=='右滑'){
+        this.delbtn = true;
+      } else if (txt == "右滑") {
         this.del = false;
-        this.delbtn =false
+        this.delbtn = false;
       }
     },
     enterMessage() {
@@ -168,7 +176,9 @@ export default {
             let userChatList = JSON.parse(val.userChatList);
             let chatList = JSON.parse(JSON.stringify(this.chatListCache));
             // 缓存历史信息
-            let userChatListCache = JSON.parse(localStorage.getItem("userChatListCache"));
+            let userChatListCache = JSON.parse(
+              localStorage.getItem("userChatListCache")
+            );
             // 聊天列表缓存
             let num = 0; // 共计显示的消息数量
             if (userChatList) {
@@ -176,15 +186,21 @@ export default {
               for (i; i < userChatList.length; i++) {
                 num += userChatList[i].news_number;
                 chatList[userChatList[i].chat_bject] = userChatList[i];
-                if(userChatListCache){
+                if (userChatListCache) {
                   // 如果缓存里面有数据，需要把新数据和老数据综合起来
-                 let chat_bject = userChatList[i].chat_bject;
-                  userChatListCache[chat_bject] ? delete userChatListCache[chat_bject] : "";
+                  let chat_bject = userChatList[i].chat_bject;
+                  userChatListCache[chat_bject]
+                    ? delete userChatListCache[chat_bject]
+                    : "";
                   // 合并对象
                   Object.assign(chatList, userChatListCache);
                 }
               }
-              localStorage.setItem("userChatListCache", JSON.stringify(userChatListCache));
+              localStorage.setItem(
+                "userChatListCache",
+                JSON.stringify(userChatListCache)
+              );
+              this.chatList = chatList;
               this.setChatListCache(chatList);
             }
             this.setShowNun(num);
@@ -194,13 +210,13 @@ export default {
           console.log(err);
         });
     },
-    getDateTime(){
+    getDateTime() {
       let time = new Date().getTime() / 1000;
       return time;
     },
     //删除
-    deleteBtn (){
-      console.log('删除了')
+    deleteBtn() {
+      console.log("删除了");
     }
   },
   watch: {
@@ -218,6 +234,24 @@ export default {
     }
   },
   mounted() {
+    if (this.refresh == true) {
+      // 如果是登录进来，需要调用初始化方法
+      let userinfo = JSON.parse(localStorage.getItem("access_token"));
+      this.findChatList(userinfo);
+      this.findNewFriendList(userinfo);
+      this.findFriendList(userinfo);
+      let web = this.$root.$webSocket;
+      if (!web) {
+        let urlPrefix = this.webSocketUrl;
+        this.$root.$webSocket = new WebSocket(urlPrefix + userinfo.id);
+        web = this.$root.$webSocket;
+        web.onerror = this.setErrorMessage;
+        // 连接成功
+        web.onopen = this.setOnopenMessage;
+        web.onmessage = this.setOnMessage;
+      }
+      return;
+    }
     let chatListCache = JSON.parse(JSON.stringify(this.chatListCache));
     let userChatListCache = localStorage.getItem("userChatListCache");
     userChatListCache = userChatListCache ? JSON.parse(userChatListCache) : {};
@@ -334,9 +368,10 @@ export default {
     return {
       chatList: {},
       moreList: [],
-      name:'touch',
-      del:false,
-      delbtn: false
+      name: "touch",
+      del: false,
+      delbtn: false,
+      refresh: this.$route.params.refresh
     };
   }
 };
@@ -349,7 +384,7 @@ export default {
   height: 1.4rem;
   position: relative;
 }
-.Delright{
+.Delright {
   right: 1.5rem;
 }
 .item-cell {
@@ -394,16 +429,16 @@ export default {
   font-size: 12px;
   color: rgba(153, 153, 153, 0.8);
 }
-.delete{
-      width: 1.5rem;
-    height: 1.4rem;
-    background: red;
-    position: absolute;
-    right: 0;
-    top: 0;
-    text-align: center;
-    color: #fff;
-    line-height: 1.4rem;
-    font-size: 0.28rem;
+.delete {
+  width: 1.5rem;
+  height: 1.4rem;
+  background: red;
+  position: absolute;
+  right: 0;
+  top: 0;
+  text-align: center;
+  color: #fff;
+  line-height: 1.4rem;
+  font-size: 0.28rem;
 }
 </style>

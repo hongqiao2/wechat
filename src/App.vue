@@ -127,7 +127,9 @@ export default {
             let userChatList = JSON.parse(val.userChatList);
             let chatList = JSON.parse(JSON.stringify(this.chatListCache));
             // 缓存历史信息
-            let userChatListCache = JSON.parse(localStorage.getItem("userChatListCache"));
+            let userChatListCache = JSON.parse(
+              localStorage.getItem("userChatListCache")
+            );
             // 聊天列表缓存
             let num = 0; // 共计显示的消息数量
             if (userChatList) {
@@ -135,15 +137,20 @@ export default {
               for (i; i < userChatList.length; i++) {
                 num += userChatList[i].news_number;
                 chatList[userChatList[i].chat_bject] = userChatList[i];
-                if(userChatListCache){
+                if (userChatListCache) {
                   // 如果缓存里面有数据，需要把新数据和老数据综合起来
-                 let chat_bject = userChatList[i].chat_bject;
-                  userChatListCache[chat_bject] ? delete userChatListCache[chat_bject] : "";
+                  let chat_bject = userChatList[i].chat_bject;
+                  userChatListCache[chat_bject]
+                    ? delete userChatListCache[chat_bject]
+                    : "";
                   // 合并对象
                   Object.assign(chatList, userChatListCache);
                 }
               }
-              localStorage.setItem("userChatListCache", JSON.stringify(userChatListCache));
+              localStorage.setItem(
+                "userChatListCache",
+                JSON.stringify(userChatListCache)
+              );
               this.setChatListCache(chatList);
             }
             this.setShowNun(num);
@@ -159,7 +166,9 @@ export default {
       let _data = JSON.parse(e.data);
       let userinfo = JSON.parse(localStorage.getItem("access_token"));
       // 缓存历史信息
-      let userChatListCache = JSON.parse(localStorage.getItem("userChatListCache"));
+      let userChatListCache = JSON.parse(
+        localStorage.getItem("userChatListCache")
+      );
       //1.判断是否是好友添加的信息，同意添加好友的信息， 是的话就更新聊天列表，以及新的朋友列表
       if (_data.isGroup == 3) {
         // 朋友圈通知
@@ -197,19 +206,25 @@ export default {
             _info.latest_news = _data.msg;
             let newNum = this.num;
             _info["msg_type"] = _data.msg_type;
-            if(_data.msg_type == 1){
+            if (_data.msg_type == 1) {
               // 如果是图片
               let msgNum = JSON.parse(_data.msg).length;
-              console.log(JSON.stringify(msgNum))
-              _info.news_number = typeof _info.news_number != "undefined" ? _info.news_number + msgNum : msgNum;
+              console.log(JSON.stringify(msgNum));
+              _info.news_number =
+                typeof _info.news_number != "undefined"
+                  ? _info.news_number + msgNum
+                  : msgNum;
               newNum += msgNum;
-            }else{
+            } else {
               _info["msg_type"] = _data.msg_type;
-              if(_data.msg_type == 2){
-                console.log(_data.msg_time)
+              if (_data.msg_type == 2) {
+                console.log(_data.msg_time);
                 _info["msg_time"] = _data.msg_time;
               }
-              _info.news_number = typeof _info.news_number != "undefined" ? _info.news_number + 1 : 1;
+              _info.news_number =
+                typeof _info.news_number != "undefined"
+                  ? _info.news_number + 1
+                  : 1;
               newNum += 1;
             }
             this.setShowNun(newNum);
@@ -227,24 +242,31 @@ export default {
             let val = res.body;
             if (val.code == "200") {
               let userChatLists = JSON.parse(val.userChatList);
-              let _chatListCache = JSON.parse(JSON.stringify(this.chatListCache));
-               // 聊天列表缓存
+              let _chatListCache = JSON.parse(
+                JSON.stringify(this.chatListCache)
+              );
+              // 聊天列表缓存
               let i = 0;
               let newNum = this.num;
               for (i; i < userChatLists.length; i++) {
                 _chatListCache[userChatLists[i].chat_bject] = userChatLists[i];
-                if(userChatListCache){
+                if (userChatListCache) {
                   let chat_bject = userChatLists[i].chat_bject;
                   // 如果缓存里面有数据，需要把新数据和老数据综合起来
-                  userChatListCache[chat_bject] ? delete userChatListCache[chat_bject] : "";
+                  userChatListCache[chat_bject]
+                    ? delete userChatListCache[chat_bject]
+                    : "";
                 }
                 newNum = userChatLists[i].news_number;
               }
-               // 合并对象
+              // 合并对象
               Object.assign(_chatListCache, userChatListCache);
               this.setShowNun(newNum);
               this.setChatListCache(_chatListCache);
-              localStorage.setItem("userChatListCache", JSON.stringify(userChatListCache));
+              localStorage.setItem(
+                "userChatListCache",
+                JSON.stringify(userChatListCache)
+              );
             }
           })
           .catch(err => {
@@ -255,43 +277,43 @@ export default {
   },
   mounted() {
     let userinfo = JSON.parse(localStorage.getItem("access_token"));
-    if(!userinfo){
+    if (!userinfo) {
       return;
     }
-    // 先登录, 
+    // 先登录,
     let loginType = 0;
-    if(userinfo.iphone){
+    if (userinfo.iphone) {
       loginType = 1;
     }
-    if(userinfo.openid){
+    if (userinfo.openid) {
       loginType = 2;
     }
-    api.getLogin(this, {
-      loginType,
-      username: userinfo.username,
-      password: userinfo.password,
-      captcha: "154264",
-      iphone: userinfo.iphone
-    }).then( res => {
-      if(res.body.data == 200){
-        this.findChatList(userinfo);
-        this.findNewFriendList(userinfo);
-        this.findFriendList(userinfo);
-      }
-    }).catch( err => {
-      
-    })
-    let web = this.$root.$webSocket;
-    if (!web) {
-      let urlPrefix = this.webSocketUrl;
-      this.$root.$webSocket = new WebSocket(urlPrefix + userinfo.id);
-      web = this.$root.$webSocket;
-      web.onerror = this.setErrorMessage;
-      // 连接成功
-      web.onopen = this.setOnopenMessage;
-      web.onmessage = this.setOnMessage;
-    }
-    
+    api
+      .getLogin(this, {
+        loginType,
+        username: userinfo.username,
+        password: userinfo.password,
+        captcha: "154264",
+        iphone: userinfo.iphone
+      })
+      .then(res => {
+        if (res.body.data == 200) {
+          this.findChatList(userinfo);
+          this.findNewFriendList(userinfo);
+          this.findFriendList(userinfo);
+          let web = this.$root.$webSocket;
+          if (!web) {
+            let urlPrefix = this.webSocketUrl;
+            this.$root.$webSocket = new WebSocket(urlPrefix + userinfo.id);
+            web = this.$root.$webSocket;
+            web.onerror = this.setErrorMessage;
+            // 连接成功
+            web.onopen = this.setOnopenMessage;
+            web.onmessage = this.setOnMessage;
+          }
+        }
+      })
+      .catch(err => {});
   }
 };
 </script>

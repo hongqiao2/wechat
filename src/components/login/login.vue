@@ -220,7 +220,10 @@ export default {
               });
             } else {
               this.$router.push({
-                path: `/chat`
+                name: `chat`,
+                params:{
+                  refresh: true
+                }
               });
             }
           }else{
