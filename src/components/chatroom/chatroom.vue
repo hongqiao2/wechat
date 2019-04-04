@@ -759,15 +759,6 @@ export default {
   watch: {
     info: function(val) {
       let _val = JSON.parse(JSON.stringify(val));
-      // let _content = {
-      //   userImg: _val.head_portrait,
-      //   sendMsg: _val.latest_news,
-      //   isSend: 1,
-      //   isAddFriend: 0,
-      //   loadding: true, // 圈圈
-      //   isShow: false // 语音播放
-      // };
-      // this.content.push(_content);
       this.text = _val.latest_news;
       var userChatRecordCachings = JSON.parse(
         localStorage.getItem("userChatRecordCaching")
@@ -800,7 +791,7 @@ export default {
           isSend: 1,
           isAddFriend: 0,
           msgType: _val.msg_type,
-          loadding: true, // 圈圈
+          loadding: false, // 圈圈
           isShow: false, // 语音播放
           fail: false
         };
