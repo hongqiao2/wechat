@@ -251,6 +251,14 @@ export default {
             console.log(err);
           });
       }
+    },
+    // 连接异常
+    setErrorMessage(e){
+      console.log(e)
+    },
+    // 建立连接
+    setOnopenMessage(e){
+      console.info("已建立连接");
     }
   },
   mounted() {

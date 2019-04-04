@@ -107,14 +107,8 @@ Vue.http.options.credentials = true
 Vue.prototype.webSocketUrl = 'ws://47.99.247.104:8080/boot/socketServer/'// webSocket 请求地址
 
 
-// 连接异常
-Vue.prototype.setErrorMessage = function (e) {
-  console.log(e);
-},
-  // 建立连接
-  Vue.prototype.setOnopenMessage = function (e) {
-    console.info("已建立连接");
-  }
+
+
 
 
 new Vue({
