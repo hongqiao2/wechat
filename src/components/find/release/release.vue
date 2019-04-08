@@ -6,17 +6,17 @@
               <router-link to=""  @click.native="back" slot="left">
                   <yd-navbar-back-icon></yd-navbar-back-icon>
               </router-link>
-              <button class="release-btn" slot="right" >发表</button>
+              <button class="release-btn" @click="submitCircle" slot="right" >发表</button>
           </yd-navbar>
           <yd-cell-group>
             <yd-cell-item>
-                <yd-textarea slot="right" placeholder="这一刻的想法..."></yd-textarea>
+                <yd-textarea slot="right" v-model="textContent" placeholder="这一刻的想法..."></yd-textarea>
             </yd-cell-item>
             <div class="release-img" >
                 <div  v-for="(item, index) in imgList" :key="index">
                     <img :src="item"/> 
                 </div>
-                <div class="add-img" @click="show1 = true"></div>
+                <div v-if="imgList.length < 9 ? true : false" class="add-img" @click="show1 = true"></div>
             </div>
         
         </yd-cell-group>
@@ -29,6 +29,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import api from '@/api/resource.js'
+  import { mapMutations, mapGetters } from "vuex";
   export default {
     components: {
     },
@@ -40,9 +42,6 @@
             label: '拍照',
             callback: () => {
                 /* 注意： callback: function() {} 和 callback() {}  这样是无法正常使用当前this的 */
-                if(this.imgList.length >= 9 ){
-                  return;
-                }
                 let that = this;
                 let cmr = plus.camera.getCamera();
                 cmr.captureImage(
@@ -109,7 +108,7 @@
                   maximum: 9 - that.imgList.length,
                   system: false,
                   onmaxed: function() {
-                    plus.nativeUI.alert("最多只能选择9张图片");
+                    plus.nativeUI.alert("已达到最大图片数量了。。");
                   }
                 }
               );
@@ -119,8 +118,12 @@
             }
           }
         ],
-        imgList: []
+        imgList: [], // 需要发表的图片列表
+        textContent: "", // 需要发表的文字内容
       }
+    },
+    computed: {
+      ...mapGetters(["sysUserCircleOfFriendsList"])
     },
     mounted () {
       this.imgList = this.$route.params.imgList;
@@ -128,7 +131,37 @@
     methods: {
       back (event) {
         this.$router.back()   // 返回上一级
-      }
+      },
+      // 发表
+      submitCircle(){
+        // 需要验证图片以及文字不为空
+        if(this.imgList.length > 0 || this.textContent){
+          let accessToken = JSON.parse(localStorage.getItem("access_token"));
+          api.saveSysUserCircleOfFriends(this, {
+            userId: accessToken.id,
+            textContent: this.textContent,
+            imgContent: JSON.stringify(this.imgList)
+          }).then( res => {
+            let _val = res.body;
+            if(_val.code == 200){
+              // 返回添加的发表数据
+              let sysUserCircleOfFriends = _val.sysUserCircleOfFriends;
+              let _sysUserCircleOfFriendsList = JSON.parse(JSON.stringify(this.sysUserCircleOfFriendsList));
+              _sysUserCircleOfFriendsList.unshift(sysUserCircleOfFriends);
+              this.setSysUserCircleOfFriends(_sysUserCircleOfFriendsList);
+              this.$router.push({
+                name: `friendcircle`
+              });
+            }
+            console.log(JSON.stringify(res))
+          }).catch( err => {
+            console.log(JSON.stringify(err))
+          })
+        }
+      },
+      ...mapMutations({
+        setSysUserCircleOfFriends: "SET_SYSUSER_CIRCLE_OF_FRIENDS_LIST"
+      })
     }
   }
 </script>

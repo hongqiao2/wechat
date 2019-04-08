@@ -254,6 +254,7 @@ export default new Router({
       component: Find,
       children: [
         {
+          name: 'friendcircle',
           path: 'friendcircle',
           meta: {
             navShow: false,

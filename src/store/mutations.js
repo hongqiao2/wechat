@@ -20,7 +20,11 @@ const mutations = {
   },
   [types.SET_CHAT_LIST_CACHE] (state, chatListCache){
     state.chatListCache = chatListCache;
-  }
+  },
+  [types.SET_SYSUSER_CIRCLE_OF_FRIENDS_LIST] (state, sysUserCircleOfFriendsList){
+    state.sysUserCircleOfFriendsList = sysUserCircleOfFriendsList;
+  },
+
 }
 
 export default mutations

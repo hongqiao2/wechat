@@ -4,6 +4,7 @@ const state = {  // 定义state, 其中info为每个联系人的信息；addList
   num: 0, // 总消息数
   userFriendList: {}, // 好友列表
   chatListCache: {}, // 聊天列表
+  sysUserCircleOfFriendsList:[], // 朋友圈列表
 }
 
 export default state   // 传出state

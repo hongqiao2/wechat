@@ -115,6 +115,14 @@ const api = {
   findSysUserCircleOfFriends(that, params){
     return that.$http.post(that.baseURL + '/circleOfFriends/findSysUserCircleOfFriends', params);
   },
+  // 发表朋友圈信息
+  saveSysUserCircleOfFriends(that, params){
+    return that.$http.post(that.baseURL + '/circleOfFriends/saveSysUserCircleOfFriends', params);
+  },
+  // 添加或者删除点赞信息
+  addSysUserCircleOfFriendsLiked(that, params){
+    return that.$http.post(that.baseURL + '/circleOfFriendsLiked/addSysUserCircleOfFriendsLiked', params);
+  },
 };
 
 export default api
