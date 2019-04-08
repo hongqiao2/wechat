@@ -245,6 +245,7 @@ export default new Router({
       ]
     },
     {
+      name: 'find',
       path: '/find',  // 第三栏：发现
       meta: {
         navShow: true,
@@ -279,6 +280,7 @@ export default new Router({
           ]
         },
         {
+          name: 'release',
           path: 'release',
           meta: {
             navShow: false,

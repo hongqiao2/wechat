@@ -111,7 +111,10 @@ const api = {
   updateSysUserFriend(that, params){
     return that.$http.post(that.baseURL + '/userFriend/updateSysUserFriend', params);
   },
-
+  // 朋友圈信息
+  findSysUserCircleOfFriends(that, params){
+    return that.$http.post(that.baseURL + '/circleOfFriends/findSysUserCircleOfFriends', params);
+  },
 };
 
 export default api

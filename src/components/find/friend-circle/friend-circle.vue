@@ -63,6 +63,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import api from '@/api/resource.js'
   export default {
     components: {
       // BScroll
@@ -168,10 +169,53 @@
           {
             label: '从相册中偷取',
             callback: () => {
-              this.$router.push({
-                path: `/find/release`
-              });
-                this.$dialog.toast({mes: '看到了不该看到的东西！'});
+              let that = this;
+              plus.gallery.pick(
+                function(path) {
+                  let files = path.files;
+                  // 显示后的content
+                  let upList = [];
+                  let i = 0;
+                  let judge = 0;
+                  // 需要优化
+                  for (i; i < files.length; i++) {
+                    let file = files[i];
+                    plus.io.resolveLocalFileSystemURL(
+                      file,
+                      function(entry) {
+                        let reader = new plus.io.FileReader();
+                        reader.onloadend = function(e) {
+                          judge += 1;
+                          upList.push(e.target.result);
+                          if (judge == files.length) {
+                            // 获取到了所有的图片base64的信息
+                            that.$router.push({
+                              name: `release`,
+                              imgList: upList
+                            });
+                          }
+                        };
+                        reader.readAsDataURL(entry.toLocalURL());
+                      },
+                      function(e) {
+                        plus.nativeUI.toast("文件读取错误：" + e.message);
+                      }
+                    );
+                  }
+                },
+                function(e) {
+                  console.log("取消选择图片")
+                },
+                {
+                  filter: "image",
+                  multiple: true,
+                  maximum: 9,
+                  system: false,
+                  onmaxed: function() {
+                    plus.nativeUI.alert("最多只能选择9张图片");
+                  }
+                }
+              );
             }
           }
         ],
@@ -182,6 +226,22 @@
       // 用户信息
       let accessToken = JSON.parse(localStorage.getItem("access_token"));
       this.accessToken = accessToken;
+      // 获取朋友圈信息
+      api.findSysUserCircleOfFriends(this, {
+        id: accessToken.id,
+        pageNo: 1,
+        pageSize: 10
+      }).then( res => {
+        console.log(res)
+        let _val = res.body;
+        if(_val.code == 200){
+          if(!_val.circleOfFriends){
+            return;
+          }
+        }
+      }).catch( err => {
+        console.log(err)
+      })
     },
     methods: {
       back (event) {

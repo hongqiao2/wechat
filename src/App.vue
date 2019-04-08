@@ -170,12 +170,12 @@ export default {
         localStorage.getItem("userChatListCache")
       );
       //1.判断是否是好友添加的信息，同意添加好友的信息， 是的话就更新聊天列表，以及新的朋友列表
+      // 朋友圈通知
       if (_data.isGroup == 3) {
-        // 朋友圈通知
         return;
       }
+      // 好友通知
       if (_data.isGroup == 2) {
-        // 好友通知
         api
           .findNewFriend(this, {
             id: userinfo.id
