@@ -12,10 +12,13 @@
             <yd-cell-item>
                 <yd-textarea slot="right" placeholder="这一刻的想法..."></yd-textarea>
             </yd-cell-item>
-            <div class="release-img" v-for="(item, index) in imgList" :key="index">
-                <img :src="item"/>
+            <div class="release-img" >
+                <div  v-for="(item, index) in imgList" :key="index">
+                    <img :src="item"/> 
+                </div>
+                <div class="add-img" @click="show1 = true"></div>
             </div>
-            <div class="add-img" @click="show1 = true"></div>
+            
         </yd-cell-group>
         </div>
         <yd-actionsheet :items="myItems1" v-model="show1" cancel="取消"></yd-actionsheet>
@@ -158,11 +161,14 @@
     border: none;
   }
   .release-img{
-    width: 6.3rem;
     clear: both;
     overflow: hidden;
     text-align: center;
     margin: auto;
+    padding: 0.2rem 0.3rem;
+  }
+  .release-img div{
+    float: left;
   }
   .release-img img{
     float: left;
