@@ -46,10 +46,10 @@
                   <span v-for="(items,index) in item.likeds" :key="index">{{items}}</span>
                 </div>
                 <div class="assist-comments" v-for="(comm, index) in item.comments" :key="index">
-                    <div>
-                      <a class="assist-name">{{comm.commentRemarkName || comm.commentNickName }}:</a>
-                      <i>{{comm.commentCon}}</i>
-                    </div>
+                  <div>
+                    <a class="assist-name">{{comm.commentRemarkName || comm.commentNickName }}:</a>
+                    <i>{{comm.commentCon}}</i>
+                  </div>
                 </div>
               </div>
             </div>
@@ -76,99 +76,11 @@ export default {
   data() {
     return {
       sysUserCircleOfFriends: [],
-      // info: [
-      //   {
-      //     dissname: '曹操',
-      //     sign: '宁我负人,毋人负我!',
-      //     imgurl: 'http://a3.att.hudong.com/63/87/19300001392461132480875422046.jpg',
-      //     album: [],
-      //     time: '20分钟前',
-      //     num: 45,
-      //     show: false,
-      //     praise: true,
-      //     assistList: [
-      //       {
-      //         aname: '三弟'
-      //       },
-      //       {
-      //         aname: 'ABCDF'
-      //       }
-      //     ],
-      //     comments: [
-      //       {
-      //         aname: '乔乔',
-      //         contant: '好'
-      //       }
-      //     ]
-      //   },
-      //   {
-      //     dissname: '关羽',
-      //     sign: '',
-      //     imgurl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1503761569656&di=01696cee833e1c3af42186949cf5a8fc&imgtype=0&src=http%3A%2F%2Fimg11.weikeimg.com%2Fupload%2Fnews%2F2011121315404465027.jpg',
-      //     album: [
-      //       {
-      //         album1: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1503761561605&di=58808d887f874446d4ee4fa1f025e48d&imgtype=0&src=http%3A%2F%2Fs11.sinaimg.cn%2Fmiddle%2F6878eb7eh88be4e1d149a%26690',
-      //         album2: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1504356148&di=e3d081ed54ebe65da2ec0a0aca295721&imgtype=jpg&er=1&src=http%3A%2F%2Fimg.anfone.com%2FOutside%2F2015-06-10%2F201506102054492527.jpg'
-      //       }
-      //     ],
-      //     time: '39分钟前',
-      //     num: 52,
-      //     show: false,
-      //     praise: false
-      //   },
-      //   {
-      //     dissname: '孙权',
-      //     sign: '曹有张文远，吾有甘兴霸！',
-      //     imgurl: 'http://a0.att.hudong.com/27/15/01300000237183121990159374583_950.jpg',
-      //     album: [],
-      //     time: '1小时前',
-      //     num: 9,
-      //     show: false,
-      //     praise: false
-      //   },
-      //   {
-      //     dissname: '司马懿',
-      //     sign: '夫将兵者，不战则守，不守则走，不走则逃，不逃则死。',
-      //     imgurl: 'http://www.e3ol.com/biography/upfiles/2008/20089822301342545.jpg',
-      //     album: [],
-      //     time: '2小时前',
-      //     num: 71,
-      //     show: false,
-      //     praise: false
-      //   },
-      //   {
-      //     dissname: '大乔',
-      //     sign: '',
-      //     imgurl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502995554006&di=70ab3f456e05a25f092c613fed0df1d3&imgtype=0&src=http%3A%2F%2Fimg3.redocn.com%2Ftupian%2F20141231%2FdaqiaorenwuchahuaJPG_3711796.jpg',
-      //     album: [
-      //       {
-      //         album1: 'http://img1.ali213.net/glpic/2015/12/23/584_2015122335344155.png',
-      //         album2: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1503767564388&di=effe1985b2d1ff797e1818a94731c617&imgtype=0&src=http%3A%2F%2Fimg.qqzhi.com%2Fupload%2Fimg_5_2436167610D64180571_23.jpg'
-      //       }
-      //     ],
-      //     time: '8小时前',
-      //     num: 89,
-      //     show: false,
-      //     praise: false
-      //   },
-      //   {
-      //     dissname: '刘备',
-      //     sign: '髀肉复生矣',
-      //     imgurl: 'http://i1.hexunimg.cn/2014-02-21/162366807.jpg',
-      //     album: [],
-      //     time: '昨天',
-      //     num: 20,
-      //     show: false,
-      //     praise: false
-      //   }
-
-      // ],
       show1: false,
       myItems1: [
         {
           label: "拍照",
           callback: () => {
-            //this.$dialog.toast({mes: '咔擦，此人太帅！'});
             /* 注意： callback: function() {} 和 callback() {}  这样是无法正常使用当前this的 */
             let that = this;
             let cmr = plus.camera.getCamera();
@@ -277,14 +189,15 @@ export default {
         pageSize: 10
       })
       .then(res => {
-        console.log(JSON.stringify(res));
         let _val = res.body;
         if (_val.code == 200) {
           if (!_val.circleOfFriends) {
             return;
           }
           this.setSysUserCircleOfFriends(_val.circleOfFriends.list);
-          this.sysUserCircleOfFriends = JSON.parse(JSON.stringify(_val.circleOfFriends.list));
+          this.sysUserCircleOfFriends = JSON.parse(
+            JSON.stringify(_val.circleOfFriends.list)
+          );
         }
       })
       .catch(err => {
@@ -310,45 +223,70 @@ export default {
     MoreHide(item) {
       item.show = false;
     },
+    // 点赞
     goZan(item, index) {
-      // 点赞
       //console.log(item.likeds)
       this.$dialog.loading.open("疯狂点赞中...");
-      if(item.praise){
+      if (item.praise) {
         // 删除
         let likedsList = this.sysUserCircleOfFriends[index].likeds;
         let delIndex = 0;
-        likedsList.forEach( (item, index) => {
-          if(item == this.accessToken.nickName){
+        likedsList.forEach((item, index) => {
+          if (item == this.accessToken.nickName) {
             delIndex = index;
           }
         });
-        api.addSysUserCircleOfFriendsLiked(this, {
-          circleId: item.id,
-          likedId: this.accessToken.id,
-          isType: 1
-        }).then( res => {
+        api
+          .addSysUserCircleOfFriendsLiked(this, {
+            circleId: item.id,
+            likedId: this.accessToken.id,
+            isType: 1
+          })
+          .then(res => {
             // 移除点赞数据
             this.sysUserCircleOfFriends[index].likeds.splice(delIndex, 1);
             this.$dialog.loading.close();
             //this.sysUserCircleOfFriends[index].likeds.push(this.accessToken.nickName);
-        }).catch( err => {
-          this.$dialog.loading.close();
-        })
-      }else{
-        api.addSysUserCircleOfFriendsLiked(this, {
-          circleId: item.id,
-          likedId: this.accessToken.id,
-          isType: 0
-        }).then( res => {
-            this.sysUserCircleOfFriends[index].likeds.push(this.accessToken.nickName);
+          })
+          .catch(err => {
             this.$dialog.loading.close();
-        }).catch( err => {
-          this.$dialog.loading.close();
-        })
+          });
+      } else {
+        api
+          .addSysUserCircleOfFriendsLiked(this, {
+            circleId: item.id,
+            likedId: this.accessToken.id,
+            isType: 0
+          })
+          .then(res => {
+            this.sysUserCircleOfFriends[index].likeds.push(
+              this.accessToken.nickName
+            );
+            this.$dialog.loading.close();
+          })
+          .catch(err => {
+            this.$dialog.loading.close();
+          });
       }
       item.show = false;
       item.praise = !item.praise;
+    },
+    // 评论
+    circleCommentCommit() {
+      this.$dialog.loading.open("添加评论中...");
+      api
+        .circleOfFriendsComment(this, {
+          circleId: item.id,
+          commentId: this.accessToken.id,
+          beCommentedId: "", // 被回复者ID
+          commentCon: "", // 回复内容
+        })
+        .then(res => {
+          this.$dialog.loading.close();
+        })
+        .catch(err => {
+          this.$dialog.loading.close();
+        });
     },
     goPinlun() {
       console.log("评论");
