@@ -191,7 +191,9 @@
                             // 获取到了所有的图片base64的信息
                             that.$router.push({
                               name: `release`,
-                              imgList: upList
+                              params:{
+                                imgList: upList
+                              }
                             });
                           }
                         };
@@ -210,7 +212,6 @@
                   filter: "image",
                   multiple: true,
                   maximum: 9,
-                  system: false,
                   onmaxed: function() {
                     plus.nativeUI.alert("最多只能选择9张图片");
                   }

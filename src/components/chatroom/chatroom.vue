@@ -535,7 +535,6 @@ export default {
           filter: "image",
           multiple: true,
           maximum: 9,
-          system: false,
           onmaxed: function() {
             plus.nativeUI.alert("最多只能选择9张图片");
           }

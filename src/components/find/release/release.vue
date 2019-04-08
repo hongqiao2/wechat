@@ -58,6 +58,7 @@
       }
     },
     mounted () {
+      console.log(JSON.stringify(this.$route.params.imgList))
     },
     methods: {
       back (event) {
