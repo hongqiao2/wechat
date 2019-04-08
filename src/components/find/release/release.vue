@@ -18,7 +18,7 @@
                 </div>
                 <div class="add-img" @click="show1 = true"></div>
             </div>
-            
+        
         </yd-cell-group>
         </div>
         <yd-actionsheet :items="myItems1" v-model="show1" cancel="取消"></yd-actionsheet>
