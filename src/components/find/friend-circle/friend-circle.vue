@@ -313,15 +313,27 @@ export default {
     goZan(item, index) {
       // 点赞
       //console.log(item.likeds)
+      this.$dialog.loading.open("疯狂点赞中...");
       if(item.praise){
         // 删除
+        let likedsList = this.sysUserCircleOfFriends[index].likeds;
+        let delIndex = 0;
+        likedsList.forEach( (item, index) => {
+          if(item == this.accessToken.nickName){
+            delIndex = index;
+          }
+        });
         api.addSysUserCircleOfFriendsLiked(this, {
           circleId: item.id,
           likedId: this.accessToken.id,
           isType: 1
         }).then( res => {
+            // 移除点赞数据
+            this.sysUserCircleOfFriends[index].likeds.splice(delIndex, 1);
+            this.$dialog.loading.close();
             //this.sysUserCircleOfFriends[index].likeds.push(this.accessToken.nickName);
         }).catch( err => {
+          this.$dialog.loading.close();
         })
       }else{
         api.addSysUserCircleOfFriendsLiked(this, {
@@ -330,7 +342,9 @@ export default {
           isType: 0
         }).then( res => {
             this.sysUserCircleOfFriends[index].likeds.push(this.accessToken.nickName);
+            this.$dialog.loading.close();
         }).catch( err => {
+          this.$dialog.loading.close();
         })
       }
       item.show = false;
