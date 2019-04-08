@@ -12,15 +12,10 @@
             <yd-cell-item>
                 <yd-textarea slot="right" placeholder="这一刻的想法..."></yd-textarea>
             </yd-cell-item>
-            <div class="release-img">
-                <img src="http://a3.att.hudong.com/63/87/19300001392461132480875422046.jpg"/>
-                <img src="http://a3.att.hudong.com/63/87/19300001392461132480875422046.jpg"/>
-                <img src="http://a3.att.hudong.com/63/87/19300001392461132480875422046.jpg"/>
-                <img src="http://a3.att.hudong.com/63/87/19300001392461132480875422046.jpg"/>
-                <img src="http://a3.att.hudong.com/63/87/19300001392461132480875422046.jpg"/>
-                <img src="http://a3.att.hudong.com/63/87/19300001392461132480875422046.jpg"/>
-                <div class="add-img" @click="show1 = true"></div>
+            <div class="release-img" v-for="(item, index) in imgList" :key="index">
+                <img :src="item"/>
             </div>
+            <div class="add-img" @click="show1 = true"></div>
         </yd-cell-group>
         </div>
         <yd-actionsheet :items="myItems1" v-model="show1" cancel="取消"></yd-actionsheet>
@@ -41,24 +36,91 @@
           {
             label: '拍照',
             callback: () => {
-                this.$dialog.toast({mes: '咔擦，此人太帅！'});
                 /* 注意： callback: function() {} 和 callback() {}  这样是无法正常使用当前this的 */
+                if(this.imgList.length >= 9 ){
+                  return;
+                }
+                let that = this;
+                let cmr = plus.camera.getCamera();
+                cmr.captureImage(
+                  function(path) {
+                    // 显示后的content
+                    let upList = new Array();
+                    // 上传的信息
+                    let upContList = new Array();
+                    plus.io.resolveLocalFileSystemURL(
+                      path,
+                      function(entry) {
+                        let reader = new plus.io.FileReader();
+                        reader.readAsDataURL(entry.toLocalURL());
+                        reader.onload = function(e) {
+                          that.imgList.push(e.target.result)
+                        };
+                      },
+                      function(e) {
+                        plus.nativeUI.toast("文件读取错误：" + e.message);
+                      }
+                    );
+                    //alert("Capture image success: " + path);
+                  },
+                  function(error) {
+                    console.log("Capture image failed: " + error.message);
+                  },
+                  {}
+                );
             }
           },
           {
             label: '从相册中偷取',
             callback: () => {
-              this.$router.push({
-                path: `/find/release`
-              });
-                this.$dialog.toast({mes: '看到了不该看到的东西！'});
+              let that = this;
+              plus.gallery.pick(
+                function(path) {
+                  let files = path.files;
+                  // 显示后的content
+                  let i = 0;
+                  // 需要优化
+                  for (i; i < files.length; i++) {
+                    let file = files[i];
+                    plus.io.resolveLocalFileSystemURL(
+                      file,
+                      function(entry) {
+                        let reader = new plus.io.FileReader();
+                        reader.onloadend = function(e) {
+                          that.imgList.push(e.target.result)
+                        };
+                        reader.readAsDataURL(entry.toLocalURL());
+                      },
+                      function(e) {
+                        plus.nativeUI.toast("文件读取错误：" + e.message);
+                      }
+                    );
+                  }
+                },
+                function(e) {
+                  console.log("取消选择图片")
+                },
+                {
+                  filter: "image",
+                  multiple: true,
+                  maximum: 9 - that.imgList.length,
+                  system: false,
+                  onmaxed: function() {
+                    plus.nativeUI.alert("最多只能选择9张图片");
+                  }
+                }
+              );
+              // this.$router.push({
+              //   path: `/find/release`
+              // });
             }
           }
         ],
+        imgList: []
       }
     },
     mounted () {
-      console.log(JSON.stringify(this.$route.params.imgList))
+      this.imgList = this.$route.params.imgList;
     },
     methods: {
       back (event) {

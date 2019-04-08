@@ -162,8 +162,43 @@
           {
             label: '拍照',
             callback: () => {
-                this.$dialog.toast({mes: '咔擦，此人太帅！'});
+                //this.$dialog.toast({mes: '咔擦，此人太帅！'});
                 /* 注意： callback: function() {} 和 callback() {}  这样是无法正常使用当前this的 */
+                let that = this;
+                let cmr = plus.camera.getCamera();
+                cmr.captureImage(
+                  function(path) {
+                    // 显示后的content
+                    let upList = new Array();
+                    // 上传的信息
+                    let upContList = new Array();
+                    plus.io.resolveLocalFileSystemURL(
+                      path,
+                      function(entry) {
+                        let reader = new plus.io.FileReader();
+                        reader.readAsDataURL(entry.toLocalURL());
+                        reader.onload = function(e) {
+                          upList.push(e.target.result);
+                          // 获取到了所有的图片base64的信息
+                          that.$router.push({
+                            name: `release`,
+                            params:{
+                              imgList: upList
+                            }
+                          });
+                        };
+                      },
+                      function(e) {
+                        plus.nativeUI.toast("文件读取错误：" + e.message);
+                      }
+                    );
+                    //alert("Capture image success: " + path);
+                  },
+                  function(error) {
+                    console.log("Capture image failed: " + error.message);
+                  },
+                  {}
+                );
             }
           },
           {
@@ -212,6 +247,7 @@
                   filter: "image",
                   multiple: true,
                   maximum: 9,
+                  system: false,
                   onmaxed: function() {
                     plus.nativeUI.alert("最多只能选择9张图片");
                   }
