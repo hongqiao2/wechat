@@ -124,7 +124,7 @@ const api = {
     return that.$http.post(that.baseURL + '/circleOfFriendsLiked/addSysUserCircleOfFriendsLiked', params);
   },
   // 添加或者删除评论信息
-  circleOfFriendsComment(that, params){
+  addSysUserCircleOfFriendsComment(that, params){
     return that.$http.post(that.baseURL + '/circleOfFriendsComment/addSysUserCircleOfFriendsComment', params);
   },
 };

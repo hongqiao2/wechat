@@ -8,7 +8,7 @@
         <i class="iconfont icon-paizhao"></i>
       </router-link>
     </yd-navbar>
-    <scroller @click.native="comment = false">
+    <scroller @click.native="hidePinLun">
       <div class="content-top">
         <img class="circle-bg" src="../../../assets/find/bg.png">
         <div class="user">
@@ -37,7 +37,7 @@
                     <div class="son" :class="{sonactive: item.show}">
                       <div class="circle-zan" @click.stop="goZan(item, index)" v-if="item.praise">取消</div>
                       <div class="circle-zan" @click.stop="goZan(item, index)" v-else>赞</div>
-                      <div class="circle-pinlun" @click.stop="goPinlun(item)">评论</div>
+                      <div class="circle-pinlun" @click.stop="goPinlun(item, index, '')">评论</div>
                     </div>
                   </div>
                 </div>
@@ -45,9 +45,10 @@
                 <div class="Assist-box" v-if="item.likeds.length > 0">
                   <span v-for="(items,index) in item.likeds" :key="index">{{items}}</span>
                 </div>
-                <div class="assist-comments" v-for="(comm, index) in item.comments" :key="index">
-                  <div>
+                <div class="assist-comments" v-for="(comm, commIndex) in item.comments" :key="commIndex">
+                  <div @click.stop="goPinlun(item, index, commIndex)">
                     <a class="assist-name">{{comm.commentRemarkName || comm.commentNickName }}:</a>
+                    <a v-if="comm.beCommentedId" class="assist-name">{{comm.beCommentRemarkName || comm.beCommentNickName }}</a>
                     <i>{{comm.commentCon}}</i>
                   </div>
                 </div>
@@ -60,7 +61,7 @@
      
     </scroller>
      <div class="comments" v-show="comment">
-        <yd-input slot="left" v-model="input1" placeholder="评论" :show-clear-icon="false"></yd-input>
+        <yd-input slot="left" v-model="input1" :placeholder="beCommentName ? '回复' + beCommentName : '评论'" :show-clear-icon="false"></yd-input>
         <yd-button slot="left" bgcolor="#8d66fa" color="#FFF" @click.native="SendComment">发送</yd-button>
       </div>
     <router-view></router-view>
@@ -83,7 +84,7 @@ export default {
       sysUserCircleOfFriends: [],
       show1: false,
       comment: false,
-      input1: '',
+      input1: '', // 评论内容
       myItems1: [
         {
           label: "拍照",
@@ -181,10 +182,17 @@ export default {
           }
         }
       ],
-      accessToken: {}
+      accessToken: {}, // 用户信息
+      commentItem: {}, // 评论的朋友圈信息
+      commentIndex: 0, // 评论的朋友圈数组下标
+      beCommentedIdIndex: "", // 具体的评论下标
+      beCommentName: "", // 被评论人名称
+      pageNo: 1,
+      pageSize: 10
     };
   },
   mounted() {
+    this.sysUserCircleOfFriends = JSON.parse(JSON.stringify(this.sysUserCircleOfFriendsList));
     // 用户信息
     let accessToken = JSON.parse(localStorage.getItem("access_token"));
     this.accessToken = accessToken;
@@ -213,10 +221,10 @@ export default {
   },
   methods: {
     back(event) {
+      this.setCircleNum(0);
       this.$router.back(); // 返回上一级
     },
     admire(item) {
-      console.log(item);
       item.num += 1;
     },
     goAlbum() {
@@ -279,35 +287,83 @@ export default {
       item.praise = !item.praise;
     },
     // 评论
-    circleCommentCommit() {
+    circleCommentCommit(commentItem, commentIndex, commentCont, beCommentedIdIndex) {
       this.$dialog.loading.open("添加评论中...");
-      api
-        .circleOfFriendsComment(this, {
-          circleId: item.id,
+      let comment = {};
+      if(beCommentedIdIndex){
+        comment = this.sysUserCircleOfFriends[commentIndex].comments[beCommentedIdIndex];
+      }
+      api.addSysUserCircleOfFriendsComment(this, {
+          circleId: commentItem.id,
           commentId: this.accessToken.id,
-          beCommentedId: "", // 被回复者ID
-          commentCon: "", // 回复内容
+          beCommentedId: comment.commentId || 0, // 被回复者ID
+          commentCon: commentCont, // 回复内容
         })
         .then(res => {
+          this.sysUserCircleOfFriends[commentIndex].comments.push({
+            circleId: commentItem.id,
+            commentId: this.accessToken.id,
+            commentNickName: this.accessToken.nickName,
+            beCommentedId: comment.commentId || "",
+            beCommentNickName: comment.commentNickName || "",
+            beCommentRemarkName: comment.commentRemarkName || "",
+            commentCon: commentCont
+          })
+          this.commentItem = {};
+          this.commentIndex = 0
+          this.beCommentedIdIndex = "";
+          this.beCommentName = "";
           this.$dialog.loading.close();
         })
         .catch(err => {
+          this.commentItem = {};
+          this.commentIndex = 0
+          this.beCommentedIdIndex = "";
+          this.beCommentName = "";
           this.$dialog.loading.close();
         });
     },
-    goPinlun(item) {
-      item.show = false;
+    // 清空评论信息
+    hidePinLun(){
+      this.comment = false;
+      this.commentItem = {};
+      this.commentIndex = 0
+      this.beCommentedIdIndex = "";
+      this.beCommentName = "";
+    },
+    goPinlun(item, index, commIndex) {
+      if(commIndex >= 0){
+        let comm = this.sysUserCircleOfFriends[index].comments[commIndex];
+        let accessToken = this.accessToken;
+        if(comm.commentId == accessToken.id){
+          return;
+        }
+        this.beCommentName = comm.commentRemarkName || comm.commentNickName;
+      }
+      this.commentItem = item;
+      this.commentIndex = index;
+      this.beCommentedIdIndex = commIndex;
       this.comment = true;
+      item.show = false;
+      
     },
     SendComment (){
+      // 在没有评论的时候需要清楚commentItem, commentIndex, beCommentedId
+      let commentCont = this.input1;// 评论内容
+      let commentItem = this.commentItem;
+      let commentIndex = this.commentIndex;
+      let commIndex = this.beCommentedIdIndex;
+      this.circleCommentCommit(commentItem, commentIndex, commentCont, commIndex);
       this.comment = false;
-      console.log(this.input1)
     },
     formatStringToArray: function(item) {
       return JSON.parse(item);
     },
     ...mapMutations({
       setSysUserCircleOfFriends: "SET_SYSUSER_CIRCLE_OF_FRIENDS_LIST"
+    }),
+    ...mapMutations({
+      setCircleNum: "SET_CIRCLE_NUM"
     }),
     // 时间格式化
     formatDate(time) {

@@ -24,7 +24,9 @@ const mutations = {
   [types.SET_SYSUSER_CIRCLE_OF_FRIENDS_LIST] (state, sysUserCircleOfFriendsList){
     state.sysUserCircleOfFriendsList = sysUserCircleOfFriendsList;
   },
-
+  [types.SET_CIRCLE_NUM] (state, circleNum){
+    state.circleNum = circleNum;
+  },
 }
 
 export default mutations

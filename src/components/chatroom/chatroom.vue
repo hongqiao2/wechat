@@ -215,12 +215,13 @@ export default {
     let userinfo = JSON.parse(localStorage.getItem("access_token"));
     this.userinfo = userinfo;
     if (_userinfo && _userinfo.news_number > 0) {
-      // TODO 需要修改成查询未读消息
       api
         .findSysUserNewLogList(this, {
           id: userinfo.id,
           chat_bject: _infoId,
-          pageNo: 0,
+          msgState: 0,
+          isGroup: 0,
+          pageNo: 1,
           pageSize: 10
         })
         .then(res => {

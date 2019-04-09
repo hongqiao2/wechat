@@ -11,4 +11,7 @@ export const chatListCache = state => state.chatListCache // 聊天列表
 
 
 
-export const sysUserCircleOfFriendsList = state => state.sysUserCircleOfFriendsList
+export const sysUserCircleOfFriendsList = state => state.sysUserCircleOfFriendsList // 朋友圈
+
+
+export const circleNum = state => state.circleNum // 朋友圈新消息提示

@@ -19,8 +19,8 @@
       <yd-tabbar-item title="通讯录" link="/address">
         <yd-icon name="tongxunlu" custom slot="icon" size="0.45rem"></yd-icon>
       </yd-tabbar-item>
-      <yd-tabbar-item title="发现" link="/find" dot>
-        <yd-icon name="faxian" custom slot="icon" size="0.45rem"></yd-icon>
+      <yd-tabbar-item title="发现" link="/find" :dot="circleNum  > 0">
+        <yd-icon  name="faxian" custom slot="icon" size="0.45rem"></yd-icon>
       </yd-tabbar-item>
       <yd-tabbar-item title="我" link="/me">
         <yd-icon name="wo" custom slot="icon" size="0.45rem"></yd-icon>
@@ -52,7 +52,8 @@ export default {
       // 拿到info的状态
       "num",
       "info",
-      "chatListCache"
+      "chatListCache",
+      "circleNum"
     ])
   },
   methods: {
