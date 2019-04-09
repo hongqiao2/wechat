@@ -8,7 +8,7 @@
 						<h2>{{userInfo.nickName}}</h2>
 						<p>微聊号：{{userInfo.username ? userInfo.username : "暂未设置"}}</p>
 					</div>
-					<div class="yd-cell-right yd-cell-arrow">
+					<div class="yd-cell-right yd-cell-arrow" @click.stop="show1 = true">
 						<img src="../../assets/me/code.png" class="aboutme-code">
 					</div>
 				</div>
@@ -46,7 +46,14 @@
 					<img class="setup-img" src="../../assets/me/set.png" height="32" width="32" />
 					<span class="setup-name">设置</span>
 				</router-link>
+				
 			</div>
+			<yd-popup v-model="show1" position="center" width="90%">
+					<div class="meCode">
+						<img src="../../assets/me/code.jpeg"/>
+						<p>扫一扫上面的二维码图案，加我微聊</p>
+					</div>
+				</yd-popup>
 		</div>
 		<router-view></router-view>
 	</div>
@@ -68,7 +75,8 @@
 				width: 60,
 				codewidth: 30,
 				userInfo: {},
-				personalAuthentication: "" //个人认证跳转路径
+				personalAuthentication: "", //个人认证跳转路径
+				show1: false
 			};
 		},
 		mounted() {
@@ -195,5 +203,22 @@
 	.yd-cell-right img {
 		width: 0.5rem;
 		height: 0.5rem;
+	}
+	.meCode{
+		background: #fff;
+		width: 5rem;
+		height:5.5rem;
+		margin: auto;
+		text-align: center;
+		border-radius: 5px;
+		padding-top: 0.5rem;
+	}
+	.meCode img{
+		width: 4rem !important;
+		height: 4rem !important;
+	}
+	.meCode p{
+		color: #606060;
+		margin-top: 0.2rem;
 	}
 </style>

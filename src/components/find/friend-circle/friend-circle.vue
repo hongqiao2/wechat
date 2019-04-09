@@ -8,7 +8,7 @@
         <i class="iconfont icon-paizhao"></i>
       </router-link>
     </yd-navbar>
-    <scroller>
+    <scroller @click.native="comment = false">
       <div class="content-top">
         <img class="circle-bg" src="../../../assets/find/bg.png">
         <div class="user">
@@ -37,7 +37,7 @@
                     <div class="son" :class="{sonactive: item.show}">
                       <div class="circle-zan" @click.stop="goZan(item, index)" v-if="item.praise">取消</div>
                       <div class="circle-zan" @click.stop="goZan(item, index)" v-else>赞</div>
-                      <div class="circle-pinlun" @click.stop="goPinlun">评论</div>
+                      <div class="circle-pinlun" @click.stop="goPinlun(item)">评论</div>
                     </div>
                   </div>
                 </div>
@@ -57,7 +57,12 @@
         </ul>
         <div style="text-align: center;opacity: 0.6;margin-top: 20px;">----没有更多动态了----</div>
       </div>
+     
     </scroller>
+     <div class="comments" v-show="comment">
+        <yd-input slot="left" v-model="input1" placeholder="评论" :show-clear-icon="false"></yd-input>
+        <yd-button slot="left" bgcolor="#8d66fa" color="#FFF" @click.native="SendComment">发送</yd-button>
+      </div>
     <router-view></router-view>
     <yd-actionsheet :items="myItems1" v-model="show1" cancel="取消"></yd-actionsheet>
   </yd-layout>
@@ -77,6 +82,8 @@ export default {
     return {
       sysUserCircleOfFriends: [],
       show1: false,
+      comment: false,
+      input1: '',
       myItems1: [
         {
           label: "拍照",
@@ -288,8 +295,13 @@ export default {
           this.$dialog.loading.close();
         });
     },
-    goPinlun() {
-      console.log("评论");
+    goPinlun(item) {
+      item.show = false;
+      this.comment = true;
+    },
+    SendComment (){
+      this.comment = false;
+      console.log(this.input1)
     },
     formatStringToArray: function(item) {
       return JSON.parse(item);
@@ -348,7 +360,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .friend-circle {
   position: fixed;
   width: 100%;
@@ -507,9 +519,10 @@ export default {
   width: 1.2rem;
 }
 .assist-comments {
-  border-top: 1px solid #eee;
-  margin-top: 0.1rem;
-  padding-top: 0.1rem;
+    border-top: 1px solid #eee;
+    margin-top: 0.1rem;
+    padding: 0.1rem;
+    background: #f3f3f5;
 }
 .assist-name {
   color: #5b6894;
@@ -551,5 +564,23 @@ export default {
 }
 .useralbum div {
   float: left;
+}
+.comments{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 0.8rem;
+  border-top: 1px solid #eee;
+  background: #f8f8f8;
+  padding: 0 0.2rem;
+  display: flex;
+  align-items: center;
+}
+.comments .yd-input>input{
+    background: #fff;
+    height: 0.66rem;
+    padding: 0 0.2rem;
+    width: 97%;
 }
 </style>
