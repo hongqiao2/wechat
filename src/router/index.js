@@ -7,6 +7,7 @@ import Address from '../components/address/address'
 import Find from '../components/find/find'
 import Me from '../components/me/me'
 import Chatroom from '../components/chatroom/chatroom'
+import ChatroomGroup from '../components/chatroom/chatroomGroup'
 import Search from '../components/search/search'
 import AddressDetail from '../components/address/address-detail/address-detail'
 import AddressFriend from '../components/address/address-friend/address-friend'
@@ -160,6 +161,14 @@ export default new Router({
           component: ChatroomSuit
         }
       ]
+    },
+    {
+      path: '/chatroomGroup',  // 聊天打字界面
+      meta: {
+        navShow: false,
+        menuShow: false
+      },
+      component: ChatroomGroup,
     },
     {
       name: 'chat',

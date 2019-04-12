@@ -27,6 +27,9 @@ const mutations = {
   [types.SET_CIRCLE_NUM] (state, circleNum){
     state.circleNum = circleNum;
   },
+  [types.SET_GROUP_INFO] (state, groupInfo){
+    state.groupInfo = groupInfo;
+  },
 }
 
 export default mutations

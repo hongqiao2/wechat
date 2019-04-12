@@ -103,6 +103,10 @@ const api = {
   saveSendMsg(that, params){
     return that.$http.post(that.baseURL + '/newsLog/saveSendMsg', params);
   },
+  // 给群好友发送信息
+  saveGroupSendMsg(that, params){
+    return that.$http.post(that.baseURL + '/newsLog/saveGroupSendMsg', params);
+  },
   // 修改消息，以及消息列表的状态
   updateMsgState(that, params){
     return that.$http.post(that.baseURL + '/newsLog/updateMsgState', params);
@@ -126,6 +130,10 @@ const api = {
   // 添加或者删除评论信息
   addSysUserCircleOfFriendsComment(that, params){
     return that.$http.post(that.baseURL + '/circleOfFriendsComment/addSysUserCircleOfFriendsComment', params);
+  },
+  // 创建群
+  saveSysUserGroup(that, params){
+    return that.$http.post(that.baseURL + '/sysUserGroup/saveSysUserGroup', params);
   },
 };
 

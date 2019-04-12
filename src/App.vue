@@ -137,12 +137,13 @@ export default {
               let i = 0;
               for (i; i < userChatList.length; i++) {
                 num += userChatList[i].news_number;
-                chatList[userChatList[i].chat_bject] = userChatList[i];
+                let nick_name = userChatList[i].nick_name || "group";
+                chatList[userChatList[i].chat_bject + "_" + nick_name] = userChatList[i];
                 if (userChatListCache) {
                   // 如果缓存里面有数据，需要把新数据和老数据综合起来
                   let chat_bject = userChatList[i].chat_bject;
-                  userChatListCache[chat_bject]
-                    ? delete userChatListCache[chat_bject]
+                  userChatListCache[chat_bject + "_" + nick_name]
+                    ? delete userChatListCache[chat_bject + "_" + nick_name]
                     : "";
                   // 合并对象
                   Object.assign(chatList, userChatListCache);
@@ -160,6 +161,52 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    // 群消息，以及个人消息的公用方法
+    chatListUtils(userinfo, userChatListCache){
+      // 聊天列表初始化，刷新
+        api
+          .findSysChatList(this, {
+            params: {
+              id: userinfo.id
+            }
+          })
+          .then(res => {
+            let val = res.body;
+            if (val.code == "200") {
+              let userChatLists = JSON.parse(val.userChatList);
+              let _chatListCache = JSON.parse(
+                JSON.stringify(this.chatListCache)
+              );
+              // 聊天列表缓存
+              let i = 0;
+              let newNum =0;
+              for (i; i < userChatLists.length; i++) {
+                newNum += userChatLists[i].news_number;
+                let nick_name = userChatLists[i].nick_name || "group";
+                _chatListCache[userChatLists[i].chat_bject + "_" + nick_name] = userChatLists[i];
+                if (userChatListCache) {
+                  let chat_bject = userChatLists[i].chat_bject;
+                  // 如果缓存里面有数据，需要把新数据和老数据综合起来
+                  userChatListCache[chat_bject + "_" + nick_name]
+                    ? delete userChatListCache[chat_bject + "_" + nick_name]
+                    : "";
+                }
+                //newNum = userChatLists[i].news_number;
+              }
+              // 合并对象
+              Object.assign(_chatListCache, userChatListCache);
+              this.setShowNun(newNum);
+              this.setChatListCache(_chatListCache);
+              localStorage.setItem(
+                "userChatListCache",
+                JSON.stringify(userChatListCache)
+              );
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
     },
     // 接收服务发来的消息
     setOnMessage(e) {
@@ -193,24 +240,22 @@ export default {
           });
         return;
       }
-      if (_data.isGroup == 1 && groupId != 0) {
+      if (_data.isGroup == 1 && _data.groupId != 0) {
         // 群消息通知
-        return;
-      }
-      if (_data.isGroup == 0) {
-        // 好友消息通知，以及添加好友成功通知
         let _info = JSON.parse(JSON.stringify(this.info));
         if (typeof _info !== "{}") {
+          
           // 如果当前聊天界面不为空，判断是否是同一个好友发送的信息
           let _infoId = _info.griend_id || _info.chat_bject;
-          if (_infoId && _data.sender == _infoId) {
+          if (_infoId && _data.groupId == _infoId) {
             _info.latest_news = _data.msg;
+            _info.head_portrait = _data.head_portrait;
+            _info.userName = _data.userName;
             let newNum = this.num;
             _info["msg_type"] = _data.msg_type;
             if (_data.msg_type == 1) {
               // 如果是图片
               let msgNum = JSON.parse(_data.msg).length;
-              console.log(JSON.stringify(msgNum));
               _info.news_number =
                 typeof _info.news_number != "undefined"
                   ? _info.news_number + msgNum
@@ -232,47 +277,44 @@ export default {
             this.setAddress(_info);
           }
         }
-        // 聊天列表初始化，刷新
-        api
-          .findSysChatList(this, {
-            params: {
-              id: userinfo.id
-            }
-          })
-          .then(res => {
-            let val = res.body;
-            if (val.code == "200") {
-              let userChatLists = JSON.parse(val.userChatList);
-              let _chatListCache = JSON.parse(
-                JSON.stringify(this.chatListCache)
-              );
-              // 聊天列表缓存
-              let i = 0;
-              let newNum = this.num;
-              for (i; i < userChatLists.length; i++) {
-                _chatListCache[userChatLists[i].chat_bject] = userChatLists[i];
-                if (userChatListCache) {
-                  let chat_bject = userChatLists[i].chat_bject;
-                  // 如果缓存里面有数据，需要把新数据和老数据综合起来
-                  userChatListCache[chat_bject]
-                    ? delete userChatListCache[chat_bject]
-                    : "";
-                }
-                newNum = userChatLists[i].news_number;
+        this.chatListUtils(userinfo, userChatListCache);
+        return;
+      }
+      if (_data.isGroup == 0) {
+        // 好友消息通知，以及添加好友成功通知
+        let _info = JSON.parse(JSON.stringify(this.info));
+        if (typeof _info !== "{}") {
+          // 如果当前聊天界面不为空，判断是否是同一个好友发送的信息
+          let _infoId = _info.griend_id || _info.chat_bject;
+          if (_infoId && _data.sender == _infoId) {
+            _info.latest_news = _data.msg;
+            let newNum = this.num;
+            _info["msg_type"] = _data.msg_type;
+            if (_data.msg_type == 1) {
+              // 如果是图片
+              let msgNum = JSON.parse(_data.msg).length;
+              _info.news_number =
+                typeof _info.news_number != "undefined"
+                  ? _info.news_number + msgNum
+                  : msgNum;
+              newNum += msgNum;
+            } else {
+              _info["msg_type"] = _data.msg_type;
+              if (_data.msg_type == 2) {
+                console.log(_data.msg_time);
+                _info["msg_time"] = _data.msg_time;
               }
-              // 合并对象
-              Object.assign(_chatListCache, userChatListCache);
-              this.setShowNun(newNum);
-              this.setChatListCache(_chatListCache);
-              localStorage.setItem(
-                "userChatListCache",
-                JSON.stringify(userChatListCache)
-              );
+              _info.news_number =
+                typeof _info.news_number != "undefined"
+                  ? _info.news_number + 1
+                  : 1;
+              newNum += 1;
             }
-          })
-          .catch(err => {
-            console.log(err);
-          });
+            this.setShowNun(newNum);
+            this.setAddress(_info);
+          }
+        }
+        this.chatListUtils(userinfo, userChatListCache);
       }
     }
   },
@@ -298,7 +340,7 @@ export default {
         iphone: userinfo.iphone
       })
       .then(res => {
-        if (res.body.data == 200) {
+        if (res.body.data == 200 || res.body.code == 200) {
           this.findChatList(userinfo);
           this.findNewFriendList(userinfo);
           this.findFriendList(userinfo);

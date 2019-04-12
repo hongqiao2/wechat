@@ -15,3 +15,5 @@ export const sysUserCircleOfFriendsList = state => state.sysUserCircleOfFriendsL
 
 
 export const circleNum = state => state.circleNum // 朋友圈新消息提示
+
+export const groupInfo = state => state.groupInfo // 群聊天
