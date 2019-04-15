@@ -103,7 +103,6 @@ export default {
       this.$router.push({
         path: `/address/${info.id}`
       });
-      this.setAddress(this.userFriendList[info.id]);
     },
     ...mapMutations({
       setAddress: "SET_INFO"

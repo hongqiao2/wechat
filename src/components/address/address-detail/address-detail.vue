@@ -5,15 +5,15 @@
       <router-link to @click.native="back" slot="left">
         <yd-navbar-back-icon></yd-navbar-back-icon>
       </router-link>
-      <router-link to="#" slot="right" @click.native="goDset(info.griend_id || info.id)">
+      <router-link to="#" slot="right" @click.native="goDset(info.id)">
         <i class="iconfont icon-xiazai9" style="color:#101010;"></i>
       </router-link>
     </yd-navbar>
     <div class="content" ref="content">
       <div class="content-name">
-        <img class="smallImg" :src="info.head_portrait">
+        <img class="smallImg" :src="info.headPortrait">
         <div class="content-disname">
-          <h2 class v-html="info.remark_name ? info.remark_name : info.nick_name"></h2>
+          <h2 class v-html="info.remarkName || info.nickName"></h2>
         </div>
       </div>
       <div class="content-note" v-if="currentUserId" @click="goRemark(info)">设置备注和描述</div>
@@ -101,13 +101,14 @@ export default {
       currentUserId: true, // 是否本人
       msgShow: true, // 发送消息按钮控制
       addFriendShow: false, // 添加到通讯录控制
-      friendId: this.$route.params.id
+      friendId: this.$route.params.id,
+      groupId: this.$route.params.groupId,
+      info: {}
     };
   },
   computed: {
     ...mapGetters([
       // 拿到info的状态
-      "info",
       "userFriendList"
       ])
   },
@@ -115,20 +116,35 @@ export default {
   },
   mounted() {
     let access_token = JSON.parse(localStorage.getItem("access_token"));
-    let info = this.info;
-    let id = this.info.chat_bject || this.info.id;
-    if (id == access_token.id) {
-      // 如果是自己
-      this.currentUserId = false;
-      this.msgShow = false;
-    } else {
-      let userFriendList = this.userFriendList;
-      if (!userFriendList[id]) {
-        this.msgShow = false;
-        this.addFriendShow = true;
-        this.currentUserId = false;
+    this.$dialog.loading.open("加载中...");
+    //friendId
+    api.findGroupMembersInfo(this, {
+      groupUserId: this.friendId
+    }).then( res => {
+      let val = res.body;
+      if(val.code == 200){
+        let groupMembersInfo = val.groupMembersInfo;
+        if(groupMembersInfo.id == access_token.id){
+            // 如果是自己
+            this.currentUserId = false;
+            this.msgShow = false;
+        }
+        else {
+          let userFriendList = this.userFriendList;
+          if (!userFriendList[groupMembersInfo.id]) {
+            this.msgShow = false;
+            this.addFriendShow = true;
+            this.currentUserId = false;
+          }
+        }
+        this.info = groupMembersInfo;
       }
-    }
+      console.log(res);
+      this.$dialog.loading.close();
+    }).catch( err => {
+      console.log(err);
+      this.$dialog.loading.close();
+    });
   },
   watch: {
     $route(to, from) {
@@ -137,7 +153,14 @@ export default {
   },
   methods: {
     back() {
-      this.$router.back(); // 返回上一级
+      // 返回上一级
+      if(this.groupId){
+        this.$router.push({
+              path: `/chatroomGroup`
+        });
+      }else{
+        this.$router.back();
+      }
     },
     doAddList(info) {
       this.setaddList(info);

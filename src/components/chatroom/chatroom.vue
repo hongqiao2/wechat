@@ -619,9 +619,14 @@ export default {
     },
     gotoUser(info) {
       this.$router.push({
-        path: `/address/${info.chat_bject}`
-      });
-      this.setAddress(this.userFriendList[info.chat_bject]);
+        name: `addressDetail`,
+        params: {
+          id: info.chat_bject
+        }
+      })
+      // this.$router.push({
+      //   path: `/address/${info.chat_bject}`
+      // });
     },
     goPacket(info) {
       this.$router.push({
@@ -1016,7 +1021,7 @@ export default {
   margin-bottom: 0.3rem;
   line-height: 0.56rem;
 }
-[class*="loading"] {
+.chatroom [class*="loading"] {
   display: inline-block;
   width: 1.5em;
   height: 1.5em;

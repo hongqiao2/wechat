@@ -74,9 +74,9 @@ export default {
         })
         .then(res => {
           let val = res.body;
-          if (val.code == "200" && val.userInfo) {
-            this.friend = val.userInfo;
-            this.friendShow = true;
+          if (val.code == "200" && val.userInfo.id) {
+              this.friend = val.userInfo;
+              this.friendShow = true;
           }
           this.$dialog.loading.close();
         })
@@ -90,10 +90,15 @@ export default {
       // 好友查询缓存
       let friend = JSON.parse(JSON.stringify(this.friend));
       friend["source"] = 1;
-      this.setAddress(friend);
       this.$router.push({
-        path: `/address/${friend.id}`
-      });
+        name: `addressDetail`,
+        params: {
+          id: friend.id
+        }
+      })
+      // this.$router.push({
+      //   path: `/address/${friend.id}`
+      // });
     },
     ...mapMutations({
       setAddress: "SET_INFO"

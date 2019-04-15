@@ -135,6 +135,30 @@ const api = {
   saveSysUserGroup(that, params){
     return that.$http.post(that.baseURL + '/sysUserGroup/saveSysUserGroup', params);
   },
+  // 查询群信息，以及群成员信息
+  findGroupInformation(that, params){
+    return that.$http.post(that.baseURL + '/sysUserGroup/findGroupInformation', params);
+  },
+  // 清空群消息
+  updateGroupByUserLog(that, params){
+    return that.$http.post(that.baseURL + '/sysUserGroup/updateGroupByUserLog', params);
+  },
+  // 解除群
+  dissolutionGroupByGroupId(that, params){
+    return that.$http.post(that.baseURL + '/sysUserGroup/dissolutionGroupByGroupId', params);
+  },
+  // 查询单个群成员信息
+  findGroupMembersInfo(that, params){
+    return that.$http.post(that.baseURL + '/sysUserGroup/findGroupMembersInfo', params);
+  },
+  // 修改群昵称
+  updateGroupInfo(that, params){
+    return that.$http.post(that.baseURL + '/sysUserGroup/updateGroupInfo', params);
+  },
+  // 修改群成员的信息
+  updateGroupLeaguerInfo(that, params){
+    return that.$http.post(that.baseURL + '/sysUserGroup/updateGroupLeaguerInfo', params);
+  },
 };
 
 export default api

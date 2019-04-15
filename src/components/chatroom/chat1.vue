@@ -625,7 +625,7 @@ export default {
   margin-bottom: 0.3rem;
   line-height: 0.56rem;
 }
-[class*="loading"] {
+.chatroom [class*="loading"] {
   display: inline-block;
   width: 1.5em;
   height: 1.5em;

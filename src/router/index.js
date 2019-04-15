@@ -197,6 +197,7 @@ export default new Router({
           children: [
             {
               path: 'groupdetail',
+              name: 'groupdetail',
               component: GroupDetail
             }
           ]
@@ -210,6 +211,7 @@ export default new Router({
           component: LabelEdit
         },
         {
+          name: 'addressDetail',
           path: ':id', // 传入不同的id,就可以跳转到不同的子路由
           meta: {
             navShow: false,

@@ -193,7 +193,6 @@ export default {
     this.$nextTick(() => {
       //location.href ="#bottom";//页面加载完后，跳到底部
     });
-
     // 获取最新信息
     let _infoId = this.info.griend_id
       ? this.info.griend_id
@@ -612,10 +611,13 @@ export default {
         });
     },
     gotoUser(info) {
+      // 跳到群信息展示
       this.$router.push({
-        path: `/address/${info.chat_bject}`
+        name: `groupdetail`,
+        params: {
+          groupId: info.chat_bject
+        }
       });
-      this.setAddress(this.userFriendList[info.chat_bject]);
     },
     goPacket(info) {
       this.$router.push({
@@ -1009,7 +1011,7 @@ export default {
   margin-bottom: 0.3rem;
   line-height: 0.56rem;
 }
-[class*="loading"] {
+.chatroom [class*="loading"] {
   display: inline-block;
   width: 1.5em;
   height: 1.5em;
